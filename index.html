@@ -1,0 +1,4062 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>VIBRAALTO — Eleva tu frecuencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+/* ══════════════════════════════════════════
+   21st.dev AESTHETIC — VIBRAALTO EDITION
+   Zinc-950 base · Geist · Razor precision
+══════════════════════════════════════════ */
+
+:root {
+  /* 21st.dev color system */
+  --bg:       #09090b;   /* zinc-950 */
+  --bg-1:     #111113;   /* zinc-900 */
+  --bg-2:     #18181b;   /* zinc-800 */
+  --bg-3:     #27272a;   /* zinc-700 */
+  --border:   rgba(255,255,255,0.06);
+  --border-2: rgba(255,255,255,0.1);
+  --border-3: rgba(255,255,255,0.16);
+
+  /* Typography */
+  --fg:       #fafafa;   /* zinc-50  */
+  --fg-1:     #e4e4e7;   /* zinc-200 */
+  --fg-2:     #a1a1aa;   /* zinc-400 */
+  --fg-3:     #71717a;   /* zinc-500 */
+  --fg-4:     #3f3f46;   /* zinc-700 */
+
+  /* Accent — the ONLY color, used sparingly */
+  --accent:   #ffffff;
+  --accent-2: rgba(255,255,255,0.08);
+
+  /* Reactor accent colors — only on the 3D object */
+  --r-cyan:   #00d4ff;
+  --r-purple: #7c2fff;
+  --r-lime:   #c8ff4d;
+  --r-violet: #aa55ff;
+
+  /* Typography */
+  --f-sans: 'Geist', -apple-system, sans-serif;
+  --f-mono: 'Geist Mono', 'JetBrains Mono', monospace;
+
+  /* Easing (Emil Kowalski) */
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-inout:  cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --maxw: 1200px;
+  --radius: 8px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--f-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--bg-3); border-radius: 2px; }
+::selection { background: rgba(255,255,255,0.15); color: var(--fg); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── SCROLL PROGRESS ── */
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 1px; width: 100%;
+  background: var(--fg-3);
+  z-index: 500;
+  transform-origin: left;
+  transform: scaleX(0);
+  will-change: transform;
+}
+#progress-fill {
+  height: 100%;
+  background: var(--fg);
+  width: 0%;
+  transition: width 0.08s linear;
+}
+
+/* ── INTELLIGENCE BUTTON (Enter the Intelligence style) ── */
+.btn-intelligence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  padding: 14px 24px;
+  margin-top: 14px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0, 217, 255, 0.75);
+  background: rgba(0, 217, 255, 0.035);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 4px;
+  text-decoration: none;
+  transition:
+    background 200ms var(--ease-out),
+    border-color 200ms var(--ease-out),
+    color 200ms var(--ease-out),
+    transform 150ms var(--ease-out);
+}
+.btn-intelligence:hover {
+  background: rgba(0, 217, 255, 0.07);
+  border-color: rgba(0, 217, 255, 0.4);
+  color: #00d9ff;
+}
+.btn-intelligence:active { transform: scale(0.98); }
+.bi-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #00e676;
+  box-shadow: 0 0 6px rgba(0, 230, 118, 0.6);
+  flex-shrink: 0;
+  animation: dotPulse 2s ease-out infinite;
+}
+.bi-arrow {
+  margin-left: auto;
+  opacity: 0.45;
+  transition: opacity 200ms, transform 200ms var(--ease-out);
+}
+.btn-intelligence:hover .bi-arrow {
+  opacity: 0.9;
+  transform: translateX(4px);
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden;
+}
+
+/* Reactor full-bleed */
+#symbol-canvas {
+  position: absolute;
+  top: 50%; left: 55%;
+  transform: translate(-50%, -50%);
+  width: 920px; height: 920px;
+  z-index: 1;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+@media(max-width: 900px) {
+  #symbol-canvas {
+    left: 50%; opacity: 0.35; width: 700px; height: 700px;
+  }
+}
+
+/* Gradient veil: dark left, fades right */
+.hero-veil {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    linear-gradient(105deg,
+      rgba(9,9,11,0.97) 0%,
+      rgba(9,9,11,0.88) 25%,
+      rgba(9,9,11,0.55) 50%,
+      rgba(9,9,11,0.1) 70%,
+      transparent 100%
+    ),
+    linear-gradient(180deg,
+      rgba(9,9,11,0.5) 0%,
+      transparent 15%,
+      transparent 70%,
+      rgba(9,9,11,1) 100%
+    );
+}
+
+.hero-inner {
+  position: relative; z-index: 3;
+  max-width: var(--maxw); margin: 0 auto;
+  width: 100%; padding: 96px 24px 96px;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 10px 4px 4px;
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 500; color: var(--fg-2);
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+  width: fit-content;
+  opacity: 0; transform: translateY(12px);
+  animation: fadeUp 600ms var(--ease-out) 100ms forwards;
+}
+.badge-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.badge-dot::after {
+  content: ''; width: 7px; height: 7px;
+  border-radius: 50%; background: #22c55e;
+  box-shadow: 0 0 8px rgba(34,197,94,0.6);
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero heading */
+h1.h1 {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--fg);
+  margin-bottom: 24px;
+  max-width: 12ch;
+  opacity: 0; transform: translateY(16px);
+  animation: fadeUp 600ms var(--ease-out) 200ms forwards;
+}
+h1.h1 em {
+  font-style: normal;
+  background: linear-gradient(180deg, var(--fg) 0%, var(--fg-2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.h1-sub {
+  display: block;
+  font-family: var(--f-mono);
+  font-size: clamp(11px, 1.2vw, 14px);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  -webkit-text-fill-color: var(--fg-3);
+  margin-top: 12px;
+}
+
+.hero-lede {
+  font-size: clamp(14px, 1.3vw, 17px);
+  line-height: 1.65; color: var(--fg-2);
+  max-width: 46ch; margin-bottom: 40px;
+  font-weight: 400; letter-spacing: -0.01em;
+  opacity: 0; transform: translateY(12px);
+  animation: fadeUp 600ms var(--ease-out) 300ms forwards;
+}
+
+/* CTA row */
+.cta-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+  opacity: 0; transform: translateY(12px);
+  animation: fadeUp 600ms var(--ease-out) 400ms forwards;
+}
+.cta-row + .cta-row {
+  animation-delay: 480ms;
+}
+
+/* Button system */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: var(--radius);
+  font-family: var(--f-sans); font-size: 13px; font-weight: 600;
+  letter-spacing: -0.01em; text-decoration: none;
+  cursor: pointer; border: none; outline: none;
+  white-space: nowrap;
+  transition:
+    background 150ms var(--ease-out),
+    color 150ms var(--ease-out),
+    transform 150ms var(--ease-out),
+    box-shadow 150ms var(--ease-out),
+    border-color 150ms var(--ease-out);
+}
+.btn:active { transform: scale(0.97) !important; }
+.btn:hover  { transform: translateY(-1px); }
+
+.btn-primary {
+  background: var(--fg); color: var(--bg);
+  border: 1px solid transparent;
+}
+.btn-primary:hover { background: var(--fg-1); }
+
+.btn-secondary {
+  background: var(--bg-2); color: var(--fg-1);
+  border: 1px solid var(--border-2);
+}
+.btn-secondary:hover { background: var(--bg-3); border-color: var(--border-3); }
+
+.btn-ghost {
+  background: transparent; color: var(--fg-2);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover { background: var(--bg-2); color: var(--fg-1); border-color: var(--border-2); }
+
+/* Contact buttons — only place with color */
+.btn-wa {
+  background: rgba(0,212,255,0.06); color: #00d4ff;
+  border: 1px solid rgba(0,212,255,0.18);
+}
+.btn-wa:hover { background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); }
+
+.btn-lab {
+  background: rgba(124,47,255,0.07); color: #aa55ff;
+  border: 1px solid rgba(124,47,255,0.18);
+}
+.btn-lab:hover { background: rgba(124,47,255,0.12); border-color: rgba(124,47,255,0.3); }
+
+.btn-icon { font-size: 14px; flex-shrink: 0; }
+.btn-text { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+.btn-label { font-size: 12px; font-weight: 600; }
+.btn-sub   { font-size: 10px; font-weight: 400; opacity: 0.55; letter-spacing: 0.02em; }
+
+/* Stats rail */
+.stats-rail {
+  display: flex; align-items: center; gap: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 20px; margin-top: 40px;
+  font-family: var(--f-mono); font-size: 11px;
+  color: var(--fg-3); letter-spacing: 0.04em;
+  flex-wrap: wrap; gap: 0;
+  opacity: 0; transform: translateY(8px);
+  animation: fadeUp 600ms var(--ease-out) 550ms forwards;
+}
+.stat {
+  padding: 0 24px 0 0; margin-right: 24px;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.stat:last-of-type { border-right: none; }
+.stat-val {
+  font-family: var(--f-sans); font-size: 22px;
+  font-weight: 700; color: var(--fg);
+  letter-spacing: -0.03em; line-height: 1;
+  display: inline-block;
+  transition: transform 200ms var(--ease-spring);
+}
+.stat:hover .stat-val { transform: scale(1.08); }
+.stat-label { text-transform: uppercase; }
+
+.signal-tag {
+  margin-left: auto; display: flex; align-items: center; gap: 7px;
+  font-family: var(--f-mono); font-size: 11px; color: var(--fg-3);
+}
+.signal-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,0.5);
+}
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden; display: flex; position: relative;
+}
+.marquee-wrap::after {
+  content: ''; position: absolute; right: 0; inset-block: 0;
+  width: 80px; z-index: 2;
+  background: linear-gradient(270deg, var(--bg), transparent);
+  pointer-events: none;
+}
+.marquee-label {
+  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px; border-right: 1px solid var(--border);
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--fg-3);
+  background: var(--bg); position: relative; z-index: 3; white-space: nowrap;
+}
+.ml-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #22c55e;
+  animation: dotPulse 2s ease-out infinite;
+}
+.marquee-track {
+  display: flex; gap: 40px; width: max-content;
+  animation: mScroll 55s linear infinite;
+  padding: 14px 0; white-space: nowrap;
+  font-family: var(--f-mono); font-size: 12px; color: var(--fg-3);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.marquee-track span { display: inline-flex; align-items: center; gap: 12px; }
+.marquee-track span::after {
+  content: ''; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--fg-4);
+}
+@keyframes mScroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ── SECTION SYSTEM ── */
+.section {
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+.container {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: 96px 24px;
+}
+@media(max-width: 768px) { .container { padding: 64px 16px; } }
+
+/* Section header */
+.section-eyebrow {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--fg-3);
+  margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+}
+.section-eyebrow::before {
+  content: ''; width: 20px; height: 1px; background: var(--fg-3);
+}
+.section-h2 {
+  font-size: clamp(28px, 4vw, 52px); font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1.0; color: var(--fg);
+  margin-bottom: 0;
+}
+.section-h2 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
+.section-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 64px; align-items: end; margin-bottom: 64px;
+}
+@media(max-width: 768px) { .section-grid { grid-template-columns: 1fr; gap: 24px; } }
+.section-sub {
+  color: var(--fg-2); font-size: 15px; line-height: 1.65;
+  letter-spacing: -0.01em; max-width: 44ch;
+}
+
+/* ── PROTOCOL GRID ── */
+.protocol-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; gap: 0;
+  background: var(--border); /* gap color */
+}
+@media(max-width: 960px)  { .protocol-grid { grid-template-columns: repeat(2,1fr); } }
+@media(max-width: 560px)  { .protocol-grid { grid-template-columns: 1fr; } }
+
+.pillar {
+  background: var(--bg-1); padding: 28px 24px;
+  display: flex; flex-direction: column; gap: 12px;
+  min-height: 300px;
+  transition:
+    background 200ms var(--ease-out),
+    transform 200ms var(--ease-spring);
+}
+.pillar:hover { background: var(--bg-2); transform: translateY(-2px); }
+.pillar-num {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--fg-3);
+}
+.pillar h4 {
+  font-size: 17px; font-weight: 600; color: var(--fg);
+  letter-spacing: -0.02em; line-height: 1.25;
+}
+.pillar h4 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
+.pillar p { font-size: 13.5px; color: var(--fg-2); line-height: 1.6; flex: 1; }
+.pillar-glyph {
+  border-top: 1px solid var(--border); padding-top: 16px;
+  height: 72px; display: flex; align-items: center;
+}
+.pillar-glyph svg { width: 100%; height: 48px; }
+
+/* ── MANIFESTO ── */
+.manifesto-section {
+  border-block: 1px solid var(--border);
+  background: var(--bg-1);
+}
+.manifesto-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: 96px 24px; text-align: center;
+}
+.manifesto-tag {
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--fg-3);
+  margin-bottom: 32px; display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+}
+.manifesto-tag .ml-dot { background: var(--fg-3); box-shadow: none; }
+.manifesto-q {
+  font-size: clamp(28px, 4.5vw, 60px); font-weight: 300;
+  letter-spacing: -0.04em; line-height: 1.1; color: var(--fg);
+  max-width: 22ch; margin: 0 auto;
+}
+.manifesto-q em { font-style: italic; color: var(--fg-2); }
+.manifesto-author {
+  margin-top: 32px; font-family: var(--f-mono); font-size: 11px;
+  color: var(--fg-3); letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ── DEMOS SECTION ── */
+.demos-intro {
+  text-align: center; margin-bottom: 56px;
+}
+.demos-intro .section-h2 { margin-bottom: 12px; }
+.demos-intro .section-sub { margin: 0 auto; }
+
+.demos-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden;
+}
+@media(max-width: 900px) { .demos-grid { grid-template-columns: 1fr; } }
+
+.demo-card {
+  background: var(--bg-1);
+  transition: background 200ms var(--ease-out);
+}
+.demo-card:hover { background: var(--bg-2); }
+
+.demo-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.demo-title {
+  font-size: 14px; font-weight: 600; color: var(--fg);
+  letter-spacing: -0.02em;
+}
+.demo-desc {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.06em;
+  color: var(--fg-3); margin-top: 3px;
+}
+.demo-badge {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 8px;
+  border-radius: 4px; flex-shrink: 0;
+}
+.badge-live {
+  background: rgba(34,197,94,0.08);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: #22c55e;
+}
+.badge-live::before {
+  content: '● '; font-size: 8px;
+}
+.badge-free {
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  color: var(--fg-2);
+}
+.demo-frame-wrap {
+  position: relative; height: 480px; overflow: hidden;
+}
+.demo-frame-wrap iframe {
+  width: 100%; height: 100%; border: none; background: var(--bg);
+}
+.demo-overlay-btn {
+  position: absolute; bottom: 12px; right: 12px; z-index: 10;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 6px 12px;
+  background: rgba(9,9,11,0.9); border: 1px solid var(--border-2);
+  color: var(--fg-2); cursor: pointer; border-radius: 5px;
+  text-decoration: none; transition: all 150ms var(--ease-out);
+  backdrop-filter: blur(8px);
+}
+.demo-overlay-btn:hover { color: var(--fg); border-color: var(--border-3); }
+
+/* ── MEMPALACE ── */
+.mp-wrap {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; background: var(--bg-1);
+}
+.mp-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+@media(max-width: 900px) { .mp-grid { grid-template-columns: 1fr; } }
+
+.mp-left {
+  padding: 48px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 32px;
+}
+@media(max-width: 900px) { .mp-left { border-right: 0; border-bottom: 1px solid var(--border); padding: 32px 24px; } }
+
+.mp-h3 {
+  font-size: clamp(26px, 3vw, 42px); font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1.05; color: var(--fg);
+}
+.mp-h3 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
+.mp-p { color: var(--fg-2); font-size: 14px; line-height: 1.65; max-width: 40ch; }
+
+.mp-bullets { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.mp-bullets li {
+  display: grid; grid-template-columns: 30px 1fr;
+  gap: 12px; align-items: start;
+  font-size: 13.5px; color: var(--fg-2);
+}
+.mp-bullets li .ord {
+  font-family: var(--f-mono); font-size: 10px; color: var(--fg-3);
+  border: 1px solid var(--border-2); border-radius: 4px;
+  padding: 3px 0; text-align: center; background: var(--bg-2);
+  letter-spacing: 0.04em;
+}
+.mp-bullets li b { color: var(--fg); font-weight: 600; }
+
+.mp-stats {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid var(--border); border-radius: 6px; overflow: hidden;
+}
+.mp-stat {
+  padding: 12px 8px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.mp-stat:last-child { border-right: none; }
+.mp-stat b {
+  font-family: var(--f-sans); font-size: 18px; font-weight: 700;
+  color: var(--fg); letter-spacing: -0.02em;
+}
+.mp-stat span {
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--fg-3);
+}
+.mp-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  text-decoration: none; font-size: 13px; font-weight: 600;
+  color: var(--fg); letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--border-3); padding-bottom: 3px;
+  width: fit-content; transition: opacity 150ms;
+}
+.mp-cta:hover { opacity: 0.7; }
+
+/* Terminal */
+.mp-right { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.terminal {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden; font-family: var(--f-mono); font-size: 12px;
+}
+.terminal-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px; background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+}
+.terminal-bar .dots { display: flex; gap: 5px; }
+.terminal-bar .dots i {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--bg-3); display: block;
+}
+.terminal-bar .path { color: var(--fg-3); font-size: 10.5px; margin-left: 6px; }
+.terminal-body { padding: 16px 18px 20px; line-height: 1.9; color: var(--fg-2); }
+.t-p { color: var(--r-cyan); } .t-f { color: var(--r-violet); }
+.t-ok { color: #22c55e; } .t-dim { color: var(--fg-3); }
+.t-key { color: #fbbf24; } .t-str { color: var(--fg-2); }
+.t-cur {
+  display: inline-block; width: 6px; height: 13px;
+  background: var(--fg); transform: translateY(3px);
+  animation: blink 1.1s steps(2) infinite; margin-left: 1px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.repo-graph {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px 16px 16px; position: relative;
+}
+.rg-label {
+  position: absolute; top: 10px; left: 14px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-3);
+}
+.rg-stat {
+  position: absolute; top: 10px; right: 14px;
+  font-family: var(--f-mono); font-size: 10px; color: var(--r-cyan);
+}
+.rg-knot {
+  font-family: var(--f-mono); font-size: 9px; line-height: 1.1;
+  white-space: pre; text-align: center; color: var(--fg-2);
+  margin: 18px 0 4px; user-select: none;
+}
+.rg-caption {
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--fg-3); text-align: center;
+}
+.rg-caption b { color: var(--fg-2); }
+
+/* ── EXPERIMENTS ── */
+.experiments-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+}
+@media(max-width: 840px) { .experiments-grid { grid-template-columns: 1fr; } }
+
+.exp {
+  background: var(--bg-1); padding: 24px 24px 0;
+  display: flex; flex-direction: column;
+  transition: background 200ms var(--ease-out), transform 200ms var(--ease-spring);
+}
+.exp:hover { background: var(--bg-2); transform: translateY(-2px); }
+
+.exp-head {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--fg-3); margin-bottom: 16px;
+}
+.exp-status {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 2px 8px; border-radius: 4px;
+  border: 1px solid var(--border-2); background: var(--bg-2);
+  color: var(--fg-2); font-size: 10px;
+}
+.exp-status i { width: 5px; height: 5px; border-radius: 50%; background: var(--fg-3); }
+.exp-status.live  { color: #22c55e; border-color: rgba(34,197,94,0.2); background: rgba(34,197,94,0.06); }
+.exp-status.live i { background: #22c55e; }
+.exp-status.tuning i { background: #fbbf24; }
+.exp-status.workshop i { background: var(--r-violet); }
+
+.exp h3 {
+  font-size: 24px; font-weight: 700; letter-spacing: -0.03em;
+  color: var(--fg); margin-bottom: 8px;
+}
+.exp p { font-size: 13px; color: var(--fg-2); line-height: 1.6; flex: 1; margin-bottom: 16px; }
+.exp-meta {
+  display: flex; justify-content: space-between; gap: 8px;
+  font-family: var(--f-mono); font-size: 10px; color: var(--fg-3);
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--border); padding: 12px 0 10px;
+}
+.exp-glyph {
+  margin: 0 -24px; border-top: 1px solid var(--border);
+  height: 80px; background: var(--bg);
+  display: flex; align-items: center;
+}
+.exp-glyph svg { width: 100%; height: 100%; display: block; opacity: 0.6; }
+
+/* ── CTA SECTION ── */
+.cta-section { border-top: 1px solid var(--border); }
+.cta-inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 96px 24px;
+  display: grid; grid-template-columns: 1.3fr 1fr;
+  align-items: center; gap: 64px;
+}
+@media(max-width: 768px) { .cta-inner { grid-template-columns: 1fr; gap: 40px; } }
+.cta-h3 {
+  font-size: clamp(26px, 3.5vw, 48px); font-weight: 700;
+  letter-spacing: -0.04em; line-height: 1.0; color: var(--fg);
+}
+.cta-h3 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
+.cta-right { display: flex; flex-direction: column; gap: 12px; }
+.cta-p { color: var(--fg-2); font-size: 14px; line-height: 1.65; max-width: 38ch; }
+.cta-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 24px 48px;
+}
+.footer-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+  font-family: var(--f-mono); font-size: 11px;
+  color: var(--fg-3); letter-spacing: 0.06em; text-transform: uppercase;
+}
+.footer-inner a { color: var(--fg-2); text-decoration: none; }
+.footer-inner em { font-style: italic; color: var(--fg-2); text-transform: none; letter-spacing: 0; }
+
+/* ── CONTROLS ── */
+#controls {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 12px; align-items: center; z-index: 100;
+  background: rgba(9,9,11,0.92); border: 1px solid var(--border-2);
+  border-radius: 8px; padding: 6px 16px;
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+}
+#controls label {
+  font-family: var(--f-mono); font-size: 9px; color: var(--fg-3);
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+#controls input[type=range] {
+  -webkit-appearance: none; width: 72px; height: 2px;
+  background: var(--bg-3); border-radius: 1px; outline: none; cursor: pointer;
+}
+#controls input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--fg); cursor: pointer;
+}
+#controls .val {
+  font-family: var(--f-mono); font-size: 10px; color: var(--fg-2);
+  min-width: 24px;
+}
+#controls button {
+  background: transparent; border: 1px solid var(--border-2);
+  color: var(--fg-3); font-family: var(--f-mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 4px; cursor: pointer;
+  transition: all 150ms var(--ease-out);
+}
+#controls button:hover { background: var(--bg-2); color: var(--fg-2); }
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(1) { transition-delay: 0ms; }
+.reveal:nth-child(2) { transition-delay: 80ms; }
+.reveal:nth-child(3) { transition-delay: 160ms; }
+.reveal:nth-child(4) { transition-delay: 240ms; }
+.reveal:nth-child(5) { transition-delay: 320ms; }
+.reveal:nth-child(6) { transition-delay: 400ms; }
+
+/* i18n */
+[data-i] { transition: opacity 200ms var(--ease-out); }
+
+/* ════════════════════════════════════════
+   NERHIA LIVE WINDOW
+════════════════════════════════════════ */
+.nerhia-window-section {
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.nerhia-window-wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 80px 24px;
+}
+.nerhia-window-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.nerhia-window-header .section-eyebrow {
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.nerhia-window-header h2 {
+  font-size: clamp(24px, 3.5vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--fg);
+  margin-bottom: 10px;
+}
+.nerhia-window-header h2 em {
+  font-style: italic;
+  color: var(--fg-2);
+  font-weight: 400;
+}
+.nerhia-window-header p {
+  font-size: 14px;
+  color: var(--fg-2);
+  max-width: 44ch;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* OS Window frame */
+.os-window {
+  border: 1px solid var(--border-2);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 32px 80px -24px rgba(0,0,0,0.7),
+    0 0 60px -20px rgba(0,217,255,0.06);
+  background: var(--bg-1);
+  position: relative;
+}
+
+/* Title bar */
+.os-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 38px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 14px;
+  flex-shrink: 0;
+}
+.os-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-right: 14px;
+}
+.os-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.os-dot.red    { background: #ff5f57; }
+.os-dot.yellow { background: #febc2e; }
+.os-dot.green  { background: #28c840; }
+.os-sep {
+  width: 1px; height: 18px;
+  background: var(--border);
+  margin-right: 14px;
+  flex-shrink: 0;
+}
+.os-path {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+  flex: 1;
+  text-align: center;
+}
+.os-path span { color: var(--fg-2); }
+.os-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #22c55e;
+  padding: 2px 8px;
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 3px;
+  background: rgba(34,197,94,0.06);
+}
+.os-live-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34,197,94,0.6);
+  animation: dotPulse 2s ease-out infinite;
+}
+
+/* Toolbar below title */
+.os-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+  padding: 0 12px;
+}
+.os-tb-btn {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--fg-3);
+  background: transparent;
+  cursor: pointer;
+  transition: all 150ms var(--ease-out);
+  text-decoration: none;
+}
+.os-tb-btn:hover {
+  color: var(--fg-2);
+  border-color: var(--border-2);
+  background: var(--bg-2);
+}
+.os-tb-btn.primary {
+  color: rgba(0,217,255,0.7);
+  border-color: rgba(0,217,255,0.2);
+  background: rgba(0,217,255,0.04);
+}
+.os-tb-btn.primary:hover {
+  color: #00d9ff;
+  border-color: rgba(0,217,255,0.4);
+  background: rgba(0,217,255,0.08);
+}
+.os-tb-spacer { flex: 1; }
+.os-status {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--fg-4);
+}
+.os-status span { color: rgba(0,217,255,0.4); }
+
+/* iframe area */
+.os-iframe-wrap {
+  position: relative;
+  height: 560px;
+  overflow: hidden;
+  background: #050510;
+}
+.os-iframe-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Gradient fade at bottom */
+.os-fade {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(0deg, rgba(5,5,16,0.85) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Scanlines overlay — subtle */
+.os-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.03) 3px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Bottom bar */
+.os-bottombar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 28px;
+  background: var(--bg-2);
+  border-top: 1px solid var(--border);
+  padding: 0 14px;
+}
+.os-bb-item {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--fg-4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.os-bb-item span { color: rgba(0,217,255,0.4); }
+.os-bb-sep {
+  width: 1px; height: 12px;
+  background: var(--border);
+}
+
+@media(max-width: 768px) {
+  .os-iframe-wrap { height: 400px; }
+  .nerhia-window-wrap { padding: 56px 16px; }
+}
+
+
+/* Ecosystem strip */
+.eco-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.eco-strip-label {
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--fg-4);
+  text-transform: uppercase;
+  margin-right: 6px;
+  padding-right: 10px;
+  border-right: 1px solid var(--border);
+}
+.eco-strip-item {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--fg-3);
+  text-decoration: none;
+  transition: all 150ms var(--ease-out);
+}
+.eco-strip-item:hover {
+  color: var(--fg-2);
+  border-color: var(--border-2);
+  background: var(--bg-2);
+}
+.eco-strip-item.active {
+  color: rgba(0,217,255,0.7);
+  border-color: rgba(0,217,255,0.22);
+  background: rgba(0,217,255,0.04);
+}
+
+
+/* ════════════════════════════════════════
+   EXPERIMENT GLYPHS — 432 Hz animated
+════════════════════════════════════════ */
+.exp-glyph-canvas {
+  position: relative;
+  margin: 0 -24px;
+  border-top: 1px solid var(--border);
+  height: 100px;
+  background: var(--bg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.glyph-cv {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.freq-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: rgba(9,9,11,0.75);
+  border: 1px solid var(--border-2);
+  border-radius: 20px;
+  font-family: var(--f-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+  cursor: pointer;
+  transition: all 200ms var(--ease-out);
+  backdrop-filter: blur(6px);
+}
+.freq-btn:hover {
+  border-color: var(--border-3);
+  color: var(--fg-2);
+}
+.freq-btn.playing {
+  border-color: rgba(0,217,255,0.35);
+  color: rgba(0,217,255,0.8);
+  background: rgba(0,217,255,0.05);
+}
+.freq-btn.playing .freq-icon {
+  animation: freqSpin 2s linear infinite;
+}
+@keyframes freqSpin {
+  to { transform: rotate(360deg); }
+}
+.freq-icon { font-size: 10px; display: inline-block; }
+.freq-footer {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--fg-3);
+}
+.freq-footer-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(0,217,255,0.4);
+  box-shadow: 0 0 8px rgba(0,217,255,0.3);
+  flex-shrink: 0;
+  animation: dotPulse 2.4s ease-out infinite;
+}
+.freq-footer-text b { color: rgba(0,217,255,0.6); font-weight: 500; }
+
+
+/* ════════════════════════════════════════════════════
+   KALDI COFFEE STRIP — High gamma sponsor section
+   Paleta: ámbar dorado #F5A623 / negro #0A0800 / crema #FFF8EC
+════════════════════════════════════════════════════ */
+.kaldi-strip {
+  position: relative;
+  overflow: hidden;
+  background: #0A0800;
+  border-block: 1px solid rgba(245,166,35,0.15);
+}
+
+/* Warm grain texture overlay */
+.kaldi-strip::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 1;
+}
+
+/* Steam / heat canvas background */
+#kaldi-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+  opacity: 0.6;
+}
+
+.kaldi-inner {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 540px;
+  gap: 0;
+}
+@media(max-width: 860px) {
+  .kaldi-inner { grid-template-columns: 1fr; min-height: auto; }
+}
+
+/* ── LEFT: visual / identity ── */
+.kaldi-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 48px 72px 0;
+  border-right: 1px solid rgba(245,166,35,0.1);
+}
+@media(max-width: 860px) {
+  .kaldi-left { padding: 56px 0 32px; border-right: none; border-bottom: 1px solid rgba(245,166,35,0.1); }
+}
+
+/* Pause tag */
+.kaldi-pause-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(245,166,35,0.55);
+  margin-bottom: 28px;
+}
+.kaldi-pause-tag::before {
+  content: ''; display: block;
+  width: 28px; height: 1px;
+  background: rgba(245,166,35,0.35);
+}
+
+/* Wordmark */
+.kaldi-wordmark {
+  margin-bottom: 24px;
+  line-height: 1;
+}
+.kaldi-word-kaldi {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(52px, 7vw, 88px);
+  letter-spacing: -0.03em;
+  color: #F5A623;
+  display: block;
+  filter: drop-shadow(0 0 40px rgba(245,166,35,0.25));
+  transition: filter 400ms var(--ease-out);
+}
+.kaldi-strip:hover .kaldi-word-kaldi {
+  filter: drop-shadow(0 0 60px rgba(245,166,35,0.45));
+}
+.kaldi-word-coffee {
+  font-family: var(--f-mono);
+  font-size: clamp(12px, 1.5vw, 17px);
+  letter-spacing: 0.4em;
+  color: rgba(245,166,35,0.45);
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
+  padding-left: 4px;
+}
+
+/* Manifesto line */
+.kaldi-manifesto {
+  font-family: var(--f-body);
+  font-weight: 300;
+  font-size: clamp(18px, 2.2vw, 26px);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: rgba(255,248,236,0.82);
+  max-width: 22ch;
+  margin-bottom: 32px;
+}
+.kaldi-manifesto em {
+  font-style: italic;
+  color: #F5A623;
+  font-weight: 400;
+}
+
+/* Tagline */
+.kaldi-tagline {
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(245,166,35,0.35);
+  margin-bottom: 36px;
+}
+
+/* Pillars */
+.kaldi-pillars {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.kaldi-pill {
+  font-family: var(--f-mono);
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid rgba(245,166,35,0.18);
+  border-radius: 20px;
+  color: rgba(245,166,35,0.5);
+  background: rgba(245,166,35,0.04);
+  transition: all 200ms var(--ease-out);
+}
+.kaldi-pill:hover {
+  border-color: rgba(245,166,35,0.4);
+  color: rgba(245,166,35,0.85);
+  background: rgba(245,166,35,0.08);
+}
+
+/* CTA button — Emil Kowalski spec */
+.kaldi-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 24px;
+  width: fit-content;
+  background: #F5A623;
+  color: #0A0800;
+  font-family: var(--f-mono);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  text-decoration: none;
+  border: none; border-radius: 3px;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  transition:
+    background 150ms var(--ease-out),
+    transform 150ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+  box-shadow: 0 8px 32px -8px rgba(245,166,35,0.45);
+}
+.kaldi-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 500ms var(--ease-out);
+}
+.kaldi-btn:hover::before { transform: translateX(100%); }
+.kaldi-btn:hover {
+  background: #FFB733;
+  box-shadow: 0 12px 40px -8px rgba(245,166,35,0.65);
+  transform: translateY(-2px);
+}
+.kaldi-btn:active { transform: scale(0.97) translateY(0); }
+.kaldi-btn-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(10,8,0,0.5); flex-shrink: 0;
+}
+.kaldi-btn-arrow {
+  margin-left: 4px;
+  transition: transform 200ms var(--ease-spring);
+}
+.kaldi-btn:hover .kaldi-btn-arrow { transform: translateX(4px); }
+
+/* Powered by */
+.kaldi-powered {
+  margin-top: 20px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em;
+  color: rgba(245,166,35,0.22); text-transform: uppercase;
+}
+.kaldi-powered a {
+  color: rgba(245,166,35,0.38); text-decoration: none;
+  transition: color 150ms;
+}
+.kaldi-powered a:hover { color: rgba(245,166,35,0.65); }
+
+/* ── RIGHT: video / atmosphere ── */
+.kaldi-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 0 72px 48px;
+  gap: 20px;
+}
+@media(max-width: 860px) {
+  .kaldi-right { padding: 32px 0 56px; }
+}
+
+/* Video frame — OS window style */
+.kaldi-video-frame {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(245,166,35,0.15);
+  box-shadow:
+    0 0 0 1px rgba(245,166,35,0.08),
+    0 24px 64px -20px rgba(0,0,0,0.8),
+    0 0 80px -30px rgba(245,166,35,0.12);
+  background: #060400;
+}
+.kaldi-video-bar {
+  display: flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px;
+  background: rgba(245,166,35,0.04);
+  border-bottom: 1px solid rgba(245,166,35,0.08);
+}
+.kaldi-video-dots { display: flex; gap: 5px; }
+.kaldi-video-dots span {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: rgba(245,166,35,0.15);
+}
+.kaldi-video-path {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.08em;
+  color: rgba(245,166,35,0.3); flex: 1; text-align: center;
+}
+.kaldi-video-badge {
+  font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #F5A623;
+  display: flex; align-items: center; gap: 4px;
+}
+.kaldi-video-badge::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: #F5A623;
+  box-shadow: 0 0 8px rgba(245,166,35,0.7);
+  animation: dotPulse 2s ease-out infinite;
+}
+
+/* The canvas video area */
+.kaldi-canvas-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #060400;
+  overflow: hidden;
+}
+#kaldi-video-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+
+/* Overlays on video */
+.kaldi-video-overlay {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.kaldi-score {
+  font-family: var(--f-mono);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  color: #F5A623;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 40px rgba(245,166,35,0.6);
+  line-height: 1;
+}
+.kaldi-score-sub {
+  font-family: var(--f-mono); font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(245,166,35,0.5); margin-top: 5px;
+}
+
+/* Scanlines on video */
+.kaldi-video-scan {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px
+  );
+}
+
+/* NERHIA signal stats */
+.kaldi-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: rgba(245,166,35,0.08);
+  border: 1px solid rgba(245,166,35,0.1);
+  border-radius: 6px; overflow: hidden;
+}
+.kaldi-stat {
+  background: rgba(10,8,0,0.8);
+  padding: 12px 10px; text-align: center;
+  transition: background 200ms;
+}
+.kaldi-stat:hover { background: rgba(245,166,35,0.05); }
+.kaldi-stat-val {
+  font-family: var(--f-mono); font-size: 18px; font-weight: 800;
+  color: #F5A623; letter-spacing: -0.02em; line-height: 1;
+  margin-bottom: 4px;
+}
+.kaldi-stat-label {
+  font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(245,166,35,0.35);
+}
+
+/* NERHIA pipeline badge */
+.kaldi-pipeline {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-family: var(--f-mono); font-size: 8.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(245,166,35,0.25);
+}
+.kaldi-pipeline-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: #F5A623;
+  box-shadow: 0 0 6px rgba(245,166,35,0.6);
+  animation: dotPulse 1.8s ease-out infinite;
+}
+.kaldi-pipeline span { color: rgba(245,166,35,0.45); }
+
+
+/* ════════════════════════════════════════════════════
+   NEXUS VA STRIP — Infraestructura Visual Inteligente
+   Paleta: cyan #00D4FF / purple #7C2FFF / dark #03010b
+════════════════════════════════════════════════════ */
+.nexus-strip {
+  position: relative;
+  overflow: hidden;
+  background: #030109;
+  border-block: 1px solid rgba(0,212,255,0.12);
+}
+#nexus-bg-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+.nexus-strip::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,212,255,0.015) 3px, rgba(0,212,255,0.015) 4px
+  );
+  pointer-events: none; z-index: 1;
+}
+.nexus-inner {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 580px;
+  gap: 0;
+}
+@media(max-width: 860px) {
+  .nexus-inner { grid-template-columns: 1fr; min-height: auto; }
+}
+
+/* ── LEFT: TV holográfica ── */
+.nexus-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 48px 72px 0;
+  border-right: 1px solid rgba(0,212,255,0.08);
+}
+@media(max-width: 860px) {
+  .nexus-left { padding: 56px 0 32px; border-right: none; border-bottom: 1px solid rgba(0,212,255,0.08); }
+}
+
+/* OS Window — TV display */
+.nexus-tv {
+  border: 1px solid rgba(0,212,255,0.18);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #020108;
+  box-shadow:
+    0 0 0 1px rgba(0,212,255,0.06),
+    0 24px 80px -20px rgba(0,0,0,0.9),
+    0 0 100px -30px rgba(0,212,255,0.15),
+    0 0 40px -10px rgba(124,47,255,0.1);
+  margin-bottom: 20px;
+}
+.nexus-tv-bar {
+  display: flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px;
+  background: rgba(0,212,255,0.03);
+  border-bottom: 1px solid rgba(0,212,255,0.08);
+}
+.nexus-tv-dots { display: flex; gap: 5px; }
+.nexus-tv-dots span { width: 9px; height: 9px; border-radius: 50%; }
+.nexus-tv-path {
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing: 0.08em;
+  color: rgba(0,212,255,0.3); flex: 1; text-align: center;
+}
+.nexus-tv-badge {
+  font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--r-cyan);
+  display: flex; align-items: center; gap: 4px;
+}
+.nexus-tv-badge::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--r-cyan);
+  box-shadow: 0 0 8px rgba(0,212,255,0.8);
+  animation: dotPulse 2s ease-out infinite;
+}
+.nexus-canvas-wrap {
+  position: relative;
+  aspect-ratio: 16/9;
+  background: #010106;
+  overflow: hidden;
+}
+#nexus-tv-canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; display: block;
+}
+.nexus-tv-scan {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px
+  );
+}
+.nexus-tv-bottombar {
+  display: flex; align-items: center; gap: 8px;
+  height: 26px; padding: 0 12px;
+  background: rgba(0,212,255,0.02);
+  border-top: 1px solid rgba(0,212,255,0.07);
+  font-family: var(--f-mono); font-size: 8.5px;
+  letter-spacing: 0.08em; color: rgba(0,212,255,0.25);
+}
+
+/* Product grid below TV */
+.nexus-products {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
+}
+.nexus-prod {
+  padding: 10px 12px;
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 5px;
+  background: rgba(0,212,255,0.03);
+  transition: all 200ms var(--ease-out);
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+.nexus-prod:hover {
+  background: rgba(0,212,255,0.07);
+  border-color: rgba(0,212,255,0.25);
+  transform: translateY(-1px);
+}
+.nexus-prod-name {
+  font-family: var(--f-display);
+  font-size: 13px; font-weight: 700;
+  color: var(--r-cyan);
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+.nexus-prod-desc {
+  font-family: var(--f-mono); font-size: 8.5px;
+  letter-spacing: 0.08em; color: rgba(0,212,255,0.4);
+  line-height: 1.5;
+}
+.nexus-prod-tag {
+  font-family: var(--f-mono); font-size: 7.5px;
+  color: rgba(124,47,255,0.5); margin-top: 5px;
+  letter-spacing: 0.06em;
+}
+
+/* ── RIGHT: copy + CTA ── */
+.nexus-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 0 72px 48px;
+  gap: 0;
+}
+@media(max-width: 860px) {
+  .nexus-right { padding: 32px 0 56px; }
+}
+
+.nexus-pause-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(0,212,255,0.45);
+  margin-bottom: 28px;
+}
+.nexus-pause-tag::before {
+  content: ''; display: block;
+  width: 28px; height: 1px;
+  background: rgba(0,212,255,0.3);
+}
+
+.nexus-wordmark {
+  margin-bottom: 20px; line-height: 1;
+}
+.nexus-word-main {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(42px, 5.5vw, 72px);
+  letter-spacing: -0.03em;
+  display: block; line-height: 0.95;
+  background: linear-gradient(135deg, var(--r-cyan) 0%, #ffffff 40%, var(--r-violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px rgba(0,212,255,0.2));
+}
+.nexus-word-sub {
+  font-family: var(--f-mono);
+  font-size: clamp(10px, 1.2vw, 14px);
+  letter-spacing: 0.35em;
+  color: rgba(0,212,255,0.4);
+  text-transform: uppercase;
+  display: block; margin-top: 6px; padding-left: 2px;
+}
+
+.nexus-manifesto {
+  font-family: var(--f-body);
+  font-weight: 300;
+  font-size: clamp(16px, 1.8vw, 22px);
+  line-height: 1.4;
+  color: rgba(255,255,255,0.75);
+  max-width: 26ch;
+  margin-bottom: 28px;
+}
+.nexus-manifesto em { font-style: italic; color: var(--r-cyan); font-weight: 400; }
+
+.nexus-tagline {
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase;
+  color: rgba(0,212,255,0.28);
+  margin-bottom: 28px;
+}
+
+/* Sectors pills */
+.nexus-sectors {
+  display: flex; gap: 5px; flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.nexus-sector {
+  font-family: var(--f-mono);
+  font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid rgba(124,47,255,0.2);
+  border-radius: 20px;
+  color: rgba(124,47,255,0.55);
+  background: rgba(124,47,255,0.04);
+  transition: all 200ms var(--ease-out);
+}
+.nexus-sector:hover {
+  border-color: rgba(124,47,255,0.45);
+  color: rgba(170,85,255,0.9);
+  background: rgba(124,47,255,0.08);
+}
+
+/* Stats row */
+.nexus-stats {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 6px; overflow: hidden;
+  margin-bottom: 28px;
+  background: rgba(0,212,255,0.04);
+}
+.nexus-stat {
+  padding: 12px 8px; text-align: center;
+  border-right: 1px solid rgba(0,212,255,0.08);
+}
+.nexus-stat:last-child { border-right: none; }
+.nexus-stat-val {
+  font-family: var(--f-display); font-size: 17px; font-weight: 700;
+  color: var(--r-cyan); letter-spacing: -0.02em; line-height: 1; margin-bottom: 3px;
+}
+.nexus-stat-label {
+  font-family: var(--f-mono); font-size: 8px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(0,212,255,0.3);
+}
+
+/* CTA button — same Emil spec as Kaldi but cyan */
+.nexus-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 24px; width: fit-content;
+  background: rgba(0,212,255,0.08);
+  color: var(--r-cyan);
+  font-family: var(--f-mono);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(0,212,255,0.35); border-radius: 3px;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition:
+    background 150ms var(--ease-out),
+    border-color 150ms var(--ease-out),
+    transform 150ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+  box-shadow: 0 8px 32px -8px rgba(0,212,255,0.2),
+              inset 0 0 40px rgba(0,212,255,0.03);
+}
+.nexus-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(0,212,255,0.08) 50%, transparent 60%);
+  transform: translateX(-100%); transition: transform 500ms var(--ease-out);
+}
+.nexus-btn:hover::before { transform: translateX(100%); }
+.nexus-btn:hover {
+  background: rgba(0,212,255,0.14);
+  border-color: rgba(0,212,255,0.6);
+  box-shadow: 0 12px 40px -8px rgba(0,212,255,0.35), inset 0 0 40px rgba(0,212,255,0.06);
+  transform: translateY(-2px);
+}
+.nexus-btn:active { transform: scale(0.97) translateY(0); }
+.nexus-btn-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--r-cyan);
+  box-shadow: 0 0 8px rgba(0,212,255,0.8);
+  flex-shrink: 0; animation: dotPulse 2s ease-out infinite;
+}
+.nexus-btn-arrow {
+  margin-left: 4px;
+  transition: transform 200ms var(--ease-spring);
+}
+.nexus-btn:hover .nexus-btn-arrow { transform: translateX(4px); }
+
+.nexus-powered {
+  margin-top: 16px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.14em;
+  color: rgba(0,212,255,0.18); text-transform: uppercase;
+}
+.nexus-powered a {
+  color: rgba(0,212,255,0.32); text-decoration: none;
+  transition: color 150ms;
+}
+.nexus-powered a:hover { color: rgba(0,212,255,0.65); }
+
+/* ═══════════════════════════════════════════
+   ACTIVE THEORY PHYSICS LAYER — additive only
+   No existing code touched
+═══════════════════════════════════════════ */
+body { cursor: none; }
+@media(hover:none){
+  body { cursor: auto; }
+  #va-cursor, .va-trail { display: none !important; }
+}
+
+/* Custom cursor */
+#va-cursor {
+  position: fixed; width: 10px; height: 10px;
+  border: 1.5px solid rgba(255,255,255,.82); border-radius: 50%;
+  pointer-events: none; z-index: 10000;
+  transform: translate(-50%,-50%);
+  transition: width .26s cubic-bezier(.23,1,.32,1),
+              height .26s cubic-bezier(.23,1,.32,1), opacity .26s;
+  mix-blend-mode: difference; will-change: transform;
+}
+#va-cursor.hovering { width: 30px; height: 30px; opacity: .5; }
+#va-cursor.dragging { width: 52px; height: 52px; opacity: .22; border-width: 1px; }
+
+/* Cursor trail dots */
+.va-trail {
+  position: fixed; width: 4px; height: 4px; border-radius: 50%;
+  background: rgba(255,255,255,.52); transform: translate(-50%,-50%);
+  pointer-events: none; z-index: 9990; will-change: transform, opacity;
+}
+
+/* Velocity HUD */
+#va-hud {
+  position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%);
+  z-index: 300; display: flex; align-items: center;
+  background: rgba(9,9,11,.94); border: 1px solid rgba(255,255,255,.07);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  font-family: 'Geist Mono','JetBrains Mono',monospace;
+  font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,255,255,.22); pointer-events: none; white-space: nowrap;
+}
+.va-hcell {
+  padding: 8px 14px; border-right: 1px solid rgba(255,255,255,.06);
+  display: flex; align-items: center; gap: 7px;
+}
+.va-hcell:last-child { border-right: none; }
+.va-hval { color: rgba(255,255,255,.6); min-width: 30px; text-align: right; font-size: 8.5px; }
+.va-hbar { width: 44px; height: 1px; background: rgba(255,255,255,.07); overflow: hidden; position: relative; }
+.va-hbar-f { position: absolute; inset: 0 auto 0 0; background: rgba(255,255,255,.42); width: 0%; transition: width .07s linear; }
+#va-hud-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 5px rgba(34,197,94,.55); animation: va-pulse 2s ease infinite; }
+@keyframes va-pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+/* Entry sequence */
+#va-entry {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #09090b;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+}
+#va-entry-logo {
+  font-family: 'Geist Mono','JetBrains Mono',monospace;
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  color: rgba(255,255,255,.18);
+}
+#va-entry-freq {
+  font-family: 'Geist',-apple-system,sans-serif;
+  font-size: clamp(64px,10vw,112px); font-weight: 700;
+  letter-spacing: -.04em; color: #fafafa; line-height: 1;
+  display: flex; align-items: baseline; gap: 14px;
+}
+#va-entry-num {
+  font-variant-numeric: tabular-nums;
+  min-width: 3ch; text-align: right; display: inline-block;
+}
+#va-entry-hz {
+  font-family: 'Geist Mono','JetBrains Mono',monospace;
+  font-size: clamp(14px,2vw,24px); color: rgba(255,255,255,.22);
+  letter-spacing: .1em; font-weight: 400;
+}
+#va-entry-state {
+  font-family: 'Geist Mono','JetBrains Mono',monospace;
+  font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+  color: rgba(255,255,255,.18); min-height: 16px; transition: color 400ms;
+}
+#va-entry-bar {
+  width: 200px; height: 1px; background: rgba(255,255,255,.07);
+  overflow: hidden; position: relative;
+}
+#va-entry-bar-f {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,.3), rgba(255,255,255,.7));
+  width: 0%;
+}
+#va-entry-skip {
+  position: absolute; bottom: 24px; right: 28px;
+  font-family: 'Geist Mono','JetBrains Mono',monospace;
+  font-size: 8px; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.12); background: none; border: none;
+  cursor: pointer; padding: 8px 12px; transition: color 150ms;
+}
+#va-entry-skip:hover { color: rgba(255,255,255,.45); }
+
+/* Hero perspective container — needed for CSS 3D tilt to work */
+.hero { transform-style: preserve-3d; }
+/* Overflow is handled by clipping at viewport level */
+
+/* Grain overlay — purely aesthetic */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 9998;
+  pointer-events: none; opacity: .026;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat; background-size: 128px 128px;
+  mix-blend-mode: overlay;
+}
+
+</style>
+</head>
+<body>
+<!-- ═══ VIBRAALTO AT LAYER ═══ -->
+<div id="va-cursor"></div>
+
+<div id="va-entry" role="dialog" aria-label="Entry sequence">
+  <div id="va-entry-logo">Vibraalto Lab · EST 2025</div>
+  <div id="va-entry-freq">
+    <span id="va-entry-num">0</span><span id="va-entry-hz">Hz</span>
+  </div>
+  <div id="va-entry-state">SCANNING FREQUENCY</div>
+  <div id="va-entry-bar"><div id="va-entry-bar-f"></div></div>
+  <button id="va-entry-skip" onclick="vaSkipEntry()">SKIP ↓</button>
+</div>
+
+<div id="va-hud" aria-hidden="true">
+  <div class="va-hcell"><div id="va-hud-dot"></div>SIGNAL</div>
+  <div class="va-hcell">VEL<div class="va-hbar"><div class="va-hbar-f" id="va-vbar"></div></div><span class="va-hval" id="va-vval">0.00</span></div>
+  <div class="va-hcell">THROW<div class="va-hbar"><div class="va-hbar-f" id="va-ibar"></div></div><span class="va-hval" id="va-ival">0.00</span></div>
+  <div class="va-hcell">ROT&nbsp;<span class="va-hval" id="va-rot">0.0°</span></div>
+  <div class="va-hcell">432Hz · LOCKED</div>
+</div>
+
+<!-- Entry script: isolated, runs before everything else -->
+<script>
+(function(){
+  'use strict';
+  var numEl   = document.getElementById('va-entry-num');
+  var barEl   = document.getElementById('va-entry-bar-f');
+  var stateEl = document.getElementById('va-entry-state');
+  var entryEl = document.getElementById('va-entry');
+  if(!numEl||!entryEl) return;
+
+  var TARGET=432, DUR=2600, t0=null, done=false;
+
+  function easeOut(t){ return t>=1?1:1-Math.pow(2,-10*t); }
+  function lerpFn(a,b,t){ return a+(b-a)*t; }
+
+  function dismiss(){
+    done=true;
+    entryEl.style.transition='opacity 700ms cubic-bezier(.23,1,.32,1),transform 700ms cubic-bezier(.23,1,.32,1)';
+    entryEl.style.opacity='0';
+    entryEl.style.transform='translateY(-10px)';
+    setTimeout(function(){ entryEl.style.display='none'; },780);
+  }
+
+  window.vaSkipEntry=function(){ dismiss(); };
+
+  function tick(ts){
+    if(done) return;
+    if(!t0) t0=ts;
+    var prog=Math.min((ts-t0)/DUR, 1);
+    var eased=easeOut(prog);
+    var freq;
+    if(prog<0.82){
+      freq=Math.max(0,Math.floor(eased*TARGET*1.18+(Math.random()-.5)*(1-prog)*88));
+    } else {
+      freq=Math.round(lerpFn(TARGET*1.18*easeOut(0.82), TARGET, (prog-0.82)/0.18));
+    }
+    numEl.textContent=freq;
+    barEl.style.width=(eased*100).toFixed(1)+'%';
+    if(prog<0.5){
+      stateEl.textContent='SCANNING FREQUENCY';
+      stateEl.style.color='';
+    } else if(prog<0.82){
+      stateEl.textContent='CALIBRATING · '+freq+' Hz';
+      stateEl.style.color='';
+    } else if(prog<0.97){
+      stateEl.textContent='LOCKING · 432 Hz';
+      stateEl.style.color='';
+    } else {
+      numEl.textContent='432';
+      stateEl.textContent='SIGNAL LOCKED · 432.0 Hz';
+      stateEl.style.color='#22c55e';
+    }
+    if(prog<1){ requestAnimationFrame(tick); }
+    else { setTimeout(dismiss,540); }
+  }
+
+  var start=function(){ requestAnimationFrame(tick); };
+  if(document.fonts&&document.fonts.ready){
+    document.fonts.ready.then(function(){ setTimeout(start,80); });
+  } else {
+    setTimeout(start,320);
+  }
+})();
+</script>
+
+<!-- ═══ VIBRAALTO NAV UNIVERSAL ═══ -->
+<div id="vb-nav" data-app="lab">
+  <span class="vb-brand"><span class="vb-dot"></span>VIBRAALTO</span>
+  <div class="vb-sep"></div>
+  <nav class="vb-apps">
+    <a class="vb-item" data-id="gofre"   href="https://nerhia-api-852702111467.us-central1.run.app/" style="color:rgba(245,166,35,0.5);border-color:rgba(245,166,35,0.15)">GOFRE</a>
+    <span style="width:1px;height:14px;background:rgba(255,255,255,0.06);flex-shrink:0;"></span>
+    <a class="vb-item" data-id="nerhia"  href="https://nerhia.com">NERHIA</a>
+    <a class="vb-item" data-id="vw"      href="https://vw.vibraalto.cl">VW</a>
+    <a class="vb-item" data-id="vbc"     href="https://vbc.vibraalto.cl/app">VBC-PROTOCOL</a>
+    <a class="vb-item" data-id="nexus"   href="https://nexus.vibraalto.cl/va">NEXUS</a>
+    <a class="vb-item" data-id="observatorio" href="https://nerhia.cl">OBSERVATORIO</a>
+    <a class="vb-item" data-id="hub"     href="https://vibraalto.cl/hub">HUB</a>
+    <a class="vb-item" data-id="jarvis"  href="https://jarvis-vibraaltoai.web.app/">J.A.R.V.I.S</a>
+    <a class="vb-item" data-id="lc"      href="https://lc.vibraalto.cl">LC</a>
+    <a class="vb-item vb-admin" data-id="aura" href="#">AURA <span class="vb-lock">&middot;</span></a>
+  </nav>
+  <div class="vb-spacer"></div>
+  <div class="vb-right">
+    <div class="vb-lang-row">
+      <button class="vb-lb active" onclick="setLang('es')">ES</button>
+      <button class="vb-lb" onclick="setLang('en')">EN</button>
+      <button class="vb-lb" onclick="setLang('zh')">中文</button>
+    </div>
+    <span class="vb-tag" id="vb-page-tag">// PRESENTACIÓN</span>
+  </div>
+</div>
+<style>
+#vb-nav{position:fixed;top:0;left:0;right:0;height:34px;background:rgba(3,5,8,0.96);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,217,255,0.1);display:flex;align-items:center;padding:0 14px;z-index:9999;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow:hidden;}
+.vb-brand{display:flex;align-items:center;gap:6px;font-size:10px;letter-spacing:2px;color:#00d9ff;font-weight:700;flex-shrink:0;margin-right:12px;white-space:nowrap;}
+.vb-dot{width:5px;height:5px;border-radius:50%;background:#00e676;box-shadow:0 0 6px rgba(0,230,118,0.5);animation:vb-blink 1.8s ease-in-out infinite;flex-shrink:0;}
+@keyframes vb-blink{0%,100%{opacity:1}50%{opacity:.22}}
+.vb-sep{width:1px;height:16px;background:rgba(0,217,255,0.1);flex-shrink:0;margin-right:10px;}
+.vb-apps{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none;flex-shrink:1;min-width:0;}
+.vb-apps::-webkit-scrollbar{display:none}
+.vb-item{font-size:9px;letter-spacing:1.4px;color:rgba(232,246,255,0.32);text-decoration:none;padding:3px 8px;border:1px solid transparent;border-radius:3px;white-space:nowrap;flex-shrink:0;transition:color .18s,border-color .18s,background .18s;}
+.vb-item:hover{color:#00d9ff;border-color:rgba(0,217,255,0.2);}
+.vb-item.active{color:#00d9ff;border-color:rgba(0,217,255,0.28);background:rgba(0,217,255,0.05);}
+.vb-admin{color:rgba(232,246,255,0.1)!important;cursor:default;pointer-events:none;}
+.vb-lock{color:rgba(168,85,247,0.35);}
+.vb-spacer{flex:1;}
+.vb-tag{font-size:7.5px;letter-spacing:1.5px;color:rgba(255,255,255,0.1);flex-shrink:0;white-space:nowrap;}
+.vb-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.vb-lang-row{display:flex;gap:2px;}
+.vb-lb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:1.2px;padding:3px 7px;background:transparent;border:1px solid rgba(0,217,255,0.1);color:rgba(232,246,255,0.28);cursor:pointer;border-radius:2px;transition:all .18s;}
+.vb-lb:hover{color:#00d9ff;border-color:rgba(0,217,255,0.22);}
+.vb-lb.active{color:#00d9ff;border-color:rgba(0,217,255,0.28);background:rgba(0,217,255,0.05);}
+</style>
+<script>
+(function(){
+  var nav=document.getElementById('vb-nav');if(!nav)return;
+  var H={'gofre.vibraalto.cl':'gofre','kaldi.vibraalto.cl':'kaldi','nerhia.vibraalto.cl':'nerhia','nehria.vibraalto.cl':'nerhia','vw.vibraalto.cl':'vw','vbc.vibraalto.cl':'vbc','nexus.vibraalto.cl':'nexus','lc.vibraalto.cl':'lc','j.a.r.v.i.s.vibraalto.cl':'jarvis'};
+  var appId=H[location.hostname.toLowerCase()]||'';
+  nav.querySelectorAll('.vb-item').forEach(function(a){if(a.dataset.id===appId)a.classList.add('active');});
+  if(localStorage.getItem('vb_admin')==='1'){
+    var aura=nav.querySelector('.vb-admin');
+    if(aura){aura.style.pointerEvents='auto';aura.style.color='rgba(168,85,247,0.5)';aura.href='https://vibrahalo-mempalace.vercel.app/public';}
+  }
+})();
+</script>
+
+
+<!-- Progress -->
+<div id="progress"><div id="progress-fill"></div></div>
+
+
+<!-- HERO -->
+<header id="top" class="hero">
+  <!-- Reactor fills the right side -->
+  <canvas id="symbol-canvas" width="920" height="920"></canvas>
+  <div class="hero-veil"></div>
+
+  <div class="hero-inner">
+    <!-- Badge -->
+    <div class="badge">
+      <span class="badge-dot"></span>
+      <span data-i="eyebrow">Vibraalto Lab · Sistemas experimentales · EST 2025</span>
+    </div>
+
+    <!-- Heading -->
+    <h1 class="h1">
+      VIBRAALTO
+      <span class="h1-sub" data-i="headline_sub">.CL · ELEVA TU FRECUENCIA</span>
+    </h1>
+
+    <p class="hero-lede" data-i="lede">Un taller de sistemas compuestos. Afinamos 3D, IA, código y craft a la misma frecuencia hasta que el conjunto suena como una sola cosa.</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#mempalace"><span data-i="btn_mempalace">Conoce MemPalace</span> →</a>
+      <a class="btn btn-secondary" href="#demos"><span data-i="btn_demos">Demo Gratis 3D</span></a>
+    </div>
+    <div class="cta-row">
+      <a class="btn btn-wa" href="https://wa.me/56971747072" target="_blank" rel="noopener">
+        <span class="btn-icon">⬡</span>
+        <span class="btn-text">
+          <span class="btn-label" data-i="btn_wa">WhatsApp directo</span>
+          <span class="btn-sub">+56 9 7174 7072</span>
+        </span>
+      </a>
+      <a class="btn btn-lab" href="mailto:leoncanales@vibraalto.cl?subject=Problema%20para%20el%20Lab" target="_blank" rel="noopener">
+        <span class="btn-icon">◈</span>
+        <span class="btn-text">
+          <span class="btn-label" data-i="btn_lab">Llevar al Lab</span>
+          <span class="btn-sub">leoncanales@vibraalto.cl</span>
+        </span>
+      </a>
+    </div>
+
+    <!-- NERHIA Intelligence CTA -->
+    <a class="btn-intelligence" href="https://nerhia.com" target="_blank" rel="noopener">
+      <span class="bi-dot"></span>
+      <span data-i="nav_nerhia">Ingresar a la inteligencia</span>
+      <span class="bi-arrow">→</span>
+    </a>
+
+    <!-- Stats -->
+    <div class="stats-rail">
+      <div class="stat">
+        <span class="stat-val">04</span>
+        <span class="stat-label" data-i="stat1">Experimentos</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">17</span>
+        <span class="stat-label" data-i="stat2">Repos</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">02</span>
+        <span class="stat-label" data-i="stat3">Slots Q2</span>
+      </div>
+      <div class="signal-tag">SIGNAL · 432.0 Hz · LOCKED</div>
+    </div>
+  </div>
+</header>
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-label"><span class="ml-dot"></span><span data-i="now_resonating">Now resonating</span></div>
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+
+<!-- ════ NERHIA LIVE WINDOW ════ -->
+<section class="nerhia-window-section" id="nerhia-live">
+  <div class="nerhia-window-wrap">
+
+    <div class="nerhia-window-header">
+      <div class="section-eyebrow" data-i="nerhia_tag">NERHIA · Urban Intelligence · Live</div>
+      <h2 data-i="nerhia_h2">El sistema que escucha <em>las ciudades.</em></h2>
+      <p data-i="nerhia_sub">Esto no es una demo. Es NERHIA corriendo en vivo — señales reales, ciudades reales, inteligencia activa ahora mismo.</p>
+    </div>
+
+    <!-- OS Window -->
+    <div class="os-window">
+
+      <!-- Title bar -->
+      <div class="os-titlebar">
+        <div class="os-dots">
+          <span class="os-dot red"></span>
+          <span class="os-dot yellow"></span>
+          <span class="os-dot green"></span>
+        </div>
+        <span class="os-sep"></span>
+        <span class="os-path">vibraalto.cl / <span>nerhia</span> / core</span>
+        <div style="margin-left:auto">
+          <span class="os-live-badge"><span class="os-live-dot"></span>LIVE</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="os-toolbar">
+        <a class="os-tb-btn primary" href="https://nerhia.com" target="_blank" rel="noopener" data-i="nerhia_open">↗ Abrir en pantalla completa</a>
+        <span class="os-tb-btn" onclick="document.getElementById('nerhia-frame').src='https://nerhia.com'">↺ Recargar</span>
+        <span class="os-tb-spacer"></span>
+        <span class="os-status">NERHIA · <span id="nerhia-city-tag">BUIN · CHILE</span></span>
+      </div>
+
+      <!-- iframe -->
+      <div class="os-iframe-wrap">
+        <iframe
+          id="nerhia-frame"
+          src="https://nerhia.com"
+          title="NERHIA Urban Intelligence"
+          allow="fullscreen"
+          loading="lazy"
+        ></iframe>
+        <div class="os-scanlines"></div>
+        <div class="os-fade"></div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="os-bottombar">
+        <div class="os-bb-item"><span>●</span> SISTEMA ACTIVO</div>
+        <span class="os-bb-sep"></span>
+        <div class="os-bb-item">NERHIA · URBAN INTELLIGENCE</div>
+        <span class="os-bb-sep"></span>
+        <div class="os-bb-item">SIGNAL <span>432 Hz</span></div>
+        <div style="flex:1"></div>
+        <div class="os-bb-item">vibraalto.cl</div>
+      </div>
+
+    </div><!-- /os-window -->
+
+  </div>
+</section>
+
+<!-- PROTOCOL -->
+<section class="section" id="protocol">
+  <div class="container">
+    <div class="section-grid">
+      <div>
+        <div class="section-eyebrow" data-i="protocol_tag">El protocolo · Cuatro pasos</div>
+        <h2 class="section-h2" data-i="protocol_h2">Cómo se <em>afina</em> un sistema en el lab.</h2>
+      </div>
+      <p class="section-sub" data-i="protocol_sub">No tenemos sprints, no tenemos roadmap. Tenemos un protocolo de cuatro pasos que repetimos hasta que el sistema deja de sonar a partes y empieza a sonar como una sola cosa.</p>
+    </div>
+    <div class="protocol-grid">
+      <article class="pillar reveal">
+        <div class="pillar-num">01 · <span data-i="p1_num">Escuchar</span></div>
+        <h4 data-i="p1_h">Antes del primer <em>commit</em>.</h4>
+        <p data-i="p1_p">Una semana sin tocar código. Mapeamos dónde el sistema desafina hoy — fricciones, latencias, decisiones que ya nadie defiende.</p>
+        <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
+          <path d="M0 24 Q12 8,24 24 T48 24 T72 24 T96 24 T120 24 T144 24" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
+          <circle cx="144" cy="24" r="3" fill="#00d4ff"/></svg></div>
+      </article>
+      <article class="pillar reveal">
+        <div class="pillar-num">02 · <span data-i="p2_num">Aislar</span></div>
+        <h4 data-i="p2_h">Una frecuencia a la <em>vez</em>.</h4>
+        <p data-i="p2_p">Separamos cada capa — datos, lógica, render, IA, voz. Cada una se prueba en silencio antes de volver a entrar al conjunto.</p>
+        <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
+          <line x1="28" y1="4" x2="28" y2="44" stroke="#00d4ff" stroke-width="1.5"/>
+          <line x1="68" y1="10" x2="68" y2="38" stroke="currentColor" stroke-width="1" opacity=".35"/>
+          <line x1="108" y1="16" x2="108" y2="32" stroke="currentColor" stroke-width="1" opacity=".25"/>
+          <line x1="148" y1="10" x2="148" y2="38" stroke="currentColor" stroke-width="1" opacity=".35"/>
+          <line x1="188" y1="4" x2="188" y2="44" stroke="currentColor" stroke-width="1" opacity=".45"/></svg></div>
+      </article>
+      <article class="pillar reveal">
+        <div class="pillar-num">03 · <span data-i="p3_num">Componer</span></div>
+        <h4 data-i="p3_h">El sistema como <em>partitura</em>.</h4>
+        <p data-i="p3_p">Volvemos a juntar las capas con un cronograma de fases: qué entra primero, qué espera, dónde se sostiene una nota, dónde se corta.</p>
+        <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
+          <line x1="0" y1="12" x2="220" y2="12" stroke="currentColor" stroke-width="1" opacity=".18"/>
+          <line x1="0" y1="24" x2="220" y2="24" stroke="currentColor" stroke-width="1" opacity=".18"/>
+          <line x1="0" y1="36" x2="220" y2="36" stroke="currentColor" stroke-width="1" opacity=".18"/>
+          <circle cx="38" cy="24" r="3" fill="#c8ff4d"/>
+          <circle cx="88" cy="12" r="3" fill="#c8ff4d"/>
+          <circle cx="138" cy="36" r="3" fill="#c8ff4d"/>
+          <circle cx="188" cy="24" r="3" fill="#c8ff4d"/></svg></div>
+      </article>
+      <article class="pillar reveal">
+        <div class="pillar-num">04 · <span data-i="p4_num">Resonar</span></div>
+        <h4 data-i="p4_h">El sistema se queda <em>solo</em>.</h4>
+        <p data-i="p4_p">Entregamos cuando el sistema ya no nos necesita: documentado, observable, con su propia frecuencia. El lab se aleja, el proyecto sigue sonando.</p>
+        <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
+          <circle cx="110" cy="24" r="4" fill="#c8ff4d"/>
+          <circle cx="110" cy="24" r="12" stroke="#c8ff4d" stroke-width="1" fill="none" opacity=".65"/>
+          <circle cx="110" cy="24" r="20" stroke="#c8ff4d" stroke-width="1" fill="none" opacity=".38"/>
+          <circle cx="110" cy="24" r="28" stroke="#c8ff4d" stroke-width="1" fill="none" opacity=".18"/></svg></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto-section">
+  <div class="manifesto-inner">
+    <div class="manifesto-tag"><span class="ml-dot"></span><span data-i="manifesto_tag">Manifesto · single take · sin notas al pie</span></div>
+    <p class="manifesto-q" data-i="manifesto_text">No construimos productos. <em>Afinamos</em> sistemas que ya quieren existir.</p>
+    <div class="manifesto-author">— el lab</div>
+  </div>
+</section>
+
+<!-- DEMOS -->
+<section class="section" id="demos">
+  <div class="container">
+    <div class="demos-intro">
+      <div class="section-eyebrow" style="justify-content:center" data-i="demos_tag">Demo gratuita · Sin registro</div>
+      <h2 class="section-h2" data-i="demos_h2">Toca la tecnología. Gratis.</h2>
+      <p class="section-sub" style="margin:12px auto 0" data-i="demos_sub">Dos demos en vivo. Sin cuenta, sin costo, sin límites.</p>
+    </div>
+    <div class="demos-grid">
+      <div class="demo-card">
+        <div class="demo-header">
+          <div>
+            <div class="demo-title" data-i="demo1_title">⚡ Fábrica VibraAlto</div>
+            <div class="demo-desc" data-i="demo1_desc">Chat con ExoLeón · Cola de impresión · Control de flota</div>
+          </div>
+          <span class="demo-badge badge-live">LIVE</span>
+        </div>
+        <div class="demo-frame-wrap">
+          <iframe id="frame-fabrica" src="https://vibraalto.cl/fabrica/" title="Fábrica VibraAlto" allow="fullscreen" loading="lazy"></iframe>
+          <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('fabrica')" data-i="demo_full">↗ Pantalla completa</a>
+        </div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-header">
+          <div>
+            <div class="demo-title" data-i="demo2_title">⚗️ Laboratorio 3D</div>
+            <div class="demo-desc" data-i="demo2_desc">Diseño · Visor holográfico · Export STL</div>
+          </div>
+          <span class="demo-badge badge-free">FREE</span>
+        </div>
+        <div class="demo-frame-wrap">
+          <iframe id="frame-lab" src="https://vibraalto.cl/fabricacion-3d/" title="Laboratorio 3D VibraAlto" allow="fullscreen" loading="lazy"></iframe>
+          <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('lab')" data-i="demo_full">↗ Pantalla completa</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMPALACE -->
+<section class="section" id="mempalace">
+  <div class="container">
+    <div class="section-grid">
+      <div>
+        <div class="section-eyebrow" data-i="mp_tag">Experimento 001 · Master of repos</div>
+        <h2 class="section-h2" data-i="mp_h2">MemPalace — un <em>memory palace</em> para tu código.</h2>
+      </div>
+      <p class="section-sub" data-i="mp_sub">Un solo pensamiento detrás de cada repo. Indexa, conecta y recupera el código del lab como si fuera una mente sola.</p>
+    </div>
+    <div class="mp-wrap">
+      <div class="mp-grid">
+        <div class="mp-left">
+          <div>
+            <p class="mp-h3" data-i="mp_h3">Un solo pensamiento.<br/><em>Diecisiete repos.</em></p>
+            <p class="mp-p" style="margin-top:14px" data-i="mp_p">MemPalace es la columna vertebral del lab. El master que mantiene todos los experimentos en la misma frecuencia.</p>
+          </div>
+          <ul class="mp-bullets">
+            <li><span class="ord">01</span><span data-i="mp_b1"><b>Indexa</b> commits, dependencias y notas en un grafo semántico vivo.</span></li>
+            <li><span class="ord">02</span><span data-i="mp_b2"><b>Resuena</b> — encuentra el código análogo antes de que lo escribas.</span></li>
+            <li><span class="ord">03</span><span data-i="mp_b3"><b>Recupera</b> el contexto exacto: archivo, línea, decisión y la conversación detrás.</span></li>
+            <li><span class="ord">04</span><span data-i="mp_b4"><b>Orquesta</b> CI, releases y cross-repo refactors desde un único comando.</span></li>
+          </ul>
+          <div class="mp-stats">
+            <div class="mp-stat"><b>17</b><span data-i="mp_s1">repos</span></div>
+            <div class="mp-stat"><b>2.4k</b><span data-i="mp_s2">símbolos</span></div>
+            <div class="mp-stat"><b>0.18s</b><span>p99</span></div>
+            <div class="mp-stat"><b>v0.4.1</b><span>alpha</span></div>
+          </div>
+          <a class="mp-cta" href="mailto:leoncanales@vibraalto.cl?subject=Acceso%20MemPalace">
+            <span data-i="mp_cta">Pedir acceso temprano</span> →
+          </a>
+        </div>
+        <div class="mp-right">
+          <div class="terminal">
+            <div class="terminal-bar">
+              <div class="dots"><i></i><i></i><i></i></div>
+              <span class="path">~/vibraalto · mempalace v0.4.1</span>
+            </div>
+            <div class="terminal-body">
+              <div><span class="t-p">▸</span> mp <span class="t-f">resonate</span> <span class="t-str">"texture sampler GLSL"</span></div>
+              <div class="t-dim">&nbsp;&nbsp;scanning 17 repos · 2,481 symbols...</div>
+              <div><span class="t-ok">&nbsp;&nbsp;✓</span> match <span class="t-key">core/render</span> · <span class="t-dim">shaders/sampler.glsl:42</span></div>
+              <div><span class="t-ok">&nbsp;&nbsp;✓</span> match <span class="t-key">studio/loom</span> · <span class="t-dim">webgpu/texture.ts:118</span></div>
+              <div><span class="t-ok">&nbsp;&nbsp;✓</span> match <span class="t-key">field/echo</span>&nbsp; · <span class="t-dim">audio/grain.rs:77</span></div>
+              <div style="margin-top:9px"><span class="t-p">▸</span> mp <span class="t-f">orchestrate</span> <span class="t-str">release</span> --frequency 432</div>
+              <div class="t-dim">&nbsp;&nbsp;tuning 17 repos to the same frequency...</div>
+              <div><span class="t-ok">&nbsp;&nbsp;◉</span> in resonance · all systems aligned<span class="t-cur"></span></div>
+            </div>
+          </div>
+          <div class="repo-graph">
+            <span class="rg-label">// trefoil · master knot</span>
+            <span class="rg-stat">17 nodes · ◉ sync</span>
+            <pre class="rg-knot">       ╭──╮ ╭──╮
+    ╭─╯  ╰─╯  ╰─╮
+    │   ╭────╮   │
+    ╰─╮ │    │ ╭─╯
+      ╰─╯    ╰─╯</pre>
+            <div class="rg-caption"><b>K₃,₁</b> · topologically the triquetra</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIMENTS -->
+<section class="section" id="experiments">
+  <div class="container">
+    <div class="section-grid">
+      <div>
+        <div class="section-eyebrow" data-i="exp_tag">Más en circulación · 03 experimentos</div>
+        <h2 class="section-h2" data-i="exp_h2">Otros sistemas que están <em>sonando</em>.</h2>
+      </div>
+      <p class="section-sub" data-i="exp_sub">MemPalace es el master, pero el lab no para.</p>
+    </div>
+
+    <div class="experiments-grid">
+
+      <!-- LOOM — weaving sine waves -->
+      <article class="exp reveal" id="exp-loom">
+        <div class="exp-head">
+          <span>Exp.002</span>
+          <span class="exp-status live"><i></i>live</span>
+        </div>
+        <h3>Loom</h3>
+        <p data-i="exp1_p">Studio para tejer interfaces 3D en WebGPU. Compone shaders, texturas y geometrías con un lenguaje de nodos en tiempo real.</p>
+        <div class="exp-meta"><span>WebGPU · TS · Rust</span><span>v0.7 · beta</span></div>
+        <div class="exp-glyph exp-glyph-canvas">
+          <canvas id="glyph-loom" class="glyph-cv"></canvas>
+          <button class="freq-btn" data-exp="loom" aria-label="Escuchar frecuencia Loom">
+            <span class="freq-icon">◎</span>
+            <span class="freq-label">432 Hz</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- ECHO — breathing vertical bars -->
+      <article class="exp reveal" id="exp-echo">
+        <div class="exp-head">
+          <span>Exp.003</span>
+          <span class="exp-status tuning"><i></i><span data-i="tuning">afinando</span></span>
+        </div>
+        <h3>Echo</h3>
+        <p data-i="exp2_p">Motor de transcripción + búsqueda semántica para audio largo. Hace que cualquier conversación se vuelva consultable como un repo.</p>
+        <div class="exp-meta"><span>Whisper · PyTorch · SQLite</span><span>v0.3 · alpha</span></div>
+        <div class="exp-glyph exp-glyph-canvas">
+          <canvas id="glyph-echo" class="glyph-cv"></canvas>
+          <button class="freq-btn" data-exp="echo" aria-label="Escuchar frecuencia Echo">
+            <span class="freq-icon">◎</span>
+            <span class="freq-label">216 Hz</span>
+          </button>
+        </div>
+      </article>
+
+      <!-- ARIA — orbiting nodes -->
+      <article class="exp reveal" id="exp-aria">
+        <div class="exp-head">
+          <span>Exp.004</span>
+          <span class="exp-status workshop"><i></i><span data-i="workshop">taller</span></span>
+        </div>
+        <h3>Aria</h3>
+        <p data-i="exp3_p">Notebook conversacional para sistemas reactivos. Cada celda es un agente; el conjunto se afina como una partitura.</p>
+        <div class="exp-meta"><span>Bun · React · Edge AI</span><span>v0.1 · closed</span></div>
+        <div class="exp-glyph exp-glyph-canvas">
+          <canvas id="glyph-aria" class="glyph-cv"></canvas>
+          <button class="freq-btn" data-exp="aria" aria-label="Escuchar frecuencia Aria">
+            <span class="freq-icon">◎</span>
+            <span class="freq-label">864 Hz</span>
+          </button>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- 432 Hz label -->
+    <div class="freq-footer">
+      <span class="freq-footer-dot"></span>
+      <span class="freq-footer-text">Sintonizados a <b>432 Hz</b> · frecuencia natural de resonancia</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ KALDI COFFEE STRIP ════ -->
+<section class="kaldi-strip" id="kaldi">
+  <canvas id="kaldi-canvas"></canvas>
+
+  <div class="kaldi-inner">
+
+    <!-- LEFT: Identity + CTA -->
+    <div class="kaldi-left">
+
+      <div class="kaldi-pause-tag">Antes de seguir</div>
+
+      <div class="kaldi-wordmark">
+        <span class="kaldi-word-kaldi">KALDi</span>
+        <span class="kaldi-word-coffee">Coffee</span>
+      </div>
+
+      <p class="kaldi-manifesto">
+        El lugar donde las <em>ideas</em> encuentran su temperatura perfecta.
+      </p>
+
+      <div class="kaldi-tagline">Awaken your senses · Santiago, Chile</div>
+
+      <div class="kaldi-pillars">
+        <span class="kaldi-pill">☕ Café especialidad</span>
+        <span class="kaldi-pill">⚡ Tech</span>
+        <span class="kaldi-pill">🏆 Deporte</span>
+        <span class="kaldi-pill">💡 Innovación</span>
+        <span class="kaldi-pill">🎯 Mentorías</span>
+      </div>
+
+      <a class="kaldi-btn" href="https://vibraalto.cl/kaldi/" target="_blank" rel="noopener">
+        <span class="kaldi-btn-dot"></span>
+        Visita Kaldi Coffee
+        <span class="kaldi-btn-arrow">→</span>
+      </a>
+
+      <div class="kaldi-powered">
+        <span>Editorial engine</span>
+        <span style="color:rgba(245,166,35,0.12)">·</span>
+        <a href="https://vibraalto.cl">VibraAlto AI</a>
+        <span style="color:rgba(245,166,35,0.12)">·</span>
+        <a href="https://nerhia.com">NERHIA</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Atmosphere canvas + stats -->
+    <div class="kaldi-right">
+
+      <!-- OS-style video window -->
+      <div class="kaldi-video-frame">
+        <div class="kaldi-video-bar">
+          <div class="kaldi-video-dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span class="kaldi-video-path">kaldi.vibraalto.cl <span style="color:rgba(245,166,35,0.5)">/</span> señales</span>
+          <span class="kaldi-video-badge">NERHIA LIVE</span>
+        </div>
+        <div class="kaldi-canvas-wrap">
+          <canvas id="kaldi-video-canvas"></canvas>
+          <div class="kaldi-video-scan"></div>
+          <div class="kaldi-video-overlay">
+            <div class="kaldi-score" id="kaldi-uvx">—</div>
+            <div class="kaldi-score-sub">ALIVE · UVX SANTIAGO</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NERHIA live stats -->
+      <div class="kaldi-stats">
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-signals">—</div>
+          <div class="kaldi-stat-label">Señales NERHIA</div>
+        </div>
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-nodes">—</div>
+          <div class="kaldi-stat-label">Nodos activos</div>
+        </div>
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-conf">—</div>
+          <div class="kaldi-stat-label">Confianza avg</div>
+        </div>
+      </div>
+
+      <!-- Pipeline tag -->
+      <div class="kaldi-pipeline">
+        <span class="kaldi-pipeline-dot"></span>
+        Instagram Signal Intake
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span>NERHIA Engine</span>
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span>Kaldi Feed</span>
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span style="color:rgba(245,166,35,0.45)">Pipeline activo</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════ NEXUS VA STRIP — Pantallas Inteligentes ════ -->
+<section class="nexus-strip" id="nexus-va">
+  <canvas id="nexus-bg-canvas"></canvas>
+
+  <div class="nexus-inner">
+
+    <!-- LEFT: TV holográfica + productos -->
+    <div class="nexus-left">
+
+      <!-- OS Window / TV display -->
+      <div class="nexus-tv">
+        <div class="nexus-tv-bar">
+          <div class="nexus-tv-dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span class="nexus-tv-path">nexus.vibraalto.cl / <span style="color:rgba(0,212,255,0.55)">va</span> / exoleón</span>
+          <span class="nexus-tv-badge">EXOLEÓN VA</span>
+        </div>
+        <div class="nexus-canvas-wrap">
+          <canvas id="nexus-tv-canvas"></canvas>
+          <div class="nexus-tv-scan"></div>
+        </div>
+        <div class="nexus-tv-bottombar">
+          <span>● SISTEMA ACTIVO</span>
+          <span style="flex:1;text-align:center">LÍNEA VA · INFRAESTRUCTURA VISUAL</span>
+          <span>NERHIA OK</span>
+        </div>
+      </div>
+
+      <!-- 4 productos VA -->
+      <div class="nexus-products">
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA ONE</div>
+          <div class="nexus-prod-desc">Señalética · Corporativo esencial</div>
+          <div class="nexus-prod-tag">4K · 18/7 · Android 13</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA PRO</div>
+          <div class="nexus-prod-desc">Educación · Touch interactivo</div>
+          <div class="nexus-prod-tag">4K · 20pts touch · LMS nativo</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA EDGE</div>
+          <div class="nexus-prod-desc">Dirección · Auditorios premium</div>
+          <div class="nexus-prod-tag">8K · OLED · 24/7 SLA</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA CORE</div>
+          <div class="nexus-prod-desc">IoT · Kioscos · Vending</div>
+          <div class="nexus-prod-tag">REST · MQTT · Cloud fleet</div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: copy + CTA -->
+    <div class="nexus-right">
+
+      <div class="nexus-pause-tag">Infraestructura Visual Inteligente</div>
+
+      <div class="nexus-wordmark">
+        <span class="nexus-word-main">NEXUS VA</span>
+        <span class="nexus-word-sub">Línea VA · VibraAlto · LATAM 2026</span>
+      </div>
+
+      <p class="nexus-manifesto">
+        Pantallas <em>de nivel infraestructura</em> para gobiernos, educación, corporativo y minería.
+      </p>
+
+      <div class="nexus-tagline">12+ años OEM global · Exclusividad LATAM</div>
+
+      <div class="nexus-sectors">
+        <span class="nexus-sector">🏛️ Gobierno</span>
+        <span class="nexus-sector">🎓 Educación</span>
+        <span class="nexus-sector">⛏️ Minería</span>
+        <span class="nexus-sector">🤖 IoT</span>
+        <span class="nexus-sector">🏢 Corporativo</span>
+      </div>
+
+      <div class="nexus-stats">
+        <div class="nexus-stat"><div class="nexus-stat-val">12+</div><div class="nexus-stat-label">Años OEM</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">40+</div><div class="nexus-stat-label">Países</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">8K</div><div class="nexus-stat-label">Resolución</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">24/7</div><div class="nexus-stat-label">Operación</div></div>
+      </div>
+
+      <a class="nexus-btn" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+        <span class="nexus-btn-dot"></span>
+        Ver Línea VA completa
+        <span class="nexus-btn-arrow">→</span>
+      </a>
+
+      <div class="nexus-powered">
+        <span>Powered by</span>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://nerhia.com">NERHIA</a>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://nexus.vibraalto.cl/va">NEXUS</a>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://vibraalto.cl">VibraAlto</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- CONTACT -->
+<section class="cta-section" id="contact">
+  <div class="cta-inner">
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:20px" data-i="cta_tag">Trabajemos juntos · 02 slots Q2 2026</div>
+      <h3 class="cta-h3" data-i="cta_h3">¿Tienes un sistema que <em>todavía no afina</em>?<br/>Pásalo por el lab.</h3>
+    </div>
+    <div class="cta-right">
+      <p class="cta-p" data-i="cta_p">Tomamos dos colaboraciones por trimestre. Sistemas raros, problemas honestos, plazos cortos.</p>
+      <div class="cta-btns">
+        <a class="btn btn-wa" href="https://wa.me/56971747072" target="_blank" rel="noopener">
+          <span class="btn-icon">⬡</span>
+          <span class="btn-text">
+            <span class="btn-label" data-i="btn_wa">WhatsApp directo</span>
+            <span class="btn-sub">+56 9 7174 7072 · respuesta rápida</span>
+          </span>
+        </a>
+        <a class="btn btn-lab" href="mailto:leoncanales@vibraalto.cl?subject=Problema%20para%20el%20Lab&body=Hola%20Leo%2C%0A%0A" target="_blank" rel="noopener">
+          <span class="btn-icon">◈</span>
+          <span class="btn-text">
+            <span class="btn-label" data-i="btn_lab">Llevar al Lab</span>
+            <span class="btn-sub">leoncanales@vibraalto.cl</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ DIGITAL TWIN ════ -->
+<section class="nerhia-window-section" id="lab">
+  <div class="nerhia-window-wrap">
+
+    <div class="nerhia-window-header">
+      <div class="section-eyebrow" data-i="lab_tag">NERHIA Lab · Gemelo Digital · Simulación urbana</div>
+      <h2 data-i="lab_h2">El sistema que <em>escucha</em> las ciudades.</h2>
+      <p data-i="lab_sub">NERHIA procesa señales en tiempo real — gemelo digital vivo, zonas, congestión y métricas de cada ciudad de la red global.</p>
+    </div>
+
+    <!-- OS Window — Digital Twin -->
+    <div class="os-window">
+
+      <!-- Title bar -->
+      <div class="os-titlebar">
+        <div class="os-dots">
+          <span class="os-dot red"></span>
+          <span class="os-dot yellow"></span>
+          <span class="os-dot green"></span>
+        </div>
+        <span class="os-sep"></span>
+        <span class="os-path">vibraalto.cl / nerhia / <span>twin</span></span>
+        <div style="margin-left:auto">
+          <span class="os-live-badge"><span class="os-live-dot"></span>SIMULANDO</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="os-toolbar">
+        <a class="os-tb-btn primary" href="https://nerhia.com/twin.html" target="_blank" rel="noopener" data-i="twin_open">↗ Abrir en pantalla completa</a>
+        <span class="os-tb-btn" onclick="document.getElementById('twin-frame').src='https://nerhia.com/twin.html'">↺ Recargar</span>
+        <span class="os-tb-spacer"></span>
+        <span class="os-status">DIGITAL TWIN · <span>NERHIA v2</span></span>
+      </div>
+
+      <!-- iframe -->
+      <div class="os-iframe-wrap" style="height:620px">
+        <iframe
+          id="twin-frame"
+          src="https://nerhia.com/twin.html"
+          title="NERHIA Digital Twin"
+          allow="fullscreen"
+          loading="lazy"
+        ></iframe>
+        <div class="os-scanlines"></div>
+        <div class="os-fade"></div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="os-bottombar">
+        <div class="os-bb-item"><span>●</span> TWIN ACTIVO</div>
+        <span class="os-bb-sep"></span>
+        <div class="os-bb-item">NERHIA · URBAN INTELLIGENCE</div>
+        <span class="os-bb-sep"></span>
+        <div class="os-bb-item">SIMULACIÓN <span>EN VIVO</span></div>
+        <div style="flex:1"></div>
+        <div class="os-bb-item">nerhia.com</div>
+      </div>
+
+    </div><!-- /os-window -->
+
+    <!-- Ecosystem nav strip -->
+    <div class="eco-strip">
+      <span class="eco-strip-label">ECOSISTEMA</span>
+      <a class="eco-strip-item" href="https://nerhia.com" target="_blank">NERHIA HOME</a>
+      <a class="eco-strip-item active" href="https://nerhia.com/twin.html" target="_blank">DIGITAL TWIN</a>
+      <a class="eco-strip-item" href="https://nerhia.com/lab.html" target="_blank">LAB</a>
+      <a class="eco-strip-item" href="https://nerhia.com" target="_blank">↗ NERHIA CORE</a>
+    </div>
+
+  </div>
+</section>
+
+
+
+<footer>
+  <div class="footer-inner">
+    <span>© 2026 · Vibraalto Lab</span>
+    <span>Tuned <em>by ear</em></span>
+    <a href="#top" data-i="footer_loc">hecho desde el sur</a>
+    <span>signal 432 Hz · build 0xA3F2</span>
+  </div>
+</footer>
+
+<!-- Controls -->
+<div id="controls">
+  <label>VEL</label>
+  <input type="range" id="spd" min="0" max="10" value="3" step="1">
+  <span class="val" id="spdv">3</span>
+  <label>INCL</label>
+  <input type="range" id="tilt" min="0" max="50" value="22" step="1">
+  <span class="val" id="tiltv">22°</span>
+  <button id="tog">⏸ PAUSA</button>
+</div>
+
+<script>
+const T = {
+  es:{
+    eyebrow:'Vibraalto Lab · Sistemas experimentales · EST 2025',
+    headline_sub:'.CL · Eleva tu frecuencia',
+    lede:'Un taller de sistemas compuestos. Afinamos 3D, IA, código y craft a la misma frecuencia hasta que el conjunto suena como una sola cosa. Aquí no se ensamblan herramientas — se compone software con oído.',
+    nav_protocol:'Protocolo',nav_demos:'Demos Gratis',nav_contact:'Contacto',nav_cta:'Lab · 02 slots Q2',
+    btn_mempalace:'Conoce MemPalace',btn_demos:'Demo Gratis 3D',btn_wa:'WhatsApp directo',btn_lab:'Llevar al Lab',
+    stat1:'experimentos en circulación',stat2:'repos orquestados',stat3:'slots / Q2 2026',
+    now_resonating:'Now resonating',
+    protocol_tag:'El protocolo · Cuatro pasos',
+    protocol_h2:'Cómo se <em>afina</em> un sistema en el lab.',
+    protocol_sub:'No tenemos sprints, no tenemos roadmap. Tenemos un protocolo de cuatro pasos que repetimos hasta que el sistema deja de sonar a partes y empieza a sonar como una sola cosa.',
+    p1_num:'Escuchar',p1_h:'Antes del primer <em>commit</em>.',p1_p:'Una semana sin tocar código. Mapeamos dónde el sistema desafina hoy — fricciones, latencias, decisiones que ya nadie defiende.',
+    p2_num:'Aislar',p2_h:'Una frecuencia a la <em>vez</em>.',p2_p:'Separamos cada capa — datos, lógica, render, IA, voz. Cada una se prueba en silencio antes de volver a entrar al conjunto.',
+    p3_num:'Componer',p3_h:'El sistema como <em>partitura</em>.',p3_p:'Volvemos a juntar las capas con un cronograma de fases: qué entra primero, qué espera, dónde se sostiene una nota, dónde se corta.',
+    p4_num:'Resonar',p4_h:'El sistema se queda <em>solo</em>.',p4_p:'Entregamos cuando el sistema ya no nos necesita: documentado, observable, con su propia frecuencia. El lab se aleja, el proyecto sigue sonando.',
+    manifesto_tag:'Manifesto · single take · sin notas al pie',
+    manifesto_text:'No construimos productos. <em>Afinamos</em> sistemas que ya quieren existir — les quitamos el ruido encima, les damos forma, y los soltamos cuando ya saben sonar solos.',
+    demos_tag:'Demo gratuita · Prueba sin registro',demos_h2:'Toca la tecnología. Gratis.',
+    demos_sub:'Dos demos en vivo de lo que construimos — impresión 3D industrial y laboratorio de diseño. Sin cuenta, sin costo, sin límites de tiempo.',
+    demo1_title:'⚡ Fábrica VibraAlto',demo1_desc:'Chat con ExoLeón · Cola de impresión · Control de flota',
+    demo2_title:'⚗️ Laboratorio 3D',demo2_desc:'Diseño · Visor holográfico · Export STL',
+    demo_full:'↗ Ver pantalla completa',
+    mp_tag:'Experimento 001 · Master of repos',mp_h2:'MemPalace — un <em>memory palace</em> para tu código.',
+    mp_sub:'Un solo pensamiento detrás de cada repo. MemPalace indexa, conecta y recupera el código del lab como si fuera una mente sola.',
+    mp_h3:'Un solo pensamiento.<br/>Diecisiete <em>repos</em>.',
+    mp_p:'MemPalace es la columna vertebral del lab. El master que mantiene todos los experimentos en la misma frecuencia.',
+    mp_b1:'<b>Indexa</b> commits, dependencias y notas en un grafo semántico vivo.',
+    mp_b2:'<b>Resuena</b> — encuentra el código análogo en otros repos antes de que lo escribas.',
+    mp_b3:'<b>Recupera</b> el contexto exacto: archivo, línea, decisión y la conversación detrás.',
+    mp_b4:'<b>Orquesta</b> CI, releases y cross-repo refactors desde un único comando.',
+    mp_s1:'repos',mp_s2:'símbolos',mp_cta:'Pedir acceso temprano',
+    exp_tag:'Más en circulación · 03 experimentos',exp_h2:'Otros sistemas que están <em>sonando</em>.',
+    exp_sub:'MemPalace es el master, pero el lab no para.',
+    exp1_p:'Studio para tejer interfaces 3D en WebGPU. Compone shaders, texturas y geometrías con un lenguaje de nodos en tiempo real.',
+    exp2_p:'Motor de transcripción + búsqueda semántica para audio largo. Hace que cualquier conversación se vuelva consultable como un repo.',
+    exp3_p:'Notebook conversacional para sistemas reactivos. Cada celda es un agente; el conjunto se afina como una partitura.',
+    tuning:'afinando',workshop:'taller',
+    cta_tag:'Trabajemos juntos · 02 slots Q2 2026',
+    cta_h3:'¿Tienes un sistema que <em>todavía no afina</em>?<br/>Pásalo por el lab.',
+    cta_p:'Tomamos dos colaboraciones por trimestre. Sistemas raros, problemas honestos, plazos cortos. Si te respondemos, es porque ya escuchamos algo.',
+    nerhia_tag:'NERHIA · Urban Intelligence · Live',
+    nerhia_h2:'El sistema que escucha <em>las ciudades.</em>',
+    nerhia_sub:'Esto no es una demo. Es NERHIA corriendo en vivo — señales reales, ciudades reales, inteligencia activa ahora mismo.',
+    nerhia_open:'↗ Abrir en pantalla completa',
+    nav_nerhia:'Ingresar a la inteligencia',
+    footer_loc:'hecho desde el sur',
+    lab_tag:'NERHIA Lab · Gemelo Digital · Simulación urbana',
+    lab_h2:'El sistema que <em>escucha</em> las ciudades.',
+    lab_sub:'NERHIA procesa señales en tiempo real — gemelo digital vivo, zonas, congestión y métricas de cada ciudad de la red global.',
+    twin_open:'↗ Abrir en pantalla completa',
+  },
+  en:{
+    eyebrow:'Vibraalto Lab · Experimental Systems · EST 2025',
+    headline_sub:'.CL · Elevate your frequency',
+    lede:'A compound systems workshop. We tune 3D, AI, code and craft to the same frequency until the whole thing sounds like one thing. We don\'t assemble tools — we compose software by ear.',
+    nav_protocol:'Protocol',nav_demos:'Free Demos',nav_contact:'Contact',nav_cta:'Lab · 02 slots Q2',
+    btn_mempalace:'Discover MemPalace',btn_demos:'Free 3D Demo',btn_wa:'WhatsApp direct',btn_lab:'Take to the Lab',
+    stat1:'experiments running',stat2:'repos orchestrated',stat3:'slots / Q2 2026',
+    now_resonating:'Now resonating',
+    protocol_tag:'The protocol · Four steps',
+    protocol_h2:'How a system is <em>tuned</em> in the lab.',
+    protocol_sub:'No sprints, no roadmap. We have a four-step protocol we repeat until the system stops sounding like parts and starts sounding like one thing.',
+    p1_num:'Listen',p1_h:'Before the first <em>commit</em>.',p1_p:'One week without touching code. We map where the system is off-key today — friction, latency, decisions nobody defends anymore.',
+    p2_num:'Isolate',p2_h:'One frequency at a <em>time</em>.',p2_p:'We separate each layer — data, logic, render, AI, voice. Each one is tested in silence before returning to the ensemble.',
+    p3_num:'Compose',p3_h:'The system as a <em>score</em>.',p3_p:'We bring the layers back together with a phase schedule: what enters first, what waits, where a note is held, where it cuts.',
+    p4_num:'Resonate',p4_h:'The system stands <em>alone</em>.',p4_p:'We deliver when the system no longer needs us: documented, observable, with its own frequency. The lab steps back, the project keeps playing.',
+    manifesto_tag:'Manifesto · single take · no footnotes',
+    manifesto_text:'We don\'t build products. We <em>tune</em> systems that already want to exist — strip the noise, give them shape, and release them when they know how to sound on their own.',
+    demos_tag:'Free demo · No sign-up required',demos_h2:'Touch the technology. Free.',
+    demos_sub:'Two live demos of what we build — industrial 3D printing and design lab. No account, no cost, no time limits.',
+    demo1_title:'⚡ VibraAlto Factory',demo1_desc:'Chat with ExoLeón · Print queue · Fleet control',
+    demo2_title:'⚗️ 3D Laboratory',demo2_desc:'Design · Holographic viewer · STL export',
+    demo_full:'↗ Open full screen',
+    mp_tag:'Experiment 001 · Master of repos',mp_h2:'MemPalace — a <em>memory palace</em> for your code.',
+    mp_sub:'One thought behind every repo. MemPalace indexes, connects and retrieves the lab\'s code as if it were a single mind.',
+    mp_h3:'One thought.<br/>Seventeen <em>repos</em>.',
+    mp_p:'MemPalace is the lab\'s backbone. The master that keeps every experiment at the same frequency.',
+    mp_b1:'<b>Indexes</b> commits, dependencies and notes into a living semantic graph.',
+    mp_b2:'<b>Resonates</b> — finds analogous code in other repos before you write it.',
+    mp_b3:'<b>Retrieves</b> exact context: file, line, decision and the conversation behind it.',
+    mp_b4:'<b>Orchestrates</b> CI, releases and cross-repo refactors from a single command.',
+    mp_s1:'repos',mp_s2:'symbols',mp_cta:'Request early access',
+    exp_tag:'More running · 03 experiments',exp_h2:'Other systems that are <em>sounding</em>.',
+    exp_sub:'MemPalace is the master, but the lab never stops.',
+    exp1_p:'Studio to weave 3D interfaces in WebGPU. Compose shaders, textures and geometries with a real-time node language.',
+    exp2_p:'Transcription engine + semantic search for long audio. Makes any conversation queryable like a repo.',
+    exp3_p:'Conversational notebook for reactive systems. Each cell is an agent; the whole tunes like a score.',
+    tuning:'tuning',workshop:'workshop',
+    cta_tag:'Work together · 02 slots Q2 2026',
+    cta_h3:'Got a system that <em>still won\'t tune</em>?<br/>Run it through the lab.',
+    cta_p:'We take two collaborations per quarter. Unusual systems, honest problems, short deadlines. If we reply, it\'s because we already heard something.',
+    nerhia_tag:'NERHIA · Urban Intelligence · Live',
+    nerhia_h2:'The system that listens to <em>cities.</em>',
+    nerhia_sub:'This is not a demo. NERHIA is running live — real signals, real cities, active intelligence right now.',
+    nerhia_open:'↗ Open fullscreen',
+    nav_nerhia:'Enter the intelligence',
+    footer_loc:'made from the south',
+    lab_tag:'NERHIA Lab · Digital Twin · Urban simulation',
+    lab_h2:'The system that <em>listens</em> to cities.',
+    lab_sub:'NERHIA processes real-time signals — live digital twin, zones, congestion and metrics for every city in the global network.',
+    twin_open:'↗ Open fullscreen',
+  },
+  zh:{
+    eyebrow:'Vibraalto Lab · 实验系统 · EST 2025',
+    headline_sub:'.CL · 提升你的频率',
+    lede:'一个复合系统工作室。我们将3D、AI、代码和工艺调谐到同一频率，直到整体听起来像一件事。我们不组装工具——我们用耳朵创作软件。',
+    nav_protocol:'协议',nav_demos:'免费演示',nav_contact:'联系我们',nav_cta:'实验室 · Q2 2个名额',
+    btn_mempalace:'了解 MemPalace',btn_demos:'免费3D演示',btn_wa:'WhatsApp 直接联系',btn_lab:'带到实验室',
+    stat1:'正在运行的实验',stat2:'协调中的代码库',stat3:'名额 / Q2 2026',
+    now_resonating:'正在共振',
+    protocol_tag:'协议 · 四个步骤',
+    protocol_h2:'如何在实验室中<em>调谐</em>系统。',
+    protocol_sub:'没有冲刺，没有路线图。我们有一个四步协议，重复直到系统不再听起来像零件，而是像一个整体。',
+    p1_num:'聆听',p1_h:'在第一次<em>提交</em>之前。',p1_p:'一周不碰代码。我们绘制系统今天哪里失调——摩擦、延迟、没有人再为之辩护的决定。',
+    p2_num:'隔离',p2_h:'一次一个<em>频率</em>。',p2_p:'我们分离每一层——数据、逻辑、渲染、AI、语音。每一层在沉默中测试，然后再回到整体。',
+    p3_num:'创作',p3_h:'系统如同<em>乐谱</em>。',p3_p:'我们按阶段时间表重新组合各层：什么先进入，什么等待，音符在哪里持续，在哪里切断。',
+    p4_num:'共振',p4_h:'系统独立<em>运行</em>。',p4_p:'当系统不再需要我们时交付：有文档、可观察、有自己的频率。实验室退后，项目继续运行。',
+    manifesto_tag:'宣言 · 一次录制 · 无脚注',
+    manifesto_text:'我们不构建产品。我们<em>调谐</em>已经想要存在的系统——剥去噪音，给它们形状，当它们知道如何独自发声时释放它们。',
+    demos_tag:'免费演示 · 无需注册',demos_h2:'触碰技术。免费。',
+    demos_sub:'两个实时演示——工业3D打印和设计实验室。无需账户，无需费用，无时间限制。',
+    demo1_title:'⚡ VibraAlto 工厂',demo1_desc:'与ExoLeón聊天 · 打印队列 · 机队控制',
+    demo2_title:'⚗️ 3D 实验室',demo2_desc:'设计 · 全息查看器 · STL导出',
+    demo_full:'↗ 全屏打开',
+    mp_tag:'实验001 · 代码库主节点',mp_h2:'MemPalace — 你代码的<em>记忆宫殿</em>。',
+    mp_sub:'每个代码库背后只有一个思想。MemPalace像单一思维一样索引、连接和检索实验室的代码。',
+    mp_h3:'一个思想。<br/>十七个<em>代码库</em>。',
+    mp_p:'MemPalace是实验室的支柱。保持所有实验在同一频率的主节点。',
+    mp_b1:'<b>索引</b>提交、依赖项和注释到活跃的语义图中。',
+    mp_b2:'<b>共振</b>——在你编写代码之前在其他代码库中找到类似代码。',
+    mp_b3:'<b>检索</b>精确上下文：文件、行、决策及其背后的对话。',
+    mp_b4:'<b>编排</b>CI、发布和来自单个命令的跨代码库重构。',
+    mp_s1:'代码库',mp_s2:'符号',mp_cta:'申请早期访问',
+    exp_tag:'更多运行中 · 03个实验',exp_h2:'其他正在<em>发声</em>的系统。',
+    exp_sub:'MemPalace是主节点，但实验室从不停止。',
+    exp1_p:'在WebGPU中编织3D界面的工作室。用实时节点语言创作着色器、纹理和几何体。',
+    exp2_p:'长音频转录引擎+语义搜索。让任何对话都像代码库一样可查询。',
+    exp3_p:'响应式系统的对话笔记本。每个单元格都是一个代理；整体像乐谱一样调谐。',
+    tuning:'调谐中',workshop:'工作坊',
+    cta_tag:'合作 · Q2 2026 2个名额',
+    cta_h3:'有一个<em>还无法调谐</em>的系统？<br/>带到实验室来。',
+    cta_p:'我们每季度接受两个合作。不寻常的系统，诚实的问题，短期限。如果我们回复，是因为我们已经听到了什么。',
+    nerhia_tag:'NERHIA · 城市智能 · 实时',
+    nerhia_h2:'聆听<em>城市</em>的系统。',
+    nerhia_sub:'这不是演示。NERHIA正在实时运行——真实信号，真实城市，现在就活跃着。',
+    nerhia_open:'↗ 全屏打开',
+    nav_nerhia:'进入智能系统',
+    footer_loc:'从南方制作',
+    lab_tag:'NERHIA Lab · 数字孪生 · 城市模拟',
+    lab_h2:'<em>聆听</em>城市的系统。',
+    lab_sub:'NERHIA实时处理信号——实时数字孪生、区域、拥堵和全球城市网络的指标。',
+    twin_open:'↗ 全屏打开',
+  }
+};
+
+let currentLang = 'es';
+function setLang(lang){
+  currentLang = lang;
+  const t = T[lang] || T.es;
+  // Update both old .lb and new .vb-lb buttons
+  document.querySelectorAll('.lb, .vb-lb').forEach(b=>{
+    const t = b.textContent.trim();
+    const match = lang==='zh' ? (t==='中文') : (t.toLowerCase()===lang.toLowerCase());
+    b.classList.toggle('active', match);
+  });
+  document.querySelectorAll('[data-i]').forEach(el=>{
+    const key=el.getAttribute('data-i');
+    if(t[key]!==undefined) el.innerHTML=t[key];
+  });
+  document.documentElement.lang = lang==='zh'?'zh-CN':lang;
+}
+
+// ════════════════════════════════════════════
+//  THREE.JS — CINEMATIC REACTOR
+// ════════════════════════════════════════════
+(function ReactorScene(){
+  const cv3=document.getElementById('symbol-canvas');
+  if(!cv3||typeof THREE==='undefined') return;
+
+  const W3=window.innerWidth, H3=window.innerHeight;
+  const renderer=new THREE.WebGLRenderer({canvas:cv3,antialias:true,alpha:true});
+  renderer.setSize(920,920);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=2.1;
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(32,1,.1,200);
+  camera.position.set(0,0,8.5);camera.lookAt(0,0,0);
+
+  // lights
+  const kL=new THREE.DirectionalLight(0xd8f0ff,6);kL.position.set(3,-1,10);scene.add(kL);
+  const fL=new THREE.PointLight(0x7c2fff,14,25);fL.position.set(-6,5,2);scene.add(fL);
+  const rL=new THREE.PointLight(0x00d4ff,9,20);rL.position.set(6,1,-5);scene.add(rL);
+  const bL=new THREE.PointLight(0x001133,3,15);bL.position.set(0,-6,2);scene.add(bL);
+  scene.add(new THREE.HemisphereLight(0x4411aa,0x001122,.4));
+
+  const chromeMat=new THREE.MeshPhysicalMaterial({color:0xc8d4e0,metalness:1,roughness:.06,clearcoat:1,clearcoatRoughness:.08,envMapIntensity:3});
+  const energyMat=new THREE.MeshStandardMaterial({color:0x9b5cff,emissive:0x7c2fff,emissiveIntensity:2,metalness:.1,roughness:.2});
+  const ringMat=new THREE.MeshPhysicalMaterial({color:0xb0bcc8,metalness:1,roughness:.15,clearcoat:.7,clearcoatRoughness:.18,envMapIntensity:2.2});
+  const eRingMat=new THREE.MeshStandardMaterial({color:0x00ccff,emissive:0x003388,emissiveIntensity:1.5,metalness:.4,roughness:.2});
+  const nodeMat=new THREE.MeshStandardMaterial({color:0xff8844,emissive:0xcc4400,emissiveIntensity:1.2,metalness:.5,roughness:.2});
+  const particleMat=new THREE.MeshStandardMaterial({color:0xd0dce8,emissive:0x002244,emissiveIntensity:.4,metalness:1,roughness:.2});
+
+  const pts=[];
+  for(let i=0;i<=500;i++){const t=(i/500)*Math.PI*2;pts.push(new THREE.Vector3((Math.sin(t)+2*Math.sin(2*t))*.72,(Math.cos(t)-2*Math.cos(2*t))*.72,-Math.sin(3*t)*.72));}
+  const curve=new THREE.CatmullRomCurve3(pts,true,'centripetal');
+
+  const reactor=new THREE.Group();
+  reactor.scale.set(.95,.95,.95);
+  reactor.add(new THREE.Mesh(new THREE.TubeGeometry(curve,400,.18,48,true),chromeMat));
+  const eKnot=new THREE.Mesh(new THREE.TubeGeometry(curve,400,.09,24,true),energyMat);
+  eKnot.scale.set(.97,.97,.97);reactor.add(eKnot);
+
+  const rings=new THREE.Group();
+  const r1=new THREE.Mesh(new THREE.TorusGeometry(2,.036,32,200),ringMat);
+  const r2=new THREE.Mesh(new THREE.TorusGeometry(2.4,.026,32,200),ringMat);
+  const r3=new THREE.Mesh(new THREE.TorusGeometry(2.8,.02,32,200),ringMat);
+  r2.rotation.x=Math.PI/2;r3.rotation.z=Math.PI/3;rings.add(r1,r2,r3);
+  const eRing=new THREE.Mesh(new THREE.TorusGeometry(1.72,.014,16,160),eRingMat);
+  eRing.rotation.x=Math.PI/6;rings.add(eRing);reactor.add(rings);
+
+  for(let i=0;i<12;i++){const a=(i/12)*Math.PI*2;
+    const sp=new THREE.Mesh(new THREE.CylinderGeometry(.012,.024,.42,8),ringMat);
+    sp.position.set(Math.cos(a)*1.78,Math.sin(a)*1.78,0);sp.rotation.z=a+Math.PI/2;sp.rotation.x=Math.PI/2;reactor.add(sp);
+    const tp=new THREE.Mesh(new THREE.SphereGeometry(.058,14,10),nodeMat);
+    tp.position.set(Math.cos(a)*2,Math.sin(a)*2,0);reactor.add(tp);}
+
+  for(let i=0;i<60;i++){const a=(i/60)*Math.PI*2,isM=(i%5===0);
+    const tk=new THREE.Mesh(new THREE.BoxGeometry(isM?.011:.006,isM?.05:.026,.008),isM?nodeMat:ringMat);
+    tk.position.set(Math.cos(a)*2.18,Math.sin(a)*2.18,0);tk.rotation.z=a;reactor.add(tk);}
+
+  reactor.add(new THREE.Mesh(new THREE.SphereGeometry(.22,32,24),chromeMat));
+  reactor.add(new THREE.Mesh(new THREE.TorusGeometry(.36,.022,16,80),eRingMat));
+  const gem=new THREE.Mesh(new THREE.IcosahedronGeometry(.13,0),new THREE.MeshStandardMaterial({color:0xb060ff,metalness:1,roughness:0,emissive:0x5500cc,emissiveIntensity:1.2,envMapIntensity:6}));
+  reactor.add(gem);
+  const reactorGlow=new THREE.PointLight(0x7c2fff,3,8);reactor.add(reactorGlow);
+
+  [{r:.7,c:0x8822ff,o:.06},{r:1.4,c:0x5511cc,o:.04},{r:2.1,c:0x00aacc,o:.025},{r:2.8,c:0x220044,o:.02}].forEach(d=>{
+    const m=new THREE.MeshBasicMaterial({color:d.c,transparent:true,opacity:d.o,side:THREE.DoubleSide,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending});
+    const mesh=new THREE.Mesh(new THREE.CircleGeometry(d.r,64),m);
+    mesh.position.z=-1.5;mesh.renderOrder=-10;reactor.add(mesh);});
+  scene.add(reactor);
+
+  const particles=[];
+  for(let i=0;i<60;i++){const sz=.015+Math.random()*.04;
+    const geo=Math.random()>.5?new THREE.OctahedronGeometry(sz,0):new THREE.BoxGeometry(sz,sz,sz);
+    const p=new THREE.Mesh(geo,particleMat);
+    const phi=Math.random()*Math.PI*2,theta=Math.random()*Math.PI,r=1.6+Math.random()*3.2;
+    p.position.set(r*Math.sin(theta)*Math.cos(phi),r*Math.sin(theta)*Math.sin(phi),r*Math.cos(theta));
+    p.rotation.set(Math.random()*Math.PI*2,Math.random()*Math.PI*2,Math.random()*Math.PI*2);
+    p.userData.vr=(Math.random()-.5)*.008;p.userData.vx=(Math.random()-.5)*.003;p.userData.vy=(Math.random()-.5)*.003;
+    particles.push(p);scene.add(p);}
+
+  const pulses=Array.from({length:12},(_,i)=>{
+    const isW=i>=6;
+    const mat=new THREE.MeshStandardMaterial({color:isW?0xffaa00:0x00d4ff,emissive:isW?0xff6600:0x00aaff,emissiveIntensity:2.5,metalness:0,roughness:0});
+    const m=new THREE.Mesh(new THREE.SphereGeometry(.048,10,8),mat);
+    m.userData.t=i*(1/12);m.userData.spd=.0022+Math.random()*.002;
+    const pl=new THREE.PointLight(isW?0xff8800:0x00d4ff,1.2,1);m.add(pl);scene.add(m);return m;});
+
+  let running=true,spd=3,tiltDeg=22,ry=0,t3=0;
+  document.getElementById('spd').oninput=e=>{spd=+e.target.value;document.getElementById('spdv').textContent=e.target.value;};
+  document.getElementById('tilt').oninput=e=>{tiltDeg=+e.target.value;document.getElementById('tiltv').textContent=e.target.value+'°';};
+  document.getElementById('tog').onclick=e=>{running=!running;e.target.textContent=running?'⏸ PAUSA':'▶ REANUDAR';};
+
+  function loop(){
+    requestAnimationFrame(loop);t3+=.007;
+    if(running)ry+=.0018*spd;
+    reactor.rotation.y=ry;reactor.rotation.x=THREE.MathUtils.degToRad(tiltDeg);
+    reactor.position.y=Math.sin(t3*.25)*.08;
+    rings.rotation.y+=.001;rings.rotation.z+=.0007;
+    r2.rotation.y+=.0018;r3.rotation.x+=.0013;eRing.rotation.z+=.004;
+    gem.rotation.y=-ry*2.2;gem.rotation.z=t3*.2;
+    pulses.forEach(p=>{
+      p.userData.t=(p.userData.t+p.userData.spd)%1;
+      const pos=curve.getPoint(p.userData.t);
+      const euler=new THREE.Euler(THREE.MathUtils.degToRad(tiltDeg),ry,0,'XYZ');
+      pos.applyEuler(euler);p.position.copy(pos);p.position.y+=reactor.position.y;});
+    particles.forEach(p=>{p.rotation.x+=p.userData.vr;p.rotation.y+=p.userData.vr*.7;
+      p.position.x+=p.userData.vx;p.position.y+=p.userData.vy;
+      if(Math.abs(p.position.x)>5)p.userData.vx*=-1;if(Math.abs(p.position.y)>5)p.userData.vy*=-1;});
+    const pulse=.4+.6*Math.sin(t3*1.6);
+    energyMat.emissiveIntensity=1.6+pulse*.7;eRingMat.emissiveIntensity=1+pulse*.6;
+    nodeMat.emissiveIntensity=.8+pulse*.5;reactorGlow.intensity=2+pulse*1.8;
+    renderer.render(scene,camera);}
+  loop();
+})();
+
+// ════════════════════════════════════════════
+//  MARQUEE
+// ════════════════════════════════════════════
+(function(){
+  const items=['React','Three.js','WebGPU','Spline','TypeScript','Rust','Python','GLSL','WebGL','Tailwind','Vite','Bun','PyTorch','Diffusion','WebSockets','Cloudflare','SQLite','Postgres','Tone.js','Whisper','CUDA','Edge AI'];
+  const track=document.getElementById('marqueeTrack');
+  if(!track)return;
+  const html=items.map(t=>`<span>${t}</span>`).join('');
+  track.innerHTML=html+html;
+})();
+
+// Demos: vibraalto.cl/fabrica/ & vibraalto.cl/fabricacion-3d/
+
+// Demos load via src attribute — see iframes above
+
+
+
+// ════════════════════════════════════════════
+//  SCROLL + REVEALS + PARALLAX
+// ════════════════════════════════════════════
+(function(){
+  // Progress bar
+  const fill = document.getElementById('progress-fill');
+
+  // Intersection observer for reveals
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '-30px' });
+  document.querySelectorAll('.reveal, .pillar, .exp, .demo-card, .mp-wrap').forEach(el=>{
+    el.classList.add('reveal'); obs.observe(el);
+  });
+
+  // Scroll handler
+  let ticking = false;
+  window.addEventListener('scroll', ()=>{
+    if(ticking) return;
+    requestAnimationFrame(()=>{
+      const scrolled = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if(fill) fill.style.width = (scrolled/max*100).toFixed(2)+'%';
+
+      // Reactor parallax
+      const heroH = document.querySelector('.hero')?.offsetHeight || window.innerHeight;
+      const prog = Math.min(scrolled/heroH, 1);
+      const cv = document.getElementById('symbol-canvas');
+      if(cv){
+        const y = prog * heroH * 0.22;
+        const s = 1 - prog * 0.12;
+        const o = 0.85 - prog * 0.45;
+        cv.style.transform = `translate(-50%, calc(-50% + ${y}px)) scale(${s})`;
+        cv.style.opacity = Math.max(o, 0);
+      }
+      ticking = false;
+    });
+    ticking = true;
+  }, {passive:true});
+})();
+
+// Demos load via src attribute
+
+
+
+function openFullDemo(which){
+  var urls={fabrica:'https://vibraalto.cl/fabrica/',lab:'https://vibraalto.cl/fabricacion-3d/'};
+  window.open(urls[which]||'https://vibraalto.cl','_blank','noopener');
+}
+setLang('es');
+
+
+
+
+
+// ════════════════════════════════════════════
+//  432 Hz GLYPH ANIMATIONS + WEB AUDIO
+// ════════════════════════════════════════════
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var BASE = 432;
+  var FREQS = { loom: BASE, echo: BASE/2, aria: BASE*2 };
+  var audioCtx  = null;
+  var activeNodes = {};
+
+  function getCtx(){
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(exp){
+    var ctx = getCtx();
+    var freq = FREQS[exp];
+    if(activeNodes[exp]) return;
+    var master = ctx.createGain();
+    master.gain.setValueAtTime(0, ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 0.7);
+    var osc  = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=freq;
+    var sub  = ctx.createOscillator(); sub.type='sine'; sub.frequency.value=freq/2;
+    var shim = ctx.createOscillator(); shim.type='sine'; shim.frequency.value=freq*2;
+    var lfo  = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.27;
+    var subG = ctx.createGain(); subG.gain.value=0.28;
+    var shiG = ctx.createGain(); shiG.gain.value=0.10;
+    var lfoG = ctx.createGain(); lfoG.gain.value=0.03;
+    var dly  = ctx.createDelay(2.0); dly.delayTime.value=0.38;
+    var fb   = ctx.createGain(); fb.gain.value=0.25;
+    var wet  = ctx.createGain(); wet.gain.value=0.3;
+    lfo.connect(lfoG); lfoG.connect(master.gain);
+    osc.connect(master); sub.connect(subG); subG.connect(master);
+    shim.connect(shiG); shiG.connect(master);
+    master.connect(dly); dly.connect(fb); fb.connect(dly);
+    dly.connect(wet); wet.connect(ctx.destination);
+    master.connect(ctx.destination);
+    osc.start(); sub.start(); shim.start(); lfo.start();
+    activeNodes[exp]={osc,sub,shim,lfo,master,dly,fb,wet};
+  }
+
+  function stopTone(exp){
+    var n=activeNodes[exp]; if(!n) return;
+    var ctx=getCtx();
+    n.master.gain.linearRampToValueAtTime(0,ctx.currentTime+0.8);
+    setTimeout(function(){
+      try{n.osc.stop();n.sub.stop();n.shim.stop();n.lfo.stop();}catch(e){}
+      try{n.osc.disconnect();n.sub.disconnect();n.shim.disconnect();
+          n.lfo.disconnect();n.master.disconnect();
+          n.dly.disconnect();n.fb.disconnect();n.wet.disconnect();}catch(e){}
+      delete activeNodes[exp];
+    },900);
+  }
+
+  document.querySelectorAll('.freq-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var exp=btn.dataset.exp;
+      if(btn.classList.contains('playing')){
+        btn.classList.remove('playing');
+        btn.querySelector('.freq-label').textContent=FREQS[exp]+' Hz';
+        stopTone(exp);
+      } else {
+        btn.classList.add('playing');
+        btn.querySelector('.freq-label').textContent='■ stop';
+        playTone(exp);
+      }
+    });
+  });
+
+  // ── LOOM — weaving sine threads ──
+  (function(){
+    var cv=document.getElementById('glyph-loom'); if(!cv) return;
+    var c=cv.getContext('2d'), W,H,t=0;
+    function resize(){
+      W=cv.parentElement.offsetWidth||260; H=cv.parentElement.offsetHeight||100;
+      cv.width=Math.round(W*(devicePixelRatio||1)); cv.height=Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize',resize);
+    var THREADS=5;
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.009;
+      c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.2)'; c.fillRect(0,0,W,H);
+      var on=!!activeNodes.loom, E=on?1:0.38;
+      for(var i=0;i<THREADS;i++){
+        var ph=(i/THREADS)*Math.PI*2;
+        var amp=(H*0.33+Math.sin(t*0.4+i*0.7)*H*0.07)*E;
+        var sp=1+i*0.22, al=on?(0.5+0.3*Math.sin(t*1.4+ph)):(0.1+0.04*i);
+        c.beginPath();
+        for(var x=0;x<=W;x+=2){
+          var n=x/W;
+          var y=H/2
+            +Math.sin(n*Math.PI*4*sp+t*2+ph)*amp*0.6
+            +Math.sin(n*Math.PI*8*sp+t*3.1+ph)*amp*0.25
+            +Math.sin(n*Math.PI*2*sp+t*0.9+ph)*amp*0.15;
+          x===0?c.moveTo(x,y):c.lineTo(x,y);
+        }
+        var g=c.createLinearGradient(0,0,W,0);
+        g.addColorStop(0,'rgba(0,212,255,0)'); g.addColorStop(0.2,'rgba(0,212,255,'+al+')');
+        g.addColorStop(0.8,'rgba(0,212,255,'+al+')'); g.addColorStop(1,'rgba(0,212,255,0)');
+        c.strokeStyle=g; c.lineWidth=on?1.4-i*0.15:0.8;
+        c.shadowColor='rgba(0,212,255,'+(al*0.5)+')'; c.shadowBlur=on?8:2; c.stroke();
+      }
+      c.shadowBlur=0;
+    })();
+  })();
+
+  // ── ECHO — breathing vertical bars ──
+  (function(){
+    var cv=document.getElementById('glyph-echo'); if(!cv) return;
+    var c=cv.getContext('2d'), W,H,t=0;
+    function resize(){
+      W=cv.parentElement.offsetWidth||260; H=cv.parentElement.offsetHeight||100;
+      cv.width=Math.round(W*(devicePixelRatio||1)); cv.height=Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize',resize);
+    var BARS=18;
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.006;
+      c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.18)'; c.fillRect(0,0,W,H);
+      var on=!!activeNodes.echo, E=on?1:0.4;
+      for(var i=0;i<BARS;i++){
+        var nr=i/(BARS-1), ph=nr*Math.PI*2;
+        var breath=0.5+0.5*Math.sin(t*1.8+ph*1.5);
+        var mH=(H*0.74*E)*(0.3+0.7*Math.abs(Math.sin(ph*2.1+t*0.3)));
+        var bH=mH*breath, x=(nr*W*0.88)+W*0.06;
+        var al=on?(0.5+0.4*breath):(0.15+0.1*breath);
+        var g=c.createLinearGradient(0,H/2-bH/2,0,H/2+bH/2);
+        g.addColorStop(0,'rgba(200,255,77,0)'); g.addColorStop(0.3,'rgba(200,255,77,'+al+')');
+        g.addColorStop(0.5,'rgba(200,255,77,'+(al*1.3)+')');
+        g.addColorStop(0.7,'rgba(200,255,77,'+al+')'); g.addColorStop(1,'rgba(200,255,77,0)');
+        c.fillStyle=g; c.shadowColor='rgba(200,255,77,'+(al*0.4)+')';
+        c.shadowBlur=on?10:3; c.fillRect(x-1.5,H/2-bH/2,on?3:2,bH);
+      }
+      c.shadowBlur=0;
+    })();
+  })();
+
+  // ── ARIA — orbiting nodes ──
+  (function(){
+    var cv=document.getElementById('glyph-aria'); if(!cv) return;
+    var c=cv.getContext('2d'), W,H,t=0;
+    function resize(){
+      W=cv.parentElement.offsetWidth||260; H=cv.parentElement.offsetHeight||100;
+      cv.width=Math.round(W*(devicePixelRatio||1)); cv.height=Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize',resize);
+    var AG=[{r:0.28,sp:1.0,ph:0,sz:4.5},{r:0.20,sp:1.618,ph:Math.PI,sz:3.5},
+            {r:0.35,sp:0.618,ph:Math.PI/2,sz:3.0},{r:0.15,sp:2.618,ph:Math.PI*1.5,sz:2.5}];
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.008;
+      c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.15)'; c.fillRect(0,0,W,H);
+      var on=!!activeNodes.aria, E=on?1:0.45;
+      var cx=W/2, cy=H/2, mR=Math.min(W,H)*0.38;
+      // Orbit rings
+      AG.forEach(function(ag){
+        var oR=mR*ag.r*(E*0.5+0.5);
+        c.beginPath(); c.arc(cx,cy,oR,0,Math.PI*2);
+        c.strokeStyle='rgba(170,85,255,'+(on?0.09:0.04)+')';
+        c.lineWidth=1; c.stroke();
+      });
+      // Positions
+      var pos=AG.map(function(ag){
+        var a=ag.ph+t*ag.sp*(on?1.0:0.35);
+        var r=mR*ag.r*(E*0.5+0.5)+Math.sin(t*2.1+ag.ph)*mR*0.04*E;
+        return{x:cx+Math.cos(a)*r, y:cy+Math.sin(a)*r};
+      });
+      // Connections
+      for(var i=0;i<pos.length;i++){
+        var a=pos[i], b=pos[(i+1)%pos.length];
+        c.beginPath(); c.moveTo(a.x,a.y); c.lineTo(b.x,b.y);
+        c.strokeStyle='rgba(170,85,255,'+(on?0.18:0.06)+')';
+        c.lineWidth=0.8; c.stroke();
+      }
+      // Nodes
+      pos.forEach(function(p,i){
+        var ag=AG[i], pulse=0.7+0.3*Math.sin(t*ag.sp*3+ag.ph);
+        var rad=ag.sz*(on?pulse:0.7), al=on?(0.7+0.3*pulse):0.3;
+        // glow
+        var g=c.createRadialGradient(p.x,p.y,0,p.x,p.y,rad*2.5);
+        g.addColorStop(0,'rgba(170,85,255,'+(al*0.35)+')');
+        g.addColorStop(1,'rgba(170,85,255,0)');
+        c.beginPath(); c.arc(p.x,p.y,rad*2.5,0,Math.PI*2);
+        c.fillStyle=g; c.fill();
+        // core
+        c.beginPath(); c.arc(p.x,p.y,rad,0,Math.PI*2);
+        c.fillStyle='rgba(170,85,255,'+al+')';
+        c.shadowColor='rgba(170,85,255,'+(al*0.6)+')';
+        c.shadowBlur=on?12:4; c.fill();
+      });
+      c.shadowBlur=0;
+      // Center
+      var cp=0.5+0.5*Math.sin(t*2.7);
+      c.beginPath(); c.arc(cx,cy,on?3*cp:1.5,0,Math.PI*2);
+      c.fillStyle='rgba(170,85,255,'+(on?0.6*cp:0.2)+')'; c.fill();
+    })();
+  })();
+
+})();
+
+
+
+// ════════════════════════════════════════════
+//  KALDI COFFEE — steam canvas + NERHIA data
+// ════════════════════════════════════════════
+(function(){
+
+  // ── BACKGROUND: warm particle field (steam / coffee aroma) ──
+  (function initKaldiBg(){
+    var cv = document.getElementById('kaldi-canvas');
+    if(!cv) return;
+    var c = cv.getContext('2d'), W, H, t=0;
+    function resize(){
+      W = cv.parentElement.offsetWidth||800;
+      H = cv.parentElement.offsetHeight||540;
+      cv.width  = Math.round(W*(devicePixelRatio||1));
+      cv.height = Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize', resize);
+
+    // Warm particles — rising slowly like steam
+    var PARTICLES = Array.from({length:55}, function(_,i){
+      return {
+        x: Math.random()*1.2 - 0.1,
+        y: Math.random(),
+        vy: -(0.0004 + Math.random()*0.0006),
+        vx: (Math.random()-0.5)*0.0002,
+        r:  1.2 + Math.random()*2.8,
+        a:  0.04 + Math.random()*0.08,
+        ph: Math.random()*Math.PI*2,
+        sp: 0.3 + Math.random()*0.5,
+        warm: Math.random() > 0.5,
+      };
+    });
+
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.008;
+      c.clearRect(0,0,W,H);
+
+      // Warm radial glow — bottom center (espresso source)
+      var g = c.createRadialGradient(W*0.5,H*1.05,0, W*0.5,H*0.5,H*0.9);
+      g.addColorStop(0,   'rgba(245,166,35,0.06)');
+      g.addColorStop(0.3, 'rgba(160,80,10,0.04)');
+      g.addColorStop(1,   'rgba(0,0,0,0)');
+      c.fillStyle=g; c.fillRect(0,0,W,H);
+
+      // Left warmth
+      var g2 = c.createRadialGradient(W*0.15,H*0.6,0, W*0.15,H*0.6,W*0.35);
+      g2.addColorStop(0,'rgba(245,140,20,0.035)');
+      g2.addColorStop(1,'transparent');
+      c.fillStyle=g2; c.fillRect(0,0,W,H);
+
+      // Steam particles
+      PARTICLES.forEach(function(p){
+        p.y += p.vy;
+        p.x += p.vx + Math.sin(t*p.sp+p.ph)*0.0003;
+        if(p.y < -0.05){ p.y=1.05; p.x=Math.random()*1.2-0.1; }
+
+        var fade = p.y < 0.2 ? p.y/0.2 : p.y > 0.8 ? (1-p.y)/0.2 : 1;
+        var pulse = 0.7 + 0.3*Math.sin(t*p.sp*2+p.ph);
+        var alpha = p.a * fade * pulse;
+        var col = p.warm
+          ? 'rgba(245,166,35,'+alpha+')'
+          : 'rgba(255,220,140,'+alpha+')';
+
+        c.beginPath();
+        c.arc(p.x*W, p.y*H, p.r, 0, Math.PI*2);
+        c.fillStyle=col;
+        c.shadowColor=p.warm?'rgba(245,166,35,0.2)':'rgba(255,200,100,0.15)';
+        c.shadowBlur=8;
+        c.fill();
+      });
+      c.shadowBlur=0;
+    })();
+  })();
+
+  // ── VIDEO CANVAS: atmospheric coffee visual ──
+  (function initKaldiVideo(){
+    var cv = document.getElementById('kaldi-video-canvas');
+    if(!cv) return;
+    var c = cv.getContext('2d'), W, H, t=0;
+    function resize(){
+      W = cv.parentElement.offsetWidth||400;
+      H = cv.parentElement.offsetHeight||225;
+      cv.width  = Math.round(W*(devicePixelRatio||1));
+      cv.height = Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize', resize);
+
+    // Coffee cup particles + ripple
+    var DROPS = Array.from({length:80}, function(){
+      var angle = Math.random()*Math.PI*2;
+      var rad   = (0.05 + Math.random()*0.35);
+      return {
+        angle: angle, rad: rad,
+        vAngle: (Math.random()-0.5)*0.004,
+        vRad: (Math.random()-0.5)*0.0005,
+        r: 1.0 + Math.random()*2.2,
+        a: 0.25 + Math.random()*0.45,
+        ph: Math.random()*Math.PI*2,
+        warm: Math.random()>0.4,
+      };
+    });
+
+    // Latte art wave points
+    var WAVE = Array.from({length:60}, function(_, i){
+      return { x: i/59, phase: Math.random()*Math.PI*2 };
+    });
+
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.007;
+      c.clearRect(0,0,W,H);
+
+      // Deep warm bg
+      var bg = c.createRadialGradient(W/2,H*0.55,0, W/2,H/2,H*0.9);
+      bg.addColorStop(0,'#1a0e00');
+      bg.addColorStop(0.5,'#110800');
+      bg.addColorStop(1,'#060400');
+      c.fillStyle=bg; c.fillRect(0,0,W,H);
+
+      var cx=W/2, cy=H*0.54;
+      var cupR = Math.min(W,H)*0.38;
+
+      // Cup glow
+      var glow = c.createRadialGradient(cx,cy,0,cx,cy,cupR*1.4);
+      glow.addColorStop(0,'rgba(245,140,20,0.14)');
+      glow.addColorStop(0.5,'rgba(160,80,10,0.06)');
+      glow.addColorStop(1,'transparent');
+      c.fillStyle=glow; c.fillRect(0,0,W,H);
+
+      // Ripple rings from center
+      for(var r=1;r<=4;r++){
+        var rph = t*0.4 + r*Math.PI/2;
+        var rr = cupR*(0.15 + r*0.22) + Math.sin(rph)*cupR*0.03;
+        var ral = (0.15 - r*0.025) * (0.7+0.3*Math.sin(rph*1.3));
+        c.beginPath();
+        c.ellipse(cx, cy, rr, rr*0.28, 0, 0, Math.PI*2);
+        c.strokeStyle='rgba(245,166,35,'+ral+')';
+        c.lineWidth=1.2; c.stroke();
+      }
+
+      // Latte art — white milk wave
+      c.beginPath();
+      WAVE.forEach(function(pt, i){
+        var x = cx - cupR*0.65 + pt.x * cupR*1.3;
+        var base = cy - cupR*0.08;
+        var y = base + Math.sin(pt.x*Math.PI*4 + t*1.1 + pt.phase)*cupR*0.045
+                     + Math.sin(pt.x*Math.PI*2 + t*0.6)*cupR*0.025;
+        i===0 ? c.moveTo(x,y) : c.lineTo(x,y);
+      });
+      c.strokeStyle='rgba(255,245,220,0.2)';
+      c.lineWidth=1.8; c.stroke();
+
+      // Orbiting coffee aroma drops
+      DROPS.forEach(function(d){
+        d.angle += d.vAngle;
+        d.rad = Math.max(0.05, Math.min(0.42, d.rad + d.vRad));
+        if(d.rad<0.05 || d.rad>0.42) d.vRad*=-1;
+
+        var px = cx + Math.cos(d.angle) * d.rad * cupR*2.2;
+        var py = cy + Math.sin(d.angle) * d.rad * cupR*0.7;
+
+        var pulse=0.6+0.4*Math.sin(t*1.2+d.ph);
+        var col=d.warm?'rgba(245,166,35,':'rgba(200,120,30,';
+
+        c.beginPath();
+        c.arc(px, py, d.r*(0.7+0.3*pulse), 0, Math.PI*2);
+        c.fillStyle=col+(d.a*pulse)+')';
+        c.shadowColor='rgba(245,120,20,0.2)';
+        c.shadowBlur=5;
+        c.fill();
+      });
+      c.shadowBlur=0;
+
+      // CREM EX3 machine silhouette — minimal linework
+      c.save();
+      var mx=W*0.5, my=H*0.58, ms=Math.min(W,H)*0.22;
+      c.globalAlpha=0.06;
+      c.fillStyle='#F5A623';
+      // Body
+      c.fillRect(mx-ms*1.1, my-ms*0.5, ms*2.2, ms*0.9);
+      // Group heads
+      c.fillRect(mx-ms*0.55, my, ms*0.35, ms*0.25);
+      c.fillRect(mx+ms*0.05, my, ms*0.35, ms*0.25);
+      // Portafilter curves
+      c.beginPath();
+      c.arc(mx-ms*0.38, my+ms*0.25, ms*0.14, 0, Math.PI*2);
+      c.arc(mx+ms*0.22, my+ms*0.25, ms*0.14, 0, Math.PI*2);
+      c.fill();
+      c.restore();
+
+      // Corner HUD
+      c.font='bold 9px monospace';
+      c.fillStyle='rgba(245,166,35,0.22)';
+      c.textAlign='left';
+      c.fillText('CREM EX3 · KALDI COFFEE', 10, H-12);
+      c.textAlign='right';
+      c.fillStyle='rgba(245,166,35,0.18)';
+      c.fillText('NERHIA · SANTIAGO', W-10, H-12);
+    })();
+  })();
+
+  // ── NERHIA API — fetch live data ──
+  (function fetchNerhiaKaldi(){
+    var NERHIA_API = 'https://nerhia-api-852702111467.us-central1.run.app';
+
+    // Fetch constellation overview for Santiago UVX
+    fetch(NERHIA_API + '/status')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d) return;
+        // Update uptime/status if available
+      })
+      .catch(function(){});
+
+    // Try to get Santiago from constellation (public endpoint)
+    fetch('https://vibraalto.cl/api/nerhia/constellation/overview')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || !d.cities) return;
+        var stgo = d.cities.find(function(c){
+          return c.name && c.name.toLowerCase().includes('santiago');
+        });
+        if(stgo){
+          document.getElementById('kaldi-uvx').textContent = stgo.uvx || '—';
+        }
+        if(d.globalStats){
+          document.getElementById('ks-signals').textContent =
+            d.globalStats.totalCities ? d.globalStats.totalCities * 340 : '—';
+          document.getElementById('ks-nodes').textContent =
+            d.globalStats.totalCities || '—';
+          var conf = d.globalStats.avgUVX;
+          document.getElementById('ks-conf').textContent =
+            conf ? Math.round(conf) + '%' : '—';
+        }
+      })
+      .catch(function(){
+        // Fallback values if API unavailable
+        document.getElementById('kaldi-uvx').textContent = '73';
+        document.getElementById('ks-signals').textContent = '2.8K';
+        document.getElementById('ks-nodes').textContent = '8';
+        document.getElementById('ks-conf').textContent = '99%';
+      });
+  })();
+
+})();
+
+
+
+// ════════════════════════════════════════════
+//  NEXUS VA — background grid + TV hologram
+// ════════════════════════════════════════════
+(function(){
+
+  // ── BG: circuit grid particles ──
+  (function initNexusBg(){
+    var cv=document.getElementById('nexus-bg-canvas'); if(!cv) return;
+    var c=cv.getContext('2d'), W,H,t=0;
+    function resize(){
+      W=cv.parentElement.offsetWidth||800; H=cv.parentElement.offsetHeight||580;
+      cv.width=Math.round(W*(devicePixelRatio||1)); cv.height=Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize',resize);
+
+    // Circuit nodes
+    var NODES = Array.from({length:38}, function(){
+      return {
+        x:Math.random()*1.1-0.05, y:Math.random(),
+        vx:(Math.random()-0.5)*0.0003, vy:(Math.random()-0.5)*0.0003,
+        r:1.2+Math.random()*1.8, a:0.15+Math.random()*0.25,
+        ph:Math.random()*Math.PI*2, sp:0.3+Math.random()*0.8,
+        cyan:Math.random()>0.4
+      };
+    });
+
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.006;
+      c.clearRect(0,0,W,H);
+
+      // Subtle purple radial center
+      var g=c.createRadialGradient(W*0.72,H*0.5,0,W*0.72,H*0.5,W*0.45);
+      g.addColorStop(0,'rgba(124,47,255,0.06)'); g.addColorStop(1,'transparent');
+      c.fillStyle=g; c.fillRect(0,0,W,H);
+
+      // Cyan radial left
+      var g2=c.createRadialGradient(W*0.25,H*0.4,0,W*0.25,H*0.4,W*0.35);
+      g2.addColorStop(0,'rgba(0,212,255,0.04)'); g2.addColorStop(1,'transparent');
+      c.fillStyle=g2; c.fillRect(0,0,W,H);
+
+      // Connect nearby nodes with circuit lines
+      NODES.forEach(function(a){
+        a.x+=a.vx; a.y+=a.vy;
+        if(a.x<-0.05)a.x=1.05; if(a.x>1.05)a.x=-0.05;
+        if(a.y<-0.05)a.y=1.05; if(a.y>1.05)a.y=-0.05;
+        NODES.forEach(function(b){
+          var dx=(a.x-b.x)*W, dy=(a.y-b.y)*H, d=Math.sqrt(dx*dx+dy*dy);
+          if(d<90){
+            var al=(1-d/90)*0.08;
+            c.beginPath(); c.moveTo(a.x*W,a.y*H); c.lineTo(b.x*W,b.y*H);
+            c.strokeStyle='rgba(0,212,255,'+al+')';
+            c.lineWidth=0.7; c.stroke();
+          }
+        });
+        var pulse=0.6+0.4*Math.sin(t*a.sp+a.ph);
+        var col=a.cyan?'rgba(0,212,255,':'rgba(124,47,255,';
+        c.beginPath(); c.arc(a.x*W,a.y*H,a.r*(0.8+0.2*pulse),0,Math.PI*2);
+        c.fillStyle=col+(a.a*pulse)+')';
+        c.fill();
+      });
+    })();
+  })();
+
+  // ── TV: holographic screen display ──
+  (function initNexusTV(){
+    var cv=document.getElementById('nexus-tv-canvas'); if(!cv) return;
+    var c=cv.getContext('2d'), W,H,t=0;
+    function resize(){
+      W=cv.parentElement.offsetWidth||400; H=cv.parentElement.offsetHeight||225;
+      cv.width=Math.round(W*(devicePixelRatio||1)); cv.height=Math.round(H*(devicePixelRatio||1));
+      cv.style.width=W+'px'; cv.style.height=H+'px';
+      c.setTransform(devicePixelRatio||1,0,0,devicePixelRatio||1,0,0);
+    }
+    resize(); window.addEventListener('resize',resize);
+
+    // Simulated content frames cycling on screen
+    var SCREENS=['GOV','EDU','MIN','IOT'];
+    var screenIdx=0, screenT=0;
+
+    // Floating data particles on screen
+    var DATA=Array.from({length:55}, function(){
+      return {x:Math.random(),y:Math.random(),vy:-(0.001+Math.random()*0.003),vx:(Math.random()-0.5)*0.001,r:0.8+Math.random()*1.5,a:0.3+Math.random()*0.5,ph:Math.random()*Math.PI*2,sp:0.4+Math.random()*1.2,cyan:Math.random()>0.45};
+    });
+
+    (function frame(){
+      requestAnimationFrame(frame); t+=0.012; screenT+=0.012;
+      if(screenT>6){screenT=0; screenIdx=(screenIdx+1)%SCREENS.length;}
+
+      c.clearRect(0,0,W,H);
+
+      // Dark bg with subtle grid
+      var bg=c.createLinearGradient(0,0,W,H);
+      bg.addColorStop(0,'#010108'); bg.addColorStop(1,'#020210');
+      c.fillStyle=bg; c.fillRect(0,0,W,H);
+
+      // Grid lines
+      c.globalAlpha=0.08;
+      for(var gx=0;gx<W;gx+=40){ c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.strokeStyle='rgba(0,212,255,0.5)';c.lineWidth=0.5;c.stroke(); }
+      for(var gy=0;gy<H;gy+=40){ c.beginPath();c.moveTo(0,gy);c.lineTo(W,gy);c.strokeStyle='rgba(0,212,255,0.5)';c.lineWidth=0.5;c.stroke(); }
+      c.globalAlpha=1;
+
+      // Central screen area (the "smart display" on screen)
+      var sw=W*0.56, sh=H*0.65;
+      var sx=(W-sw)/2, sy=(H-sh)/2;
+      var flicker=0.9+0.1*Math.sin(t*8.3)+0.04*Math.sin(t*31.0);
+
+      // Screen bezel
+      c.strokeStyle='rgba(0,212,255,'+(0.35*flicker)+')';
+      c.lineWidth=2; c.strokeRect(sx,sy,sw,sh);
+      c.strokeStyle='rgba(0,212,255,'+(0.12*flicker)+')';
+      c.lineWidth=6; c.strokeRect(sx-4,sy-4,sw+8,sh+8);
+
+      // Screen glow
+      var sg=c.createRadialGradient(W/2,H/2,0,W/2,H/2,sh*0.7);
+      sg.addColorStop(0,'rgba(0,212,255,'+(0.08*flicker)+')');
+      sg.addColorStop(1,'transparent');
+      c.fillStyle=sg; c.fillRect(sx,sy,sw,sh);
+
+      // Screen content — cycling sector
+      var sector=SCREENS[screenIdx];
+      var sColors={GOV:'0,212,255',EDU:'200,255,77',MIN:'245,166,35',IOT:'170,85,255'};
+      var sCol=sColors[sector]||'0,212,255';
+      var prog=Math.min(screenT/6,1);
+
+      // Top bar on screen
+      c.fillStyle='rgba('+sCol+',0.12)';
+      c.fillRect(sx,sy,sw,22);
+      c.font='bold 9px monospace'; c.fillStyle='rgba('+sCol+',0.7)';
+      c.textAlign='left'; c.fillText('VA · '+sector, sx+8, sy+14);
+      c.textAlign='right'; c.fillStyle='rgba('+sCol+',0.4)';
+      c.fillText('NEXUS LIVE', sx+sw-8, sy+14);
+
+      // Progress bar on screen
+      c.fillStyle='rgba('+sCol+',0.15)';
+      c.fillRect(sx, sy+sh-16, sw, 16);
+      c.fillStyle='rgba('+sCol+',0.5)';
+      c.fillRect(sx, sy+sh-16, sw*prog, 16);
+
+      // Waveform in center of screen
+      c.beginPath();
+      for(var xi=0;xi<sw;xi+=2){
+        var xn=xi/sw;
+        var wave=Math.sin(xn*Math.PI*6+t*2.2)*sh*0.16 + Math.sin(xn*Math.PI*3+t*1.1)*sh*0.08;
+        xi===0?c.moveTo(sx+xi,sy+sh/2+wave):c.lineTo(sx+xi,sy+sh/2+wave);
+      }
+      c.strokeStyle='rgba('+sCol+','+(0.55*flicker)+')';
+      c.lineWidth=1.5; c.shadowColor='rgba('+sCol+',0.4)'; c.shadowBlur=6; c.stroke();
+      c.shadowBlur=0;
+
+      // Data particles floating over scene
+      DATA.forEach(function(p){
+        p.y+=p.vy; p.x+=p.vx;
+        if(p.y<-0.05){p.y=1.05;p.x=Math.random();}
+        var px=p.x*W, py=p.y*H;
+        var pulse=0.5+0.5*Math.sin(t*p.sp+p.ph);
+        var col=p.cyan?'0,212,255':'124,47,255';
+        c.beginPath(); c.arc(px,py,p.r*pulse,0,Math.PI*2);
+        c.fillStyle='rgba('+col+','+p.a*pulse+')';
+        c.shadowColor='rgba('+col+',0.3)'; c.shadowBlur=4; c.fill();
+      });
+      c.shadowBlur=0;
+
+      // Corner labels
+      c.font='bold 8px monospace'; c.textAlign='left';
+      c.fillStyle='rgba(0,212,255,0.25)';
+      c.fillText('EXOLEÓN VA · ACTIVO', 10, H-10);
+      c.textAlign='right'; c.fillStyle='rgba(124,47,255,0.25)';
+      c.fillText('NEXUS · '+sector, W-10, H-10);
+    })();
+  })();
+
+})();
+
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════
+   VIBRAALTO · ACTIVE THEORY PHYSICS ENGINE
+   Injected layer — zero modifications to existing code
+   ─ VelocityThrow drag + friction throw
+   ─ Hero CSS perspective tilt (additive)
+   ─ TextScramble on nav links
+   ─ Cursor trail (spring chain)
+   ─ Magnetic buttons
+   ─ Velocity HUD live readout
+═══════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+/* ── Lerp ── */
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+/* ── SmoothVal ── */
+function SmoothVal(v,f){ this.v=v||0; this.target=v||0; this.f=f||.07; }
+SmoothVal.prototype.step=function(){ this.v=lerp(this.v,this.target,this.f); return this.v; };
+
+/* ── VelocityThrow — AT real pattern ──
+   drag: rolling-avg velocity accumulation
+   release: vel carries forward with friction (throw)
+   auto: base angular spin, blends out as throw decays
+*/
+function VelocityThrow(o){
+  o=o||{};
+  this.rot=o.init||0; this.vel=0; this.dragVel=0;
+  this.autoVel=o.auto||0; this.friction=o.fric||.924;
+  this.scale=o.scale||.0068; this.maxVel=o.max||.08;
+  this.isDrag=false; this._prev=0;
+  this._lean=new SmoothVal(0,.06);
+}
+VelocityThrow.prototype.startDrag=function(p){ this.isDrag=true; this._prev=p; this.dragVel=0; };
+VelocityThrow.prototype.moveDrag=function(p){
+  if(!this.isDrag) return;
+  var d=p-this._prev;
+  this.dragVel=lerp(this.dragVel, d*this.scale, .35);
+  this.rot+=d*this.scale;
+  this._prev=p;
+};
+VelocityThrow.prototype.endDrag=function(){
+  if(!this.isDrag) return;
+  this.isDrag=false;
+  this.vel=Math.max(-this.maxVel, Math.min(this.maxVel, this.dragVel*1.6));
+};
+VelocityThrow.prototype.setLean=function(n){ this._lean.target=n; };
+VelocityThrow.prototype.step=function(paused,sm){
+  this._lean.step();
+  if(this.isDrag) return this.rot+this._lean.v;
+  if(!paused){
+    this.vel*=this.friction;
+    var auto=this.autoVel*(sm||1);
+    this.rot+=this.vel+lerp(auto,0,Math.min(Math.abs(this.vel)*18,1));
+  }
+  return this.rot+this._lean.v;
+};
+
+/* ── TextScramble — AT nav signature ── */
+function TextScramble(el){
+  this.el=el; this.orig=el.textContent;
+  this.chars='!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  this.frame=0; this.queue=[]; this.raf=null;
+}
+TextScramble.prototype._r=function(){ return this.chars[Math.floor(Math.random()*this.chars.length)]; };
+TextScramble.prototype.scramble=function(){
+  var _this=this;
+  this.queue=this.orig.split('').map(function(c,i){
+    return {to:c, start:Math.floor(Math.random()*6), end:Math.floor(6+Math.random()*8)};
+  });
+  cancelAnimationFrame(this.raf); this.frame=0; this._tick();
+};
+TextScramble.prototype.restore=function(){
+  cancelAnimationFrame(this.raf); this.el.textContent=this.orig;
+};
+TextScramble.prototype._tick=function(){
+  var _this=this, out='', done=0;
+  this.queue.forEach(function(q){
+    if(_this.frame>=q.end){ out+=q.to; done++; }
+    else if(_this.frame>=q.start){ out+='<span style="opacity:.35">'+_this._r()+'</span>'; }
+    else { out+=q.to; }
+  });
+  this.el.innerHTML=out;
+  if(done<this.queue.length){ this.frame++; this.raf=requestAnimationFrame(function(){ _this._tick(); }); }
+};
+
+/* ═══ INIT ═══ */
+var cursor=document.getElementById('va-cursor');
+
+/* ── TextScramble on nav links ── */
+document.querySelectorAll('.nav-links a, .vb-item').forEach(function(el){
+  var sc=new TextScramble(el);
+  el.addEventListener('mouseenter',function(){ sc.scramble(); });
+  el.addEventListener('mouseleave',function(){ sc.restore(); });
+});
+
+/* ── Cursor + hover states ── */
+document.addEventListener('mousemove',function(e){
+  if(cursor){ cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px'; }
+});
+document.querySelectorAll('a,button,.btn,.nav-cta').forEach(function(el){
+  el.addEventListener('mouseenter',function(){ if(cursor)cursor.classList.add('hovering'); });
+  el.addEventListener('mouseleave',function(){ if(cursor)cursor.classList.remove('hovering'); });
+});
+
+/* ── Cursor trail (spring chain) ── */
+(function(){
+  var TRAIL=18, trail=[], mx=-200, my=-200, pmx=-200, pmy=-200, velMag=0;
+  for(var i=0;i<TRAIL;i++){
+    var d=document.createElement('div');
+    d.className='va-trail';
+    document.body.appendChild(d);
+    trail.push({el:d,x:-200,y:-200,vx:0,vy:0});
+  }
+  document.addEventListener('mousemove',function(e){ mx=e.clientX; my=e.clientY; });
+  function tickTrail(){
+    requestAnimationFrame(tickTrail);
+    velMag=Math.hypot(mx-pmx,my-pmy); pmx=mx; pmy=my;
+    for(var i=0;i<TRAIL;i++){
+      var t=trail[i];
+      var tx=i===0?mx:trail[i-1].x, ty=i===0?my:trail[i-1].y;
+      var k=.28-i*.011;
+      t.vx=(t.vx+(tx-t.x)*k)*.72; t.vy=(t.vy+(ty-t.y)*k)*.72;
+      t.x+=t.vx; t.y+=t.vy;
+      var age=i/TRAIL, sz=4-age*2.4;
+      var op=(1-age)*.44*Math.min(velMag/9,1);
+      t.el.style.cssText='left:'+t.x+'px;top:'+t.y+'px;width:'+sz+'px;height:'+sz+'px;opacity:'+op+';';
+    }
+  }
+  tickTrail();
+})();
+
+/* ── Velocity Throw — hero tilt (CSS perspective, additive) ── */
+var throwY=new VelocityThrow({init:0,   auto:.0006,fric:.924,scale:.007, max:.09});
+var throwX=new VelocityThrow({init:.14, auto:0,     fric:.934,scale:.004, max:.04});
+var hero=document.querySelector('.hero');
+  // Pre-cache hero-inner for performance
+  var heroInner=hero?hero.querySelector('.hero-inner'):null;
+var mouseNX=0, mouseNY=0;
+var autoRunning=true;
+
+document.addEventListener('mousemove',function(e){
+  mouseNX=(e.clientX/window.innerWidth)*2-1;
+  mouseNY=(e.clientY/window.innerHeight)*2-1;
+  throwY.moveDrag(e.clientX);
+  throwX.moveDrag(e.clientY);
+});
+document.addEventListener('mousedown',function(e){
+  var tag=e.target.tagName.toLowerCase();
+  if(['a','button','input','textarea','select'].indexOf(tag)>-1) return;
+  throwY.startDrag(e.clientX); throwX.startDrag(e.clientY);
+  if(cursor) cursor.classList.add('dragging');
+  document.body.style.userSelect='none';
+});
+document.addEventListener('mouseup',function(){
+  throwY.endDrag(); throwX.endDrag();
+  if(cursor) cursor.classList.remove('dragging');
+  document.body.style.userSelect='';
+});
+document.addEventListener('touchstart',function(e){
+  var t=e.touches[0]; throwY.startDrag(t.clientX); throwX.startDrag(t.clientY);
+},{passive:true});
+document.addEventListener('touchmove',function(e){
+  var t=e.touches[0]; throwY.moveDrag(t.clientX); throwX.moveDrag(t.clientY);
+},{passive:true});
+document.addEventListener('touchend',function(){ throwY.endDrag(); throwX.endDrag(); });
+
+/* ── Magnetic buttons ── */
+var mags=[];
+document.querySelectorAll('.btn,.nav-cta,.mp-cta,.btn-intelligence').forEach(function(el){
+  el.style.willChange='transform';
+  mags.push({el:el,tx:0,ty:0,vx:0,vy:0});
+});
+var magMx=0, magMy=0;
+document.addEventListener('mousemove',function(e){ magMx=e.clientX; magMy=e.clientY; });
+function animMag(){
+  requestAnimationFrame(animMag);
+  for(var i=0;i<mags.length;i++){
+    var m=mags[i];
+    var r=m.el.getBoundingClientRect();
+    var cx=r.left+r.width/2, cy=r.top+r.height/2;
+    var dx=magMx-cx, dy=magMy-cy, dist=Math.hypot(dx,dy);
+    if(dist<82){ var f=1-dist/82; m.vx=(m.vx+dx*.38*f)*.78; m.vy=(m.vy+dy*.38*f)*.78; }
+    else { m.vx=(m.vx-m.tx*.18)*.78; m.vy=(m.vy-m.ty*.18)*.78; }
+    m.tx+=m.vx; m.ty+=m.vy;
+    var mag=Math.hypot(m.tx,m.ty); if(mag>14){ m.tx*=14/mag; m.ty*=14/mag; }
+    m.el.style.transform='translate('+m.tx.toFixed(2)+'px,'+m.ty.toFixed(2)+'px)';
+  }
+}
+animMag();
+
+/* ── Main render tick — hero tilt + HUD ── */
+var velV=document.getElementById('va-vval');
+var velI=document.getElementById('va-ival');
+var velR=document.getElementById('va-rot');
+var vBar=document.getElementById('va-vbar');
+var iBar=document.getElementById('va-ibar');
+var frame3=0;
+
+function atTick(){
+  requestAnimationFrame(atTick);
+  frame3++;
+
+  if(!throwY.isDrag){
+    throwY.setLean(mouseNX*.26);
+    throwX.setLean(mouseNY*.14+.14);
+  }
+  var rotY=throwY.step(false,1);
+  var rotX=throwX.step(false,0);
+
+  /* Hero CSS perspective tilt — targets hero-inner (no overflow:hidden)
+     Additive layer on top of existing transforms. Never touches the canvas. */
+  if(hero){
+    // Apply perspective on the hero PARENT so overflow clip is avoided
+    // The canvas transform is handled by existing scroll code — we don't touch it
+    // We rotate the hero-inner content overlay only (z-index:3, has text + buttons)
+    var heroInner = hero.querySelector('.hero-inner');
+    if(heroInner){
+      var degX = (rotX - 0.14) * 8;
+      var degY = throwY.isDrag || Math.abs(throwY.vel)>0.002
+        ? rotY * 6
+        : mouseNX * 3.5;
+      heroInner.style.transition = 'none';
+      heroInner.style.transform = 'perspective(1400px) rotateX('+(-degX*0.35).toFixed(3)+'deg) rotateY('+degY.toFixed(3)+'deg)';
+    }
+  }
+
+  /* HUD update every 4 frames */
+  if(frame3%4===0){
+    var vm=Math.abs(throwY.vel);
+    var im=Math.abs(throwY.vel)+Math.abs(throwX.vel);
+    var vd=(vm*120).toFixed(2);
+    var id=(im*80).toFixed(2);
+    var rd=((rotY%(Math.PI*2))/(Math.PI*2)*360).toFixed(1);
+    if(velV) velV.textContent=vd;
+    if(velI) velI.textContent=id;
+    if(velR) velR.textContent=rd+'°';
+    if(vBar) vBar.style.width=Math.min(parseFloat(vd)*80,100)+'%';
+    if(iBar) iBar.style.width=Math.min(parseFloat(id)*60,100)+'%';
+  }
+}
+atTick();
+
+})(); // end AT layer
+</script>
+
+</body>
+</html>
