@@ -1,0 +1,8 @@
+{
+  "projects": { "default": "vibraaltoai-11f55" },
+  "targets": {
+    "vibraaltoai-11f55": {
+      "hosting": { "vibraalto": ["vibraaltoai-11f55"] }
+    }
+  }
+}
