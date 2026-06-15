@@ -3,10 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="VibraAlto Lab — taller de sistemas compuestos. 3D, IA, codigo y craft afinados a la misma frecuencia.">
+<meta name="theme-color" content="#09090b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="VIBRAALTO — Eleva tu frecuencia">
+<meta property="og:description" content="Taller de sistemas compuestos: 3D, IA, codigo y craft a la misma frecuencia.">
+<meta property="og:url" content="https://vibraalto.cl">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VIBRAALTO — Eleva tu frecuencia">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2309090b'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%23fafafa' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E">
 <title>VIBRAALTO — Eleva tu frecuencia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer crossorigin="anonymous"></script>
 <style>
 /* ══════════════════════════════════════════
    21st.dev AESTHETIC — VIBRAALTO EDITION
@@ -2779,10 +2790,10 @@ body::after {
     <!-- Ecosystem nav strip -->
     <div class="eco-strip">
       <span class="eco-strip-label">ECOSISTEMA</span>
-      <a class="eco-strip-item" href="https://nerhia.com" target="_blank">NERHIA HOME</a>
-      <a class="eco-strip-item active" href="https://nerhia.com/twin.html" target="_blank">DIGITAL TWIN</a>
-      <a class="eco-strip-item" href="https://nerhia.com/lab.html" target="_blank">LAB</a>
-      <a class="eco-strip-item" href="https://nerhia.com" target="_blank">↗ NERHIA CORE</a>
+      <a class="eco-strip-item" href="https://nerhia.com" target="_blank" rel="noopener noreferrer">NERHIA HOME</a>
+      <a class="eco-strip-item active" href="https://nerhia.com/twin.html" target="_blank" rel="noopener noreferrer">DIGITAL TWIN</a>
+      <a class="eco-strip-item" href="https://nerhia.com/lab.html" target="_blank" rel="noopener noreferrer">LAB</a>
+      <a class="eco-strip-item" href="https://nerhia.com" target="_blank" rel="noopener noreferrer">↗ NERHIA CORE</a>
     </div>
 
   </div>
@@ -2987,7 +2998,7 @@ function setLang(lang){
 // ════════════════════════════════════════════
 //  THREE.JS — CINEMATIC REACTOR
 // ════════════════════════════════════════════
-(function ReactorScene(){
+window.addEventListener("load", function ReactorScene(){
   const cv3=document.getElementById('symbol-canvas');
   if(!cv3||typeof THREE==='undefined') return;
 
@@ -3099,7 +3110,7 @@ function setLang(lang){
     nodeMat.emissiveIntensity=.8+pulse*.5;reactorGlow.intensity=2+pulse*1.8;
     renderer.render(scene,camera);}
   loop();
-})();
+});
 
 // ════════════════════════════════════════════
 //  MARQUEE
