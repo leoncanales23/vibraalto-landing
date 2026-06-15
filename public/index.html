@@ -3486,116 +3486,118 @@ setLang('es');
     }
     resize(); window.addEventListener('resize', resize);
 
-    // Coffee cup particles + ripple
-    var DROPS = Array.from({length:80}, function(){
-      var angle = Math.random()*Math.PI*2;
-      var rad   = (0.05 + Math.random()*0.35);
+    // ── HOLOGRAMA KALDI ── taza proyectada como dato. Ambar Kaldi + cian NERHIA.
+    var AMBER='245,166,35', CYAN='0,212,255';
+
+    var STEAM = Array.from({length:46}, function(){
       return {
-        angle: angle, rad: rad,
-        vAngle: (Math.random()-0.5)*0.004,
-        vRad: (Math.random()-0.5)*0.0005,
-        r: 1.0 + Math.random()*2.2,
-        a: 0.25 + Math.random()*0.45,
-        ph: Math.random()*Math.PI*2,
-        warm: Math.random()>0.4,
+        x:(Math.random()-0.5),
+        y:Math.random(),
+        vy:0.0015+Math.random()*0.0035,
+        sway:Math.random()*Math.PI*2,
+        swaySpd:0.5+Math.random()*1.2,
+        r:0.8+Math.random()*1.8,
+        a:0.2+Math.random()*0.4,
+        cyan:Math.random()>0.55
       };
     });
 
-    // Latte art wave points
-    var WAVE = Array.from({length:60}, function(_, i){
-      return { x: i/59, phase: Math.random()*Math.PI*2 };
-    });
-
     (function frame(){
-      requestAnimationFrame(frame); t+=0.007;
+      requestAnimationFrame(frame); t+=0.016;
       c.clearRect(0,0,W,H);
 
-      // Deep warm bg
-      var bg = c.createRadialGradient(W/2,H*0.55,0, W/2,H/2,H*0.9);
-      bg.addColorStop(0,'#1a0e00');
-      bg.addColorStop(0.5,'#110800');
-      bg.addColorStop(1,'#060400');
+      var bg=c.createRadialGradient(W/2,H*0.62,0, W/2,H/2,H*1.0);
+      bg.addColorStop(0,'#03060a');
+      bg.addColorStop(0.6,'#020407');
+      bg.addColorStop(1,'#000');
       c.fillStyle=bg; c.fillRect(0,0,W,H);
 
-      var cx=W/2, cy=H*0.54;
-      var cupR = Math.min(W,H)*0.38;
+      var cx=W/2, cy=H*0.56, cupR=Math.min(W,H)*0.34;
+      var flicker=0.82+0.18*Math.sin(t*7.0)+0.05*Math.sin(t*23.0);
 
-      // Cup glow
-      var glow = c.createRadialGradient(cx,cy,0,cx,cy,cupR*1.4);
-      glow.addColorStop(0,'rgba(245,140,20,0.14)');
-      glow.addColorStop(0.5,'rgba(160,80,10,0.06)');
-      glow.addColorStop(1,'transparent');
-      c.fillStyle=glow; c.fillRect(0,0,W,H);
+      var cone=c.createLinearGradient(0,cy+cupR*0.7,0,cy-cupR*1.3);
+      cone.addColorStop(0,'rgba('+CYAN+','+(0.10*flicker)+')');
+      cone.addColorStop(1,'transparent');
+      c.fillStyle=cone;
+      c.beginPath();
+      c.moveTo(cx-cupR*0.2, cy+cupR*0.72);
+      c.lineTo(cx+cupR*0.2, cy+cupR*0.72);
+      c.lineTo(cx+cupR*1.15, cy-cupR*1.25);
+      c.lineTo(cx-cupR*1.15, cy-cupR*1.25);
+      c.closePath(); c.fill();
 
-      // Ripple rings from center
-      for(var r=1;r<=4;r++){
-        var rph = t*0.4 + r*Math.PI/2;
-        var rr = cupR*(0.15 + r*0.22) + Math.sin(rph)*cupR*0.03;
-        var ral = (0.15 - r*0.025) * (0.7+0.3*Math.sin(rph*1.3));
+      for(var ring=0; ring<3; ring++){
+        var rp=t*0.8+ring*Math.PI/1.5;
+        var rr=cupR*(0.55+ring*0.18)+Math.sin(rp)*cupR*0.03;
         c.beginPath();
-        c.ellipse(cx, cy, rr, rr*0.28, 0, 0, Math.PI*2);
-        c.strokeStyle='rgba(245,166,35,'+ral+')';
-        c.lineWidth=1.2; c.stroke();
+        c.ellipse(cx, cy+cupR*0.72, rr, rr*0.22, 0, 0, Math.PI*2);
+        c.strokeStyle='rgba('+CYAN+','+((0.22-ring*0.05)*flicker)+')';
+        c.lineWidth=1.1; c.stroke();
       }
 
-      // Latte art — white milk wave
-      c.beginPath();
-      WAVE.forEach(function(pt, i){
-        var x = cx - cupR*0.65 + pt.x * cupR*1.3;
-        var base = cy - cupR*0.08;
-        var y = base + Math.sin(pt.x*Math.PI*4 + t*1.1 + pt.phase)*cupR*0.045
-                     + Math.sin(pt.x*Math.PI*2 + t*0.6)*cupR*0.025;
-        i===0 ? c.moveTo(x,y) : c.lineTo(x,y);
-      });
-      c.strokeStyle='rgba(255,245,220,0.2)';
-      c.lineWidth=1.8; c.stroke();
-
-      // Orbiting coffee aroma drops
-      DROPS.forEach(function(d){
-        d.angle += d.vAngle;
-        d.rad = Math.max(0.05, Math.min(0.42, d.rad + d.vRad));
-        if(d.rad<0.05 || d.rad>0.42) d.vRad*=-1;
-
-        var px = cx + Math.cos(d.angle) * d.rad * cupR*2.2;
-        var py = cy + Math.sin(d.angle) * d.rad * cupR*0.7;
-
-        var pulse=0.6+0.4*Math.sin(t*1.2+d.ph);
-        var col=d.warm?'rgba(245,166,35,':'rgba(200,120,30,';
-
+      function cupPath(offX, color, alpha, lw){
         c.beginPath();
-        c.arc(px, py, d.r*(0.7+0.3*pulse), 0, Math.PI*2);
-        c.fillStyle=col+(d.a*pulse)+')';
-        c.shadowColor='rgba(245,120,20,0.2)';
-        c.shadowBlur=5;
-        c.fill();
+        c.moveTo(cx+offX-cupR*0.6, cy-cupR*0.55);
+        c.lineTo(cx+offX-cupR*0.48, cy+cupR*0.5);
+        c.lineTo(cx+offX+cupR*0.48, cy+cupR*0.5);
+        c.lineTo(cx+offX+cupR*0.6, cy-cupR*0.55);
+        c.strokeStyle='rgba('+color+','+(alpha*flicker)+')';
+        c.lineWidth=lw; c.stroke();
+        c.beginPath();
+        c.ellipse(cx+offX, cy-cupR*0.55, cupR*0.6, cupR*0.16, 0, 0, Math.PI*2);
+        c.stroke();
+        c.beginPath();
+        c.ellipse(cx+offX+cupR*0.72, cy-cupR*0.02, cupR*0.2, cupR*0.28, 0, -Math.PI*0.5, Math.PI*0.5);
+        c.stroke();
+      }
+      var ab=Math.sin(t*3.0)*1.6+1.2;
+      cupPath(-ab, CYAN, 0.5, 1.0);
+      cupPath( ab, AMBER, 0.55, 1.0);
+      cupPath( 0, '255,245,220', 0.7, 1.2);
+
+      c.beginPath();
+      c.ellipse(cx, cy-cupR*0.5, cupR*0.5, cupR*0.13, 0, 0, Math.PI*2);
+      var liq=c.createRadialGradient(cx,cy-cupR*0.5,0,cx,cy-cupR*0.5,cupR*0.5);
+      liq.addColorStop(0,'rgba('+AMBER+','+(0.35*flicker)+')');
+      liq.addColorStop(1,'rgba('+AMBER+',0.05)');
+      c.fillStyle=liq; c.fill();
+
+      STEAM.forEach(function(s){
+        s.y+=s.vy; s.sway+=0.01*s.swaySpd;
+        if(s.y>1){ s.y=0; s.x=(Math.random()-0.5); }
+        var px=cx + s.x*cupR*0.5 + Math.sin(s.sway)*cupR*0.18*s.y;
+        var py=(cy-cupR*0.5) - s.y*cupR*1.25;
+        var fade=(1-s.y)*flicker*s.a;
+        var col=s.cyan?CYAN:AMBER;
+        c.beginPath();
+        c.arc(px,py,s.r*(1+s.y*0.8),0,Math.PI*2);
+        c.fillStyle='rgba('+col+','+fade+')';
+        c.shadowColor='rgba('+col+',0.5)';
+        c.shadowBlur=6; c.fill();
       });
       c.shadowBlur=0;
 
-      // CREM EX3 machine silhouette — minimal linework
-      c.save();
-      var mx=W*0.5, my=H*0.58, ms=Math.min(W,H)*0.22;
-      c.globalAlpha=0.06;
-      c.fillStyle='#F5A623';
-      // Body
-      c.fillRect(mx-ms*1.1, my-ms*0.5, ms*2.2, ms*0.9);
-      // Group heads
-      c.fillRect(mx-ms*0.55, my, ms*0.35, ms*0.25);
-      c.fillRect(mx+ms*0.05, my, ms*0.35, ms*0.25);
-      // Portafilter curves
-      c.beginPath();
-      c.arc(mx-ms*0.38, my+ms*0.25, ms*0.14, 0, Math.PI*2);
-      c.arc(mx+ms*0.22, my+ms*0.25, ms*0.14, 0, Math.PI*2);
-      c.fill();
-      c.restore();
+      c.globalAlpha=0.5;
+      for(var sy=0; sy<H; sy+=3){
+        c.fillStyle=(Math.floor(sy/3)%2===0)?'rgba('+CYAN+',0.025)':'rgba(0,0,0,0.06)';
+        c.fillRect(0,sy,W,1.5);
+      }
+      c.globalAlpha=1;
 
-      // Corner HUD
+      var scanY=((t*0.16)%1)*H;
+      var sgrad=c.createLinearGradient(0,scanY-14,0,scanY+14);
+      sgrad.addColorStop(0,'transparent');
+      sgrad.addColorStop(0.5,'rgba('+CYAN+',0.10)');
+      sgrad.addColorStop(1,'transparent');
+      c.fillStyle=sgrad; c.fillRect(0,scanY-14,W,28);
+
       c.font='bold 9px monospace';
-      c.fillStyle='rgba(245,166,35,0.22)';
+      c.fillStyle='rgba('+AMBER+',0.30)';
       c.textAlign='left';
-      c.fillText('CREM EX3 · KALDI COFFEE', 10, H-12);
+      c.fillText('HOLO · KALDI COFFEE', 10, H-12);
       c.textAlign='right';
-      c.fillStyle='rgba(245,166,35,0.18)';
-      c.fillText('NERHIA · SANTIAGO', W-10, H-12);
+      c.fillStyle='rgba('+CYAN+',0.30)';
+      c.fillText('NERHIA · PROJECTION', W-10, H-12);
     })();
   })();
 
