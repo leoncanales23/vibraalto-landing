@@ -1941,9 +1941,44 @@ body::after {
   mix-blend-mode: overlay;
 }
 
+
+/* ═══ PITCH DECK MODE ═══ */
+html.deck-mode { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+html.deck-mode body { overflow-x: hidden; }
+html.deck-mode .hero,
+html.deck-mode section,
+html.deck-mode .manifesto-section,
+html.deck-mode .kaldi-strip,
+html.deck-mode .nexus-strip,
+html.deck-mode .nerhia-window-section,
+html.deck-mode .cta-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+html.deck-mode .hero { justify-content: flex-end; }
+html.deck-mode footer { scroll-snap-align: start; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+
+/* Slide counter */
+#deck-counter {
+  position: fixed; top: 14px; right: 16px; z-index: 600;
+  display: none;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.06em;
+  color: var(--fg-3); background: rgba(9,9,11,0.85);
+  border: 1px solid var(--border-2); border-radius: 4px;
+  padding: 3px 10px; backdrop-filter: blur(12px);
+}
+#deck-counter .dc-cur { color: #00d9ff; font-weight: 700; font-size: 14px; }
+#deck-counter .dc-sep { opacity: .35; margin: 0 4px; }
+html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
+
 </style>
 </head>
 <body>
+<div id="deck-counter"><span class="dc-cur" id="dc-cur">1</span><span class="dc-sep">/</span><span id="dc-tot">11</span></div>
+
 <!-- ═══ VIBRAALTO AT LAYER ═══ -->
 <div id="va-cursor"></div>
 
@@ -4072,6 +4107,108 @@ atTick();
 })(); // end AT layer
 </script>
 
-<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
+// ═══ PITCH DECK MODE ═══
+(function(){
+  'use strict';
+  var tag = document.getElementById('vb-page-tag');
+  var counter = document.getElementById('dc-cur');
+  var total = document.getElementById('dc-tot');
+  if(!tag) return;
+
+  // Collect slide elements
+  function getSlides(){
+    var slides = [];
+    var hero = document.getElementById('top');
+    if(hero) slides.push(hero);
+    var sects = document.querySelectorAll('section');
+    sects.forEach(function(s){ slides.push(s); });
+    return slides;
+  }
+
+  var active = false;
+  var scrollY_before = 0;
+
+  function enterDeck(){
+    active = true;
+    scrollY_before = window.scrollY;
+    document.documentElement.classList.add('deck-mode');
+    // Skip entry animation
+    var entry = document.getElementById('va-entry');
+    if(entry) entry.style.display = 'none';
+    // Update counter
+    var slides = getSlides();
+    if(total) total.textContent = slides.length;
+    updateCounter();
+    // Scroll to nearest slide
+    var cur = currentSlide();
+    if(cur >= 0 && slides[cur]) slides[cur].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function exitDeck(){
+    active = false;
+    document.documentElement.classList.remove('deck-mode');
+  }
+
+  function currentSlide(){
+    var slides = getSlides();
+    var best = 0, bestDist = Infinity;
+    for(var i=0; i<slides.length; i++){
+      var rect = slides[i].getBoundingClientRect();
+      var dist = Math.abs(rect.top);
+      if(dist < bestDist){ bestDist = dist; best = i; }
+    }
+    return best;
+  }
+
+  function updateCounter(){
+    if(!active) return;
+    var cur = currentSlide();
+    if(counter) counter.textContent = cur + 1;
+  }
+
+  function goSlide(dir){
+    if(!active) return;
+    var slides = getSlides();
+    var cur = currentSlide();
+    var next = cur + dir;
+    if(next < 0) next = 0;
+    if(next >= slides.length) next = slides.length - 1;
+    slides[next].scrollIntoView({ behavior: 'smooth' });
+    setTimeout(updateCounter, 350);
+  }
+
+  // Click toggle
+  tag.addEventListener('click', function(e){
+    e.preventDefault();
+    if(active) exitDeck(); else enterDeck();
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e){
+    if(!active) return;
+    if(e.key === 'Escape'){ exitDeck(); e.preventDefault(); return; }
+    if(e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown'){
+      goSlide(1); e.preventDefault();
+    }
+    if(e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp'){
+      goSlide(-1); e.preventDefault();
+    }
+    if(e.key === 'Home'){ goSlide(-999); e.preventDefault(); }
+    if(e.key === 'End'){ goSlide(999); e.preventDefault(); }
+  });
+
+  // Update counter on scroll
+  var scrollTick = false;
+  window.addEventListener('scroll', function(){
+    if(!active || scrollTick) return;
+    scrollTick = true;
+    requestAnimationFrame(function(){ updateCounter(); scrollTick = false; });
+  });
+
+  // F11 / fullscreen hint
+  tag.title = 'Click para activar modo presentación (F11 para pantalla completa)';
+})();
+</script>
 </body>
 </html>
