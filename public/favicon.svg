@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7c2fff"/>
+    </linearGradient>
+    <linearGradient id="border-g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c2fff" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo oscuro con esquinas redondeadas -->
+  <rect width="100" height="100" rx="18" fill="#09090b"/>
+  <!-- Borde sutil con degradado -->
+  <rect x="1.5" y="1.5" width="97" height="97" rx="17" fill="none" stroke="url(#border-g)" stroke-width="1.5"/>
+  <!-- Letras VA con degradado de marca -->
+  <text x="50" y="67"
+    font-size="46"
+    text-anchor="middle"
+    font-family="system-ui, -apple-system, 'Geist', sans-serif"
+    font-weight="700"
+    letter-spacing="-2"
+    fill="url(#g)">VA</text>
+</svg>
