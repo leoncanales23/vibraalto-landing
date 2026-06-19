@@ -812,17 +812,47 @@ footer {
 #controls button:hover { background: var(--bg-2); color: var(--fg-2); }
 
 /* ── REVEAL ANIMATIONS ── */
+/* ═══ PAGE-FLIP 3D REVEAL ═══ */
 .reveal {
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  opacity: 0;
+  transform: perspective(1200px) rotateY(-6deg) translateY(30px);
+  transform-origin: left center;
+  transition: opacity 800ms var(--ease-out), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
 }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(even) {
+  transform: perspective(1200px) rotateY(6deg) translateY(30px);
+  transform-origin: right center;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: perspective(1200px) rotateY(0deg) translateY(0);
+}
 .reveal:nth-child(1) { transition-delay: 0ms; }
-.reveal:nth-child(2) { transition-delay: 80ms; }
-.reveal:nth-child(3) { transition-delay: 160ms; }
-.reveal:nth-child(4) { transition-delay: 240ms; }
-.reveal:nth-child(5) { transition-delay: 320ms; }
-.reveal:nth-child(6) { transition-delay: 400ms; }
+.reveal:nth-child(2) { transition-delay: 100ms; }
+.reveal:nth-child(3) { transition-delay: 180ms; }
+.reveal:nth-child(4) { transition-delay: 260ms; }
+.reveal:nth-child(5) { transition-delay: 340ms; }
+.reveal:nth-child(6) { transition-delay: 420ms; }
+
+/* Page spine shadow during flip */
+.reveal::before {
+  content:''; position:absolute; top:0; bottom:0; width:40px;
+  background:linear-gradient(to right, rgba(0,212,255,0.04), transparent);
+  opacity:0; transition:opacity 1s ease; pointer-events:none; left:0;
+}
+.reveal:nth-child(even)::before {
+  left:auto; right:0;
+  background:linear-gradient(to left, rgba(0,212,255,0.04), transparent);
+}
+.reveal.visible::before { opacity:1; }
+
+/* Reduce motion for accessibility */
+@media(prefers-reduced-motion: reduce){
+  .reveal { transform:none !important; opacity:0; transition:opacity 400ms ease; }
+  .reveal.visible { opacity:1; }
+  .reveal::before { display:none; }
+}
 
 /* i18n */
 [data-i] { transition: opacity 200ms var(--ease-out); }
