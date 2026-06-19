@@ -2128,6 +2128,39 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 .vb-lb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:1.2px;padding:3px 7px;background:transparent;border:1px solid rgba(0,217,255,0.1);color:rgba(232,246,255,0.28);cursor:pointer;border-radius:2px;transition:all .18s;}
 .vb-lb:hover{color:#00d9ff;border-color:rgba(0,217,255,0.22);}
 .vb-lb.active{color:#00d9ff;border-color:rgba(0,217,255,0.28);background:rgba(0,217,255,0.05);}
+
+/* ═══ CHAPTER SIDEBAR ═══ */
+.va-chapters{
+  position:fixed; right:20px; top:50%; transform:translateY(-50%);
+  z-index:900; display:flex; flex-direction:column; gap:12px;
+  pointer-events:auto;
+}
+.ch{
+  display:flex; align-items:center; gap:8px; cursor:pointer;
+  flex-direction:row-reverse; padding:3px 0;
+}
+.ch-dot{
+  width:7px; height:7px; border-radius:50%;
+  background:rgba(0,212,255,0.2); border:1px solid rgba(0,212,255,0.35);
+  transition:all .4s ease; flex-shrink:0;
+}
+.ch.active .ch-dot{
+  background:#00d4ff; width:9px; height:9px;
+  box-shadow:0 0 10px rgba(0,212,255,0.5), 0 0 20px rgba(0,212,255,0.2);
+}
+.ch-label{
+  font:500 10px/1 'JetBrains Mono',monospace;
+  color:rgba(255,255,255,0.2); white-space:nowrap;
+  opacity:0; transform:translateX(8px);
+  transition:all .3s ease; letter-spacing:.4px; text-transform:uppercase;
+}
+.ch:hover .ch-label, .ch.active .ch-label{
+  opacity:1; transform:translateX(0); color:rgba(0,212,255,0.85);
+}
+.ch:hover .ch-dot{ background:rgba(0,212,255,0.5); }
+@media(max-width:768px){ .va-chapters{ display:none; } }
+html.deck-mode .va-chapters{ display:none; }
+
 </style>
 <script>
 (function(){
@@ -2344,7 +2377,7 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 </section>
 
 <!-- MANIFESTO -->
-<section class="manifesto-section">
+<section class="manifesto-section" id="manifesto">
   <div class="manifesto-inner">
     <div class="manifesto-tag"><span class="ml-dot"></span><span data-i="manifesto_tag">Manifesto · single take · sin notas al pie</span></div>
     <p class="manifesto-q" data-i="manifesto_text">No construimos productos. <em>Afinamos</em> sistemas que ya quieren existir.</p>
@@ -4252,6 +4285,41 @@ atTick();
   // F11 / fullscreen hint
   tag.title = 'Click para activar modo presentación (F11 para pantalla completa)';
 })();
+
+  // ═══ CHAPTER SIDEBAR — SCROLL TRACKING ═══
+  (function(){
+    var chs=document.querySelectorAll('.ch');
+    var sectionIds=['hero','nerhia-live','protocol','manifesto','demos','mempalace','experiments','kaldi','nexus-va','contact','lab'];
+
+    // Click → smooth scroll
+    chs.forEach(function(ch){
+      ch.addEventListener('click',function(){
+        var tgt=ch.dataset.target;
+        var el=tgt==='hero'?document.querySelector('.hero'):document.getElementById(tgt);
+        if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+
+    // Scroll → highlight active chapter
+    var chTick=false;
+    window.addEventListener('scroll',function(){
+      if(chTick) return;
+      requestAnimationFrame(function(){
+        var mid=window.innerHeight*0.4;
+        var active=0;
+        sectionIds.forEach(function(id,i){
+          var el=id==='hero'?document.querySelector('.hero'):document.getElementById(id);
+          if(!el) return;
+          var r=el.getBoundingClientRect();
+          if(r.top<mid && r.bottom>0) active=i;
+        });
+        chs.forEach(function(ch,i){ ch.classList.toggle('active',i===active); });
+        chTick=false;
+      });
+      chTick=true;
+    });
+  })();
+
 </script>
 </body>
 </html>
