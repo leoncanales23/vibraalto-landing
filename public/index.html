@@ -3143,6 +3143,7 @@ window.addEventListener("load", function ReactorScene(){
 
   function loop(){
     requestAnimationFrame(loop);t3+=.007;
+    if(!window.vaVisible.hero) return;
     if(running)ry+=.0018*spd;
     reactor.rotation.y=ry;reactor.rotation.x=THREE.MathUtils.degToRad(tiltDeg);
     reactor.position.y=Math.sin(t3*.25)*.08;
@@ -3187,6 +3188,22 @@ window.addEventListener("load", function ReactorScene(){
 (function(){
   // Progress bar
   const fill = document.getElementById('progress-fill');
+
+  // ═══ INTERSECTION OBSERVER — ANIMATION PERFORMANCE ═══
+  // Pause canvas animations outside viewport to save GPU/CPU
+  window.vaVisible={hero:true};
+  (function(){
+    var sIds=['nerhia-live','protocol','demos','mempalace','experiments','kaldi','nexus-va','contact','lab'];
+    var perfObs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var key=e.target.id||(e.target.classList.contains('hero')?'hero':'');
+        if(key) window.vaVisible[key]=e.isIntersecting;
+      });
+    },{rootMargin:'200px 0px',threshold:0});
+    var hero=document.querySelector('.hero');
+    if(hero) perfObs.observe(hero);
+    sIds.forEach(function(id){ var el=document.getElementById(id); if(el) perfObs.observe(el); });
+  })();
 
   // Intersection observer for reveals
   const obs = new IntersectionObserver(entries=>{
@@ -3322,6 +3339,7 @@ setLang('es');
     var THREADS=5;
     (function frame(){
       requestAnimationFrame(frame); t+=0.009;
+      if(!window.vaVisible.experiments) return;
       c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.2)'; c.fillRect(0,0,W,H);
       var on=!!activeNodes.loom, E=on?1:0.38;
       for(var i=0;i<THREADS;i++){
@@ -3361,6 +3379,7 @@ setLang('es');
     var BARS=18;
     (function frame(){
       requestAnimationFrame(frame); t+=0.006;
+      if(!window.vaVisible.experiments) return;
       c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.18)'; c.fillRect(0,0,W,H);
       var on=!!activeNodes.echo, E=on?1:0.4;
       for(var i=0;i<BARS;i++){
@@ -3395,6 +3414,7 @@ setLang('es');
             {r:0.35,sp:0.618,ph:Math.PI/2,sz:3.0},{r:0.15,sp:2.618,ph:Math.PI*1.5,sz:2.5}];
     (function frame(){
       requestAnimationFrame(frame); t+=0.008;
+      if(!window.vaVisible.experiments) return;
       c.clearRect(0,0,W,H); c.fillStyle='rgba(9,9,11,0.15)'; c.fillRect(0,0,W,H);
       var on=!!activeNodes.aria, E=on?1:0.45;
       var cx=W/2, cy=H/2, mR=Math.min(W,H)*0.38;
@@ -3483,6 +3503,7 @@ setLang('es');
 
     (function frame(){
       requestAnimationFrame(frame); t+=0.008;
+      if(!window.vaVisible.kaldi) return;
       c.clearRect(0,0,W,H);
 
       // Warm radial glow — bottom center (espresso source)
@@ -3555,6 +3576,7 @@ setLang('es');
 
     (function frame(){
       requestAnimationFrame(frame); t+=0.016;
+      if(!window.vaVisible.kaldi) return;
       c.clearRect(0,0,W,H);
 
       var bg=c.createRadialGradient(W/2,H*0.62,0, W/2,H/2,H*1.0);
@@ -3729,6 +3751,7 @@ setLang('es');
 
     (function frame(){
       requestAnimationFrame(frame); t+=0.006;
+      if(!window.vaVisible['nexus-va']) return;
       c.clearRect(0,0,W,H);
 
       // Subtle purple radial center
@@ -3787,6 +3810,7 @@ setLang('es');
 
     (function frame(){
       requestAnimationFrame(frame); t+=0.012; screenT+=0.012;
+      if(!window.vaVisible['nexus-va']) return;
       if(screenT>6){screenT=0; screenIdx=(screenIdx+1)%SCREENS.length;}
 
       c.clearRect(0,0,W,H);
@@ -4078,6 +4102,7 @@ var frame3=0;
 
 function atTick(){
   requestAnimationFrame(atTick);
+  if(!window.vaVisible.hero) return;
   frame3++;
 
   if(!throwY.isDrag){
