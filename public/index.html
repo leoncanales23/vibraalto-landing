@@ -2426,29 +2426,16 @@ html.deck-mode .va-chapters{ display:none; }
     <div class="demos-intro">
       <div class="section-eyebrow" style="justify-content:center" data-i="demos_tag">Demo gratuita · Sin registro</div>
       <h2 class="section-h2" data-i="demos_h2">Toca la tecnología. Gratis.</h2>
-      <p class="section-sub" style="margin:12px auto 0" data-i="demos_sub">Dos demos en vivo. Sin cuenta, sin costo, sin límites.</p>
+      <p class="section-sub" style="margin:12px auto 0" data-i="demos_sub">Demo en vivo. Sin cuenta, sin costo, sin límites.</p>
     </div>
-    <div class="demos-grid">
+    <div class="demos-grid" style="grid-template-columns:1fr;max-width:820px;margin:0 auto">
       <div class="demo-card">
         <div class="demo-header">
           <div>
-            <div class="demo-title" data-i="demo1_title">⚡ Fábrica VibraAlto</div>
-            <div class="demo-desc" data-i="demo1_desc">Chat con ExoLeón · Cola de impresión · Control de flota</div>
+            <div class="demo-title" data-i="demo1_title">⚗️ Laboratorio 3D · Fabricación</div>
+            <div class="demo-desc" data-i="demo1_desc">Diseño · Visor holográfico · Export STL · Cola de impresión</div>
           </div>
           <span class="demo-badge badge-live">LIVE</span>
-        </div>
-        <div class="demo-frame-wrap">
-          <iframe id="frame-fabrica" src="https://3d.vibraalto.cl/fabricacion-3d" title="Fábrica VibraAlto" allow="fullscreen" loading="lazy"></iframe>
-          <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('fabrica')" data-i="demo_full">↗ Pantalla completa</a>
-        </div>
-      </div>
-      <div class="demo-card">
-        <div class="demo-header">
-          <div>
-            <div class="demo-title" data-i="demo2_title">⚗️ Laboratorio 3D</div>
-            <div class="demo-desc" data-i="demo2_desc">Diseño · Visor holográfico · Export STL</div>
-          </div>
-          <span class="demo-badge badge-free">FREE</span>
         </div>
         <div class="demo-frame-wrap">
           <iframe id="frame-lab" src="https://3d.vibraalto.cl/fabricacion-3d" title="Laboratorio 3D VibraAlto" allow="fullscreen" loading="lazy"></iframe>
@@ -2961,9 +2948,8 @@ const T = {
     manifesto_tag:'Manifesto · single take · sin notas al pie',
     manifesto_text:'No construimos productos. <em>Afinamos</em> sistemas que ya quieren existir — les quitamos el ruido encima, les damos forma, y los soltamos cuando ya saben sonar solos.',
     demos_tag:'Demo gratuita · Prueba sin registro',demos_h2:'Toca la tecnología. Gratis.',
-    demos_sub:'Dos demos en vivo de lo que construimos — impresión 3D industrial y laboratorio de diseño. Sin cuenta, sin costo, sin límites de tiempo.',
-    demo1_title:'⚡ Fábrica VibraAlto',demo1_desc:'Chat con ExoLeón · Cola de impresión · Control de flota',
-    demo2_title:'⚗️ Laboratorio 3D',demo2_desc:'Diseño · Visor holográfico · Export STL',
+    demos_sub:'Demo en vivo de lo que construimos — fabricación 3D industrial y laboratorio de diseño. Sin cuenta, sin costo, sin límites de tiempo.',
+    demo1_title:'⚗️ Laboratorio 3D · Fabricación',demo1_desc:'Diseño · Visor holográfico · Export STL · Cola de impresión',
     demo_full:'↗ Ver pantalla completa',
     mp_tag:'Experimento 001 · Master of repos',mp_h2:'MemPalace — un <em>memory palace</em> para tu código.',
     mp_sub:'Un solo pensamiento detrás de cada repo. MemPalace indexa, conecta y recupera el código del lab como si fuera una mente sola.',
@@ -3012,9 +2998,8 @@ const T = {
     manifesto_tag:'Manifesto · single take · no footnotes',
     manifesto_text:'We don\'t build products. We <em>tune</em> systems that already want to exist — strip the noise, give them shape, and release them when they know how to sound on their own.',
     demos_tag:'Free demo · No sign-up required',demos_h2:'Touch the technology. Free.',
-    demos_sub:'Two live demos of what we build — industrial 3D printing and design lab. No account, no cost, no time limits.',
-    demo1_title:'⚡ VibraAlto Factory',demo1_desc:'Chat with ExoLeón · Print queue · Fleet control',
-    demo2_title:'⚗️ 3D Laboratory',demo2_desc:'Design · Holographic viewer · STL export',
+    demos_sub:'Live demo — industrial 3D fabrication and design lab. No account, no cost, no time limits.',
+    demo1_title:'⚗️ 3D Lab · Fabrication',demo1_desc:'Design · Holographic viewer · STL export · Print queue',
     demo_full:'↗ Open full screen',
     mp_tag:'Experiment 001 · Master of repos',mp_h2:'MemPalace — a <em>memory palace</em> for your code.',
     mp_sub:'One thought behind every repo. MemPalace indexes, connects and retrieves the lab\'s code as if it were a single mind.',
@@ -3063,9 +3048,8 @@ const T = {
     manifesto_tag:'宣言 · 一次录制 · 无脚注',
     manifesto_text:'我们不构建产品。我们<em>调谐</em>已经想要存在的系统——剥去噪音，给它们形状，当它们知道如何独自发声时释放它们。',
     demos_tag:'免费演示 · 无需注册',demos_h2:'触碰技术。免费。',
-    demos_sub:'两个实时演示——工业3D打印和设计实验室。无需账户，无需费用，无时间限制。',
+    demos_sub:'实时演示——工业3D制造和设计实验室。无需账户，无需费用，无时间限制。',
     demo1_title:'⚡ VibraAlto 工厂',demo1_desc:'与ExoLeón聊天 · 打印队列 · 机队控制',
-    demo2_title:'⚗️ 3D 实验室',demo2_desc:'设计 · 全息查看器 · STL导出',
     demo_full:'↗ 全屏打开',
     mp_tag:'实验001 · 代码库主节点',mp_h2:'MemPalace — 你代码的<em>记忆宫殿</em>。',
     mp_sub:'每个代码库背后只有一个思想。MemPalace像单一思维一样索引、连接和检索实验室的代码。',
@@ -3244,9 +3228,7 @@ window.addEventListener("load", function ReactorScene(){
   track.innerHTML=html+html;
 })();
 
-// Demos: https://3d.vibraalto.cl/fabricacion-3d
-
-// Demos load via src attribute — see iframes above
+// Demo: https://3d.vibraalto.cl/fabricacion-3d
 
 
 
@@ -3312,8 +3294,8 @@ window.addEventListener("load", function ReactorScene(){
 
 
 function openFullDemo(which){
-  var urls={fabrica:'https://3d.vibraalto.cl/fabricacion-3d',lab:'https://3d.vibraalto.cl/fabricacion-3d'};
-  window.open(urls[which]||'https://vibraalto.cl','_blank','noopener');
+  var url='https://3d.vibraalto.cl/fabricacion-3d';
+  window.open(url,'_blank','noopener');
 }
 setLang('es');
 
