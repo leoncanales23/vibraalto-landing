@@ -2438,7 +2438,7 @@ html.deck-mode .va-chapters{ display:none; }
           <span class="demo-badge badge-live">LIVE</span>
         </div>
         <div class="demo-frame-wrap">
-          <iframe id="frame-fabrica" src="https://vibraalto.cl/fabrica/" title="Fábrica VibraAlto" allow="fullscreen" loading="lazy"></iframe>
+          <iframe id="frame-fabrica" src="https://3d.vibraalto.cl/fabricacion-3d" title="Fábrica VibraAlto" allow="fullscreen" loading="lazy"></iframe>
           <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('fabrica')" data-i="demo_full">↗ Pantalla completa</a>
         </div>
       </div>
@@ -2451,7 +2451,7 @@ html.deck-mode .va-chapters{ display:none; }
           <span class="demo-badge badge-free">FREE</span>
         </div>
         <div class="demo-frame-wrap">
-          <iframe id="frame-lab" src="https://vibraalto.cl/fabricacion-3d/" title="Laboratorio 3D VibraAlto" allow="fullscreen" loading="lazy"></iframe>
+          <iframe id="frame-lab" src="https://3d.vibraalto.cl/fabricacion-3d" title="Laboratorio 3D VibraAlto" allow="fullscreen" loading="lazy"></iframe>
           <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('lab')" data-i="demo_full">↗ Pantalla completa</a>
         </div>
       </div>
@@ -3244,7 +3244,7 @@ window.addEventListener("load", function ReactorScene(){
   track.innerHTML=html+html;
 })();
 
-// Demos: vibraalto.cl/fabrica/ & vibraalto.cl/fabricacion-3d/
+// Demos: https://3d.vibraalto.cl/fabricacion-3d
 
 // Demos load via src attribute — see iframes above
 
@@ -3312,7 +3312,7 @@ window.addEventListener("load", function ReactorScene(){
 
 
 function openFullDemo(which){
-  var urls={fabrica:'https://vibraalto.cl/fabrica/',lab:'https://vibraalto.cl/fabricacion-3d/'};
+  var urls={fabrica:'https://3d.vibraalto.cl/fabricacion-3d',lab:'https://3d.vibraalto.cl/fabricacion-3d'};
   window.open(urls[which]||'https://vibraalto.cl','_blank','noopener');
 }
 setLang('es');
@@ -4216,21 +4216,6 @@ atTick();
 })(); // end AT layer
 </script>
 
-<!-- ═══ CHAPTER SIDEBAR (Kindle-style) ═══ -->
-<nav class="va-chapters" id="chapter-nav" aria-label="Capítulos">
-  <div class="ch active" data-target="hero"><span class="ch-label">I · La Señal</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nerhia-live"><span class="ch-label">II · Ciudad Viva</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="protocol"><span class="ch-label">III · Protocolo</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="manifesto"><span class="ch-label">IV · Manifiesto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="demos"><span class="ch-label">V · Demos</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="mempalace"><span class="ch-label">VI · MemPalace</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="experiments"><span class="ch-label">VII · Lab</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="kaldi"><span class="ch-label">VIII · Kaldi</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nexus-va"><span class="ch-label">IX · Nexus</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="contact"><span class="ch-label">X · Contacto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="lab"><span class="ch-label">XI · Twin</span><span class="ch-dot"></span></div>
-</nav>
-
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}
 // ═══ PITCH DECK MODE ═══
 (function(){
@@ -4371,5 +4356,19 @@ atTick();
   })();
 
 </script>
+<!-- ═══ CHAPTER SIDEBAR (Kindle-style) ═══ -->
+<nav class="va-chapters" id="chapter-nav" aria-label="Capítulos">
+  <div class="ch active" data-target="hero"><span class="ch-label">I · La Señal</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nerhia-live"><span class="ch-label">II · Ciudad Viva</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="protocol"><span class="ch-label">III · Protocolo</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="manifesto"><span class="ch-label">IV · Manifiesto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="demos"><span class="ch-label">V · Demos</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="mempalace"><span class="ch-label">VI · MemPalace</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="experiments"><span class="ch-label">VII · Lab</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="kaldi"><span class="ch-label">VIII · Kaldi</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nexus-va"><span class="ch-label">IX · Nexus</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="contact"><span class="ch-label">X · Contacto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="lab"><span class="ch-label">XI · Twin</span><span class="ch-dot"></span></div>
+</nav>
 </body>
 </html>
