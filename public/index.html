@@ -2026,6 +2026,859 @@ html.deck-mode #vb-page-tag {
 html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 
 </style>
+
+<!-- ═══ LICENCIA VA CSS ═══ -->
+<style>
+.lic-strip{position:relative;overflow:hidden;background:#05070c;
+  border-top:1px solid rgba(0,212,255,0.12);border-bottom:1px solid rgba(0,212,255,0.12);
+  font-family:'Rajdhani',-apple-system,sans-serif;}
+.lic-strip::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 45%,rgba(0,212,255,0.10),transparent 60%);pointer-events:none;}
+.lic-inner{position:relative;max-width:1200px;margin:0 auto;padding:60px 28px;
+  display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;}
+@media(max-width:900px){.lic-inner{grid-template-columns:1fr;gap:36px;justify-items:center;}.lic-left{text-align:center;}}
+.lic-tag{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:#00d4ff;opacity:.8;margin-bottom:14px;}
+.lic-tag::before{content:'◢ ';opacity:.6;}
+.lic-wordmark{font-family:'Orbitron',monospace;font-weight:900;font-size:clamp(34px,6vw,54px);line-height:.95;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;}
+@media(max-width:900px){.lic-wordmark{justify-content:center;}}
+.lic-w1{color:#d8dde3;text-shadow:0 0 24px rgba(216,221,227,.3);}
+.lic-w2{color:#e01030;text-shadow:0 0 24px rgba(255,45,77,.5);}
+.lic-manifesto{font-size:clamp(20px,3vw,28px);color:#c8eeff;margin-top:18px;font-weight:600;}
+.lic-manifesto em{color:#00d4ff;font-style:normal;}
+.lic-sub{font-size:15px;line-height:1.6;color:#7be3ff;opacity:.7;margin-top:12px;max-width:460px;}
+@media(max-width:900px){.lic-sub{margin-left:auto;margin-right:auto;}}
+.lic-pillars{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
+@media(max-width:900px){.lic-pillars{justify-content:center;}}
+.lic-pill{font-family:'Share Tech Mono',monospace;font-size:12px;color:#c8eeff;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.18);padding:7px 13px;border-radius:20px;}
+.lic-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;}
+@media(max-width:900px){.lic-actions{justify-content:center;}}
+.lic-btn{display:inline-flex;align-items:center;gap:9px;text-decoration:none;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;padding:13px 22px;border-radius:11px;border:none;transition:transform .15s,box-shadow .15s;}
+.lic-btn-primary{background:linear-gradient(135deg,#00d4ff,#0090cc);color:#001018;box-shadow:0 6px 24px rgba(0,212,255,.3);}
+.lic-btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(0,212,255,.45);}
+.lic-btn-ghost{background:transparent;color:#00d4ff;border:1px solid rgba(0,212,255,.35);}
+.lic-btn-ghost:hover{transform:translateY(-2px);background:rgba(0,212,255,.08);}
+.lic-right{display:flex;justify-content:center;}
+/* el .scene del carné mantiene sus estilos originales abajo */
+</style>
+<style>
+
+  :root{
+    --silver:#d8dde3; --silver2:#9aa3ad; --ruby:#e01030; --ruby-glow:#ff2d4d;
+    --cyan:#00d4ff; --gold:#f5c542; --bg:#05070c;
+    --card-bg: linear-gradient(160deg, #0f141d 0%, #070a11 55%, #0c1019 100%);
+    --card-border: rgba(216,221,227,0.18);
+    --text-primary: var(--silver);
+    --text-secondary: var(--silver2);
+    --spec-bg: rgba(0,212,255,0.05);
+    --spec-border: rgba(0,212,255,0.2);
+    --footer-border: rgba(216,221,227,0.12);
+    --chip-gradient: linear-gradient(135deg, #c9a84a, #8a6d2a);
+    --qr-border: rgba(0,212,255,0.15);
+    --laser-color: var(--cyan);
+    --deco-line: rgba(0,212,255,0.3);
+    --status-color: #00ff88;
+    --status-glow: #00ff88;
+    --back-text: var(--silver2);
+    --btn-bg: linear-gradient(135deg, #e01030, #ff2d4d);
+    --btn-hover: linear-gradient(135deg, #ff2d4d, #e01030);
+    --toggle-bg: rgba(15,20,29,0.8);
+    --toggle-active: var(--gold);
+    --form-bg: rgba(15,20,29,0.9);
+    --form-border: rgba(216,221,227,0.15);
+    --input-bg: rgba(7,10,17,0.6);
+    --input-border: rgba(216,221,227,0.12);
+    --input-text: var(--silver);
+  }
+  [data-theme="light"]{
+    --bg: #e8ecf1;
+    --card-bg: linear-gradient(160deg, #ffffff 0%, #f0f2f5 55%, #e8ecf1 100%);
+    --card-border: rgba(0,0,0,0.12);
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --spec-bg: rgba(0,100,200,0.08);
+    --spec-border: rgba(0,100,200,0.25);
+    --footer-border: rgba(0,0,0,0.1);
+    --chip-gradient: linear-gradient(135deg, #d4a843, #a07c2a);
+    --qr-border: rgba(0,100,200,0.2);
+    --laser-color: #0088cc;
+    --deco-line: rgba(0,100,200,0.3);
+    --status-color: #00aa66;
+    --status-glow: #00aa66;
+    --back-text: #4a4a6a;
+    --btn-bg: linear-gradient(135deg, #cc1122, #ee3344);
+    --btn-hover: linear-gradient(135deg, #ee3344, #cc1122);
+    --toggle-bg: rgba(255,255,255,0.9);
+    --toggle-active: #f5c542;
+    --form-bg: rgba(255,255,255,0.95);
+    --form-border: rgba(0,0,0,0.1);
+    --input-bg: rgba(240,242,245,0.8);
+    --input-border: rgba(0,0,0,0.12);
+    --input-text: #1a1a2e;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;transition: background-color 0.5s ease, color 0.3s ease, border-color 0.3s ease;}
+  body{
+    background: var(--bg);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+    font-family:'Rajdhani',sans-serif;
+    transition: background 0.5s ease;
+  }
+  [data-theme="light"] body{
+    background: radial-gradient(ellipse at 50% 35%, #f5f7fa, #e8ecf1 70%);
+  }
+  .main-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+    max-width:100%;
+  }
+  .scene{perspective:1400px;}
+
+  .theme-toggle{
+    position:fixed;
+    top:20px;
+    right:20px;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background: var(--toggle-bg);
+    padding:6px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    border:1px solid var(--card-border);
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    backdrop-filter:blur(10px);
+  }
+  .theme-label{
+    font-family:'Share Tech Mono',monospace;
+    font-size:11px;
+    color:var(--text-secondary);
+  }
+  .toggle-switch{
+    width:36px;
+    height:20px;
+    background:#333;
+    border-radius:10px;
+    position:relative;
+    transition:background 0.3s;
+  }
+  [data-theme="light"] .toggle-switch{background:#ccc;}
+  .toggle-knob{
+    width:16px;
+    height:16px;
+    background:var(--toggle-active);
+    border-radius:50%;
+    position:absolute;
+    top:2px;
+    left:2px;
+    transition:transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow:0 2px 4px rgba(0,0,0,0.3);
+  }
+  [data-theme="light"] .toggle-knob{transform:translateX(16px);}
+
+  .licencia{
+    width:420px;
+    height:640px;
+    border-radius:24px;
+    position:relative;
+    background: var(--card-bg);
+    border:1px solid var(--card-border);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 60px rgba(0,212,255,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    overflow:hidden;
+    animation: float 6s ease-in-out infinite;
+    transform-style:preserve-3d;
+  }
+  @keyframes float{
+    0%,100%{transform:rotateY(-7deg) rotateX(3deg);}
+    50%{transform:rotateY(7deg) rotateX(-2deg);}
+  }
+
+  .holo-lines{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:5;
+    background: repeating-linear-gradient(0deg, rgba(0,212,255,0.04) 0px, rgba(0,212,255,0.04) 1px, transparent 2px, transparent 4px);
+  }
+  .holo-sweep{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:6;
+    background: linear-gradient(115deg, transparent 30%, rgba(0,212,255,0.10) 48%, rgba(255,255,255,0.06) 50%, transparent 70%);
+    background-size:300% 300%;
+    animation:sweep 5s linear infinite;
+  }
+  @keyframes sweep{
+    0%{background-position:200% 0;}
+    100%{background-position:-100% 0;}
+  }
+
+  .c-top{
+    position:relative;
+    z-index:7;
+    padding:22px 24px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+  }
+  .c-org{
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    letter-spacing:3px;
+    color:var(--text-secondary);
+    line-height:1.6;
+  }
+  .c-org b{
+    color:var(--text-primary);
+    font-size:11px;
+    letter-spacing:2px;
+  }
+  .c-rank{text-align:right;}
+  .c-rank-star{
+    color:var(--gold);
+    font-size:13px;
+    letter-spacing:2px;
+    text-shadow:0 0 8px rgba(245,197,66,0.4);
+  }
+  .c-rank-lbl{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    letter-spacing:2px;
+    color:var(--text-secondary);
+    margin-top:3px;
+  }
+
+  .c-logo{
+    position:relative;
+    z-index:7;
+    display:flex;
+    justify-content:center;
+    margin-top:12px;
+  }
+  .c-logo-frame{
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(224,16,48,0.12), transparent 65%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .c-logo-frame::before{
+    content:'';
+    position:absolute;
+    inset:-5px;
+    border-radius:50%;
+    border:1.5px solid rgba(0,212,255,0.25);
+    animation: ringspin 12s linear infinite;
+  }
+  .c-logo-frame::after{
+    content:'';
+    position:absolute;
+    inset:8px;
+    border-radius:50%;
+    border:1px dashed rgba(216,221,227,0.15);
+    animation: ringspin 18s linear infinite reverse;
+  }
+  @keyframes ringspin{to{transform:rotate(360deg);}}
+
+  .c-logo svg{
+    width:200px;
+    height:200px;
+    filter: drop-shadow(0 0 18px rgba(0,212,255,0.25)) drop-shadow(0 0 10px rgba(224,16,48,0.3));
+    mix-blend-mode:screen;
+  }
+
+  .c-data{
+    position:relative;
+    z-index:7;
+    padding:8px 26px 0;
+    text-align:center;
+  }
+  .c-name{
+    font-family:'Orbitron',monospace;
+    font-weight:900;
+    font-size:24px;
+    color:var(--text-primary);
+    letter-spacing:1.5px;
+    text-shadow:0 0 18px rgba(216,221,227,0.3);
+    text-transform:uppercase;
+  }
+  .c-title{
+    font-family:'Rajdhani';
+    font-weight:600;
+    font-size:13px;
+    color:var(--cyan);
+    letter-spacing:2px;
+    margin-top:4px;
+    text-transform:uppercase;
+  }
+  .c-id{
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    color:var(--text-secondary);
+    letter-spacing:3px;
+    margin-top:12px;
+  }
+  .c-id span{
+    color:var(--ruby-glow);
+    font-weight:bold;
+  }
+
+  .c-specs{
+    position:relative;
+    z-index:7;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin:14px 24px 0;
+    flex-wrap:wrap;
+  }
+  .c-spec{
+    font-family:'Share Tech Mono',monospace;
+    font-size:8px;
+    letter-spacing:1.5px;
+    color:var(--text-secondary);
+    padding:4px 10px;
+    border:1px solid var(--spec-border);
+    border-radius:12px;
+    background:var(--spec-bg);
+  }
+
+  .c-stats{
+    position:relative;
+    z-index:7;
+    display:flex;
+    justify-content:space-around;
+    margin:18px 24px 0;
+    padding:14px 0;
+    border-top:1px solid var(--footer-border);
+    border-bottom:1px solid var(--footer-border);
+  }
+  .c-stat{text-align:center;}
+  .c-stat-v{
+    font-family:'Orbitron',monospace;
+    font-weight:700;
+    font-size:18px;
+    color:var(--text-primary);
+  }
+  .c-stat-l{
+    font-family:'Share Tech Mono',monospace;
+    font-size:8px;
+    letter-spacing:1.5px;
+    color:var(--text-secondary);
+    margin-top:4px;
+  }
+
+  .c-status{
+    position:relative;
+    z-index:7;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    margin:14px 0;
+  }
+  .status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--status-color);
+    box-shadow:0 0 8px var(--status-glow);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.4;}
+  }
+  .status-text{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--status-color);
+    letter-spacing:2px;
+  }
+
+  .c-foot{
+    position:relative;
+    z-index:7;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 24px;
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+  }
+  .c-sig{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--text-secondary);
+    letter-spacing:1px;
+    line-height:1.5;
+  }
+  .c-sig b{color:var(--ruby-glow);}
+  .c-chip{
+    width:40px;
+    height:28px;
+    border-radius:6px;
+    background:var(--chip-gradient);
+    position:relative;
+    opacity:0.85;
+    box-shadow:0 0 10px rgba(201,168,74,0.3);
+  }
+  .c-chip::before{
+    content:'';
+    position:absolute;
+    inset:5px;
+    border:1px solid rgba(0,0,0,0.3);
+    border-radius:3px;
+  }
+
+  .c-qr{
+    position:absolute;
+    bottom:70px;
+    right:24px;
+    z-index:7;
+    width:50px;
+    height:50px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--qr-border);
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    overflow:hidden;
+  }
+  .c-qr svg{
+    width:40px;
+    height:40px;
+    opacity:0.7;
+  }
+
+  .qr-laser{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:2px;
+    background:linear-gradient(90deg, transparent, var(--laser-color), transparent);
+    box-shadow:0 0 8px var(--laser-color), 0 0 20px var(--laser-color);
+    opacity:0;
+    pointer-events:none;
+    z-index:10;
+  }
+  .c-qr.scanning .qr-laser{
+    animation: laserScan 1.5s ease-in-out infinite;
+    opacity:1;
+  }
+  @keyframes laserScan{
+    0%{top:0;opacity:0;}
+    10%{opacity:1;}
+    90%{opacity:1;}
+    100%{top:100%;opacity:0;}
+  }
+  .qr-scan-overlay{
+    position:absolute;
+    inset:0;
+    border:2px solid var(--laser-color);
+    border-radius:6px;
+    opacity:0;
+    pointer-events:none;
+    z-index:9;
+  }
+  .c-qr.scanning .qr-scan-overlay{
+    opacity:1;
+    animation: qrPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes qrPulse{
+    0%,100%{box-shadow:0 0 5px var(--laser-color);}
+    50%{box-shadow:0 0 15px var(--laser-color), 0 0 30px var(--laser-color);}
+  }
+
+  .deco-line{
+    position:absolute;
+    z-index:4;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--deco-line), transparent);
+  }
+  .deco-line.top{top:60px;left:24px;right:24px;}
+  .deco-line.bottom{bottom:60px;left:24px;right:24px;}
+
+  .caption{
+    text-align:center;
+    margin-top:24px;
+    font-family:'Share Tech Mono',monospace;
+    font-size:11px;
+    color:#5a6b7d;
+    letter-spacing:1px;
+    max-width:420px;
+  }
+  .caption b{color:var(--cyan);}
+
+  .licencia-back{
+    width:420px;
+    height:640px;
+    border-radius:24px;
+    position:relative;
+    background: var(--card-bg);
+    border:1px solid var(--card-border);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7), 0 0 60px rgba(0,212,255,0.08), inset 0 1px 0 rgba(255,255,255,0.06);
+    overflow:hidden;
+    display:none;
+    animation: float 6s ease-in-out infinite;
+    transform-style:preserve-3d;
+  }
+  .licencia-back.active{display:block;}
+  .back-content{
+    position:relative;
+    z-index:7;
+    padding:28px 24px;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
+  }
+  .back-header{
+    text-align:center;
+    margin-bottom:16px;
+    border-bottom:1px solid var(--footer-border);
+    padding-bottom:12px;
+  }
+  .back-header h2{
+    font-family:'Orbitron',monospace;
+    font-weight:700;
+    font-size:14px;
+    color:var(--text-primary);
+    letter-spacing:2px;
+  }
+  .back-header p{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--text-secondary);
+    margin-top:4px;
+    letter-spacing:1px;
+  }
+  .back-section{
+    margin-bottom:14px;
+  }
+  .back-section h3{
+    font-family:'Orbitron',monospace;
+    font-size:10px;
+    color:var(--cyan);
+    letter-spacing:1.5px;
+    margin-bottom:6px;
+    text-transform:uppercase;
+  }
+  .back-section p, .back-section li{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--back-text);
+    line-height:1.6;
+    letter-spacing:0.5px;
+  }
+  .back-section ul{
+    padding-left:14px;
+  }
+  .back-section li{margin-bottom:3px;}
+
+  .digital-sig{
+    margin-top:auto;
+    border-top:1px solid var(--footer-border);
+    padding-top:14px;
+  }
+  .sig-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:10px;
+  }
+  .sig-block{
+    text-align:center;
+  }
+  .sig-line{
+    width:120px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--text-secondary), transparent);
+    margin:0 auto 4px;
+  }
+  .sig-label{
+    font-family:'Share Tech Mono',monospace;
+    font-size:8px;
+    color:var(--text-secondary);
+    letter-spacing:1px;
+  }
+  .sig-value{
+    font-family:'Orbitron',monospace;
+    font-size:10px;
+    color:var(--text-primary);
+    margin-top:2px;
+  }
+  .nfc-chip{
+    width:32px;
+    height:32px;
+    border-radius:6px;
+    background:linear-gradient(135deg, #c9a84a, #8a6d2a);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    opacity:0.85;
+    box-shadow:0 0 10px rgba(201,168,74,0.3);
+  }
+  .nfc-chip::before{
+    content:'';
+    position:absolute;
+    inset:4px;
+    border:1px solid rgba(0,0,0,0.3);
+    border-radius:3px;
+  }
+  .nfc-icon{
+    width:18px;
+    height:18px;
+    fill:none;
+    stroke:#1a1a1a;
+    stroke-width:2;
+    opacity:0.7;
+  }
+  .nfc-label{
+    font-family:'Share Tech Mono',monospace;
+    font-size:7px;
+    color:var(--text-secondary);
+    text-align:center;
+    margin-top:4px;
+    letter-spacing:1px;
+  }
+
+  .back-footer{
+    text-align:center;
+  }
+  .back-footer-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+    padding-top:8px;
+    border-top:1px solid var(--footer-border);
+  }
+  .back-footer-left{
+    font-family:'Share Tech Mono',monospace;
+    font-size:8px;
+    color:var(--text-secondary);
+    line-height:1.5;
+  }
+  .back-footer-right{
+    text-align:right;
+  }
+  .hash-value{
+    font-family:'Share Tech Mono',monospace;
+    font-size:7px;
+    color:var(--text-secondary);
+    letter-spacing:1px;
+    word-break:break-all;
+    max-width:180px;
+  }
+
+  .flip-btn{
+    background: var(--btn-bg);
+    color:#fff;
+    border:none;
+    padding:10px 24px;
+    border-radius:20px;
+    font-family:'Orbitron',monospace;
+    font-size:11px;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    box-shadow:0 4px 15px rgba(224,16,48,0.4);
+    transition:all 0.3s ease;
+    margin-top:8px;
+  }
+  .flip-btn:hover{
+    background: var(--btn-hover);
+    transform:translateY(-2px);
+    box-shadow:0 6px 20px rgba(224,16,48,0.5);
+  }
+
+  .form-panel{
+    width:420px;
+    background:var(--form-bg);
+    border:1px solid var(--form-border);
+    border-radius:16px;
+    padding:20px 24px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    backdrop-filter:blur(10px);
+  }
+  .form-title{
+    font-family:'Orbitron',monospace;
+    font-size:14px;
+    color:var(--text-primary);
+    margin-bottom:16px;
+    text-align:center;
+    letter-spacing:1px;
+  }
+  .form-group{
+    margin-bottom:12px;
+  }
+  .form-group label{
+    display:block;
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    color:var(--text-secondary);
+    margin-bottom:4px;
+    letter-spacing:1px;
+  }
+  .form-group input{
+    width:100%;
+    padding:8px 12px;
+    background:var(--input-bg);
+    border:1px solid var(--input-border);
+    border-radius:8px;
+    color:var(--input-text);
+    font-family:'Share Tech Mono',monospace;
+    font-size:11px;
+    outline:none;
+    transition:border-color 0.3s;
+  }
+  .form-group input:focus{
+    border-color:var(--cyan);
+    box-shadow:0 0 8px rgba(0,212,255,0.2);
+  }
+  .spec-selector{
+    display:flex;
+    gap:10px;
+  }
+  .spec-tags{
+    flex:1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .spec-tag{
+    background:var(--spec-bg);
+    border:1px solid var(--spec-border);
+    border-radius:10px;
+    padding:3px 10px;
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--text-secondary);
+    cursor:pointer;
+    transition:all 0.2s;
+  }
+  .spec-tag.active{
+    background:rgba(0,212,255,0.15);
+    border-color:var(--cyan);
+    color:var(--cyan);
+  }
+  .form-btn{
+    width:100%;
+    background:var(--btn-bg);
+    color:#fff;
+    border:none;
+    padding:12px;
+    border-radius:10px;
+    font-family:'Orbitron',monospace;
+    font-size:12px;
+    letter-spacing:1.5px;
+    cursor:pointer;
+    margin-top:8px;
+    box-shadow:0 4px 15px rgba(224,16,48,0.4);
+    transition:all 0.3s;
+  }
+  .form-btn:hover{
+    background:var(--btn-hover);
+    transform:translateY(-1px);
+  }
+
+  .google-auth{
+    text-align:center;
+    margin-bottom:16px;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--footer-border);
+  }
+  .google-auth p{
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px;
+    color:var(--text-secondary);
+    margin-bottom:8px;
+  }
+  .user-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    justify-content:center;
+  }
+  .user-avatar{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:2px solid var(--cyan);
+  }
+  .user-name{
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    color:var(--text-secondary);
+  }
+  .logout-btn{
+    background:transparent;
+    border:1px solid var(--ruby);
+    color:var(--ruby-glow);
+    padding:4px 12px;
+    border-radius:6px;
+    font-family:'Share Tech Mono',monospace;
+    font-size:9px;
+    cursor:pointer;
+    margin-top:4px;
+  }
+
+  @media (max-width:480px){
+    .licencia, .licencia-back, .form-panel{width:340px;height:520px;}
+    .licencia-back{height:auto;min-height:520px;}
+    .c-logo-frame{width:180px;height:180px;}
+    .c-logo svg{width:160px;height:160px;}
+    .c-name{font-size:18px;}
+    .c-stats{margin:12px 18px 0;}
+    .back-content{padding:20px 16px;}
+    .card-wrapper{width:340px;height:520px;}
+  }
+
+  .card-wrapper{
+    position:relative;
+    width:420px;
+    height:640px;
+    perspective:1400px;
+  }
+  .card-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-style:preserve-3d;
+  }
+  .card-inner.flipped{
+    transform:rotateY(180deg);
+  }
+  .card-front, .card-back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .card-back{
+    transform:rotateY(180deg);
+  }
+
+</style>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div id="deck-counter"><span class="dc-cur" id="dc-cur">1</span><span class="dc-sep">/</span><span id="dc-tot">11</span></div>
@@ -2804,6 +3657,249 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 
+<!-- ═══ LICENCIA VA STRIP ═══ -->
+<!-- ═══════════════════════════════════════════════════════════
+     FRANJA · LICENCIA VA · credencial de seguridad holográfica
+     Envuelve el carné volteable existente (flip/QR/tema preservados).
+     Botón 1: abrir app de licencias · Botón 2: generar tu licencia
+     ═══════════════════════════════════════════════════════════ -->
+<section class="lic-strip" id="licencia-va">
+  <div class="lic-inner">
+    <div class="lic-left">
+      <div class="lic-tag">CREDENCIAL DE SEGURIDAD · VIBRA·ALTO</div>
+      <div class="lic-wordmark"><span class="lic-w1">LICENCIA</span><span class="lic-w2">VA</span></div>
+      <div class="lic-manifesto">Tu credencial es <em>tu autoridad</em>.</div>
+      <div class="lic-sub">Una identidad verificable para operar la red VibraAlto: rango, especialidades y firma autenticada. El lenguaje límbico de nuestras pantallas, hecho carné.</div>
+      <div class="lic-pillars">
+        <span class="lic-pill">★ Rango por mérito</span>
+        <span class="lic-pill">◆ Firma autenticada</span>
+        <span class="lic-pill">⬡ QR verificable</span>
+      </div>
+      <div class="lic-actions">
+        <a class="lic-btn lic-btn-primary" href="https://vbc.vibraalto.cl/app" target="_blank" rel="noopener"><span>▶</span> Abrir la app</a>
+        <button class="lic-btn lic-btn-ghost" onclick="(function(){var f=document.getElementById('licencia-va');var b=f.querySelector('.flip-btn');if(b)b.click();})()"><span>↻</span> Voltear licencia</button>
+      </div>
+    </div>
+    <div class="lic-right">
+      <div class="scene">
+      <div class="card-wrapper" id="cardWrapper">
+        <div class="card-inner" id="cardInner">
+          <!-- FRENTE -->
+          <div class="card-front">
+            <div class="licencia" id="licenciaFront">
+              <div class="holo-lines"></div>
+              <div class="holo-sweep"></div>
+              <div class="deco-line top"></div>
+              <div class="deco-line bottom"></div>
+
+              <div class="c-top">
+                <div class="c-org">
+                  LICENCIA DE CAZADOR<br>
+                  <b>VIBRA·ALTO</b><br>
+                  <span style="font-size:8px;opacity:0.7;">VA-SEC-2026</span>
+                </div>
+                <div class="c-rank">
+                  <div class="c-rank-star">★ ★ ★</div>
+                  <div class="c-rank-lbl">RANGO TRI-ESTRELLA</div>
+                </div>
+              </div>
+
+              <div class="c-logo">
+                <div class="c-logo-frame">
+                  <svg viewBox="100 248 1058 742" xmlns="http://www.w3.org/2000/svg" style="width:180px;height:180px;">
+                    <defs>
+                      <linearGradient id="metal" gradientUnits="userSpaceOnUse" x1="265" y1="268" x2="937" y2="809">
+                        <stop offset="0%" stop-color="#f0f0f0"/>
+                        <stop offset="8%" stop-color="#d8d8d8"/>
+                        <stop offset="20%" stop-color="#b0b0b0"/>
+                        <stop offset="33%" stop-color="#808080"/>
+                        <stop offset="46%" stop-color="#565656"/>
+                        <stop offset="55%" stop-color="#6e6e6e"/>
+                        <stop offset="68%" stop-color="#a0a0a0"/>
+                        <stop offset="82%" stop-color="#cccccc"/>
+                        <stop offset="100%" stop-color="#b8b8b8"/>
+                      </linearGradient>
+                      <linearGradient id="metal2" gradientUnits="userSpaceOnUse" x1="490" y1="604" x2="316" y2="809">
+                        <stop offset="0%" stop-color="#e0e0e0"/>
+                        <stop offset="25%" stop-color="#a0a0a0"/>
+                        <stop offset="55%" stop-color="#606060"/>
+                        <stop offset="80%" stop-color="#909090"/>
+                        <stop offset="100%" stop-color="#c0c0c0"/>
+                      </linearGradient>
+                      <linearGradient id="metalText" gradientUnits="userSpaceOnUse" x1="120" y1="850" x2="120" y2="909">
+                        <stop offset="0%" stop-color="#bdbdbd"/>
+                        <stop offset="45%" stop-color="#e8e8e8"/>
+                        <stop offset="100%" stop-color="#f5f5f5"/>
+                      </linearGradient>
+                      <filter id="brushed" color-interpolation-filters="sRGB" x="-2%" y="-2%" width="104%" height="104%">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.50 0.005" numOctaves="4" seed="7" stitchTiles="stitch" result="nb"/>
+                        <feColorMatrix type="saturate" values="0" in="nb" result="gb"/>
+                        <feComponentTransfer in="gb" result="sb"><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
+                        <feTurbulence type="fractalNoise" baseFrequency="0.90" numOctaves="3" seed="23" stitchTiles="stitch" result="nf"/>
+                        <feColorMatrix type="saturate" values="0" in="nf" result="gf"/>
+                        <feComponentTransfer in="gf" result="sf"><feFuncA type="linear" slope="0.08"/></feComponentTransfer>
+                        <feMerge result="tex"><feMergeNode in="sb"/><feMergeNode in="sf"/></feMerge>
+                        <feComposite in="tex" in2="SourceGraphic" operator="in" result="texClip"/>
+                        <feBlend in="SourceGraphic" in2="texClip" mode="overlay"/>
+                      </filter>
+                      <filter id="sSym" x="-15%" y="-10%" width="130%" height="120%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.80"/>
+                      </filter>
+                      <filter id="bl" x="-50%" y="-30%" width="200%" height="160%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="b"/>
+                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                      </filter>
+                      <radialGradient id="gemG" cx="32%" cy="16%" r="68%">
+                        <stop offset="0%" stop-color="#ff7070"/>
+                        <stop offset="8%" stop-color="#e01010"/>
+                        <stop offset="38%" stop-color="#880000"/>
+                        <stop offset="100%" stop-color="#150000"/>
+                      </radialGradient>
+                      <filter id="gGlow" x="-130%" y="-130%" width="360%" height="360%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                      </filter>
+                    </defs>
+
+                    <g filter="url(#sSym)">
+                      <polygon points="264,269 325,284 588,756 685,574 802,796 752,809 937,809 875,795 715,501 608,697 535,562 608,417 676,548 823,276 912,268 731,268 817,276 704,479 630,349 546,510 420,282 499,268"
+                        fill="url(#metal)" filter="url(#brushed)"
+                        stroke="rgba(255,255,255,0.32)" stroke-width="1.5" stroke-linejoin="miter"/>
+                      <polygon points="488,602 376,804 316,804 316,809 449,809 448,804 385,802 491,610"
+                        fill="url(#metal2)" filter="url(#brushed)"
+                        stroke="rgba(255,255,255,0.28)" stroke-width="1.3" stroke-linejoin="miter"/>
+                    </g>
+
+                    <polyline points="264,269 325,284" fill="none" stroke="rgba(255,255,255,0.90)" stroke-width="1.8" filter="url(#bl)"/>
+                    <polyline points="731,268 817,276" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.6" filter="url(#bl)"/>
+                    <polyline points="823,276 912,268" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="1.4" filter="url(#bl)"/>
+                    <polyline points="752,809 937,809" fill="none" stroke="rgba(200,200,200,0.65)" stroke-width="1.4" filter="url(#bl)"/>
+                    <polyline points="316,809 449,809" fill="none" stroke="rgba(200,200,200,0.60)" stroke-width="1.3" filter="url(#bl)"/>
+
+                    <ellipse cx="608" cy="560" rx="54" ry="88" fill="#5a0000" opacity="0.55" filter="url(#gGlow)"/>
+                    <polygon points="608,479 567,560 608,641 649,560" fill="#5e0000"/>
+                    <polygon points="608,479 567,560 608,560" fill="#d42020"/>
+                    <polygon points="608,479 649,560 608,560" fill="#aa0808"/>
+                    <polygon points="567,560 608,641 608,560" fill="#3d0000"/>
+                    <polygon points="649,560 608,641 608,560" fill="#2e0000"/>
+                    <line x1="608" y1="479" x2="608" y2="641" stroke="rgba(0,0,0,0.70)" stroke-width="0.9"/>
+                    <line x1="567" y1="560" x2="649" y2="560" stroke="rgba(0,0,0,0.70)" stroke-width="0.9"/>
+                    <polygon points="608,479 567,560 608,641 649,560" fill="none" stroke="rgba(0,0,0,0.80)" stroke-width="1.5"/>
+                    <polygon points="608,479 622,513 608,520 593,513" fill="rgba(255,130,130,0.92)"/>
+                    <polygon points="608,479 614,497 608,502 602,497" fill="rgba(255,240,240,1.0)"/>
+                    <polygon points="567,560 583,531 588,547" fill="rgba(255,60,60,0.28)"/>
+
+                    <g fill="url(#metalText)" filter="url(#brushed)">
+                      <path d="M120,850 L124,860 L136,880 L151,909 L165,909 L166,908 L167,904 L170,901 L195,856 L199,851 L199,850 L184,850 L168,879 L163,886 L160,893 L158,894 L134,850 Z"/>
+                      <path d="M249,850 L249,908 L250,909 L262,909 L263,908 L262,907 L262,852 L263,851 L262,850 Z"/>
+                      <path d="M321,850 L321,908 L322,909 L378,909 L386,906 L389,903 L390,901 L390,896 L391,895 L391,888 L390,887 L390,884 L388,881 L386,880 L388,879 L386,880 L384,879 L390,872 L390,860 L388,855 L385,852 L380,850 Z M377,863 L377,871 L373,874 L335,874 L334,873 L334,862 L335,861 L356,861 L357,860 L359,860 L360,861 L374,861 Z M334,885 L335,884 L375,884 L378,887 L378,895 L375,898 L335,898 L334,897 Z" fill-rule="evenodd"/>
+                      <path d="M449,850 L449,886 L450,887 L449,888 L449,903 L450,904 L449,908 L450,909 L462,909 L463,908 L462,907 L462,897 L463,896 L462,893 L463,889 L464,888 L472,888 L473,887 L474,888 L479,888 L502,909 L519,909 L513,902 L506,897 L498,889 L501,887 L508,887 L512,885 L517,879 L517,859 L513,853 L507,850 L451,850 L450,849 Z M462,862 L463,861 L501,861 L503,862 L505,865 L505,873 L504,875 L501,877 L463,877 L462,876 Z" fill-rule="evenodd"/>
+                      <path d="M576,909 L590,909 L590,907 L596,898 L599,891 L615,865 L617,867 L621,876 L624,879 L624,881 L629,888 L640,909 L654,909 L636,879 L634,874 L631,871 L631,869 L622,855 L622,853 L620,850 L610,850 L609,851 L608,855 L605,858 L592,882 L587,889 L584,896 L579,902 L579,904 Z"/>
+                    </g>
+
+                    <g fill="#cc0000">
+                      <path d="M719,907 L721,909 L732,908 L755,867 L758,864 L760,866 L764,875 L768,880 L769,884 L771,886 L782,907 L784,909 L796,909 L795,905 L793,903 L791,898 L788,895 L785,888 L780,881 L777,874 L772,867 L763,850 L752,850 Z"/>
+                      <path d="M848,850 L848,908 L849,909 L899,909 L900,908 L902,909 L903,908 L903,899 L902,898 L863,898 L862,899 L860,897 L860,851 L859,850 Z"/>
+                      <path d="M947,850 L946,851 L946,859 L947,860 L971,860 L973,862 L973,908 L975,909 L981,909 L983,908 L984,909 L985,908 L985,864 L987,861 L991,861 L992,860 L1012,860 L1012,850 Z"/>
+                      <path d="M1065,856 L1065,857 L1063,860 L1063,898 L1064,899 L1064,901 L1065,902 L1065,903 L1067,905 L1068,905 L1070,907 L1071,907 L1072,908 L1079,908 L1080,909 L1117,909 L1118,908 L1121,908 L1122,907 L1124,907 L1125,906 L1126,906 L1129,903 L1129,902 L1131,899 L1131,864 L1132,863 L1131,862 L1131,859 L1130,858 L1130,857 L1125,852 L1124,852 L1123,851 L1120,851 L1119,850 L1074,850 L1073,851 L1071,851 L1070,852 L1069,852 Z M1076,862 L1077,861 L1079,861 L1080,860 L1115,860 L1116,861 L1117,861 L1120,864 L1120,871 L1119,872 L1119,896 L1117,898 L1077,898 L1075,896 L1075,864 L1076,863 Z" fill-rule="evenodd"/>
+                    </g>
+
+                    <line x1="120" y1="962" x2="184" y2="962" stroke="#bb0000" stroke-width="2.5"/>
+                    <line x1="1096" y1="962" x2="1133" y2="962" stroke="#bb0000" stroke-width="2.5"/>
+                    <text x="640" y="970" font-family="'Arial Narrow','Arial','Helvetica Neue',sans-serif" font-size="16" font-weight="400" letter-spacing="4.8" fill="#bb0000" text-anchor="middle">TECNOLOGÍA QUE CONECTA, SOLUCIONES QUE TRANSFORMAN</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="c-data">
+                <div class="c-name" id="hunterName">LEON CANALES</div>
+                <div class="c-title">CAZADOR CERTIFICADO VA</div>
+                <div class="c-id">ID: <span id="hunterId">VA-HUNT-2026-0042</span></div>
+              </div>
+
+              <div class="c-specs" id="hunterSpecs">
+                <div class="c-spec">WEB</div>
+                <div class="c-spec">API</div>
+                <div class="c-spec">MOBILE</div>
+                <div class="c-spec">CLOUD</div>
+                <div class="c-spec">IOT</div>
+              </div>
+
+              <div class="c-stats">
+                <div class="c-stat">
+                  <div class="c-stat-v" id="statVulns">847</div>
+                  <div class="c-stat-l">VULNERABILIDADES</div>
+                </div>
+                <div class="c-stat">
+                  <div class="c-stat-v" id="statReports">12.4K</div>
+                  <div class="c-stat-l">REPORTES</div>
+                </div>
+                <div class="c-stat">
+                  <div class="c-stat-v" id="statPrograms">156</div>
+                  <div class="c-stat-l">PROGRAMAS</div>
+                </div>
+              </div>
+
+              <div class="c-status">
+                <div class="status-dot"></div>
+                <div class="status-text">CAZADOR ACTIVO</div>
+              </div>
+
+              <div class="c-qr" id="qrCode" onclick="toggleQRScan()">
+                <div class="qr-laser"></div>
+                <div class="qr-scan-overlay"></div>
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="10" y="10" width="25" height="25" fill="none" stroke="rgba(0,212,255,0.6)" stroke-width="3"/>
+                  <rect x="15" y="15" width="15" height="15" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="10" width="25" height="25" fill="none" stroke="rgba(0,212,255,0.6)" stroke-width="3"/>
+                  <rect x="70" y="15" width="15" height="15" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="10" y="65" width="25" height="25" fill="none" stroke="rgba(0,212,255,0.6)" stroke-width="3"/>
+                  <rect x="15" y="70" width="15" height="15" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="10" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="10" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="20" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="50" y="25" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="45" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="45" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="55" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="55" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="65" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="65" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="75" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="75" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="45" y="85" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="55" y="85" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="45" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="75" y="45" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="85" y="45" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="55" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="75" y="55" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="85" y="55" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="65" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="75" y="65" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="85" y="65" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="75" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="75" y="75" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="85" y="75" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="65" y="85" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="75" y="85" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                  <rect x="85" y="85" width="5" height="5" fill="rgba(0,212,255,0.6)"/>
+                </svg>
+              </div>
+
+              <div class="c-foot">
+                <div class="c-sig">
+                  <b>VÁLIDA HASTA:</b> <span id="validDate">31.DIC.2026</span><br>
+                  EMITIDA: <span id="issueDate">15.ENE.2026</span>
+                </div>
+                <div class="c-chip"></div>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section class="cta-section" id="contact">
   <div class="cta-inner">
@@ -3259,7 +4355,7 @@ window.addEventListener("load", function ReactorScene(){
   const obs = new IntersectionObserver(entries=>{
     entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1, rootMargin: '-30px' });
-  document.querySelectorAll('.reveal, .pillar, .exp, .demo-card, .mp-wrap').forEach(el=>{
+  document.querySelectorAll('.reveal, .pillar, .exp, .demo-card, .mp-wrap, .lic-strip').forEach(el=>{
     el.classList.add('reveal'); obs.observe(el);
   });
 
@@ -4349,8 +5445,120 @@ atTick();
   <div class="ch" data-target="experiments"><span class="ch-label">VII · Lab</span><span class="ch-dot"></span></div>
   <div class="ch" data-target="kaldi"><span class="ch-label">VIII · Kaldi</span><span class="ch-dot"></span></div>
   <div class="ch" data-target="nexus-va"><span class="ch-label">IX · Nexus</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="contact"><span class="ch-label">X · Contacto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="lab"><span class="ch-label">XI · Twin</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="licencia-va"><span class="ch-label">X · Licencia</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="contact"><span class="ch-label">XI · Contacto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="lab"><span class="ch-label">XII · Twin</span><span class="ch-dot"></span></div>
 </nav>
+
+<!-- ═══ LICENCIA VA SCRIPT ═══ -->
+<script>
+<script>
+
+  // === TOGGLE TEMA ===
+  function toggleTheme(){
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    const next = current === 'light' ? 'dark' : 'light';
+    html.setAttribute('data-theme', next);
+    var tl=document.getElementById('themeLabel'); if(tl) tl.textContent = next === 'light' ? 'MODO CLARO' : 'MODO OSCURO';
+    localStorage.setItem('va-theme', next);
+  }
+  (function(){
+    const saved = localStorage.getItem('va-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+    var tl2=document.getElementById('themeLabel'); if(tl2) tl2.textContent = saved === 'light' ? 'MODO CLARO' : 'MODO OSCURO';
+  })();
+
+  // === VOLTEAR TARJETA ===
+  let isFlipped = false;
+  function flipCard(){
+    const inner = document.getElementById('cardInner');
+    isFlipped = !isFlipped;
+    inner.classList.toggle('flipped', isFlipped);
+  }
+
+  // === QR LASER ===
+  let qrScanning = false;
+  function toggleQRScan(){
+    const qr = document.getElementById('qrCode');
+    qrScanning = !qrScanning;
+    qr.classList.toggle('scanning', qrScanning);
+  }
+
+  // === ESPECIALIDADES ===
+  document.querySelectorAll('.spec-tag').forEach(tag => {
+    tag.addEventListener('click', function(){
+      this.classList.toggle('active');
+    });
+  });
+
+  // === GENERAR LICENCIA ===
+  function generateLicense(){
+    const name = document.getElementById('inputName').value || 'LEON CANALES';
+    const id = document.getElementById('inputId').value || 'VA-HUNT-2026-0042';
+    const vulns = document.getElementById('inputVulns').value || '847';
+    const reports = document.getElementById('inputReports').value || '12.4K';
+    const programs = document.getElementById('inputPrograms').value || '156';
+    const validDate = document.getElementById('inputValidDate').value || '31.DIC.2026';
+    const issueDate = document.getElementById('inputIssueDate').value || '15.ENE.2026';
+
+    document.getElementById('hunterName').textContent = name;
+    document.getElementById('hunterId').textContent = id;
+    document.getElementById('statVulns').textContent = vulns;
+    document.getElementById('statReports').textContent = reports;
+    document.getElementById('statPrograms').textContent = programs;
+    document.getElementById('validDate').textContent = validDate;
+    document.getElementById('issueDate').textContent = issueDate;
+
+    const specsContainer = document.getElementById('hunterSpecs');
+    specsContainer.innerHTML = '';
+    document.querySelectorAll('.spec-tag.active').forEach(tag => {
+      const div = document.createElement('div');
+      div.className = 'c-spec';
+      div.textContent = tag.dataset.spec;
+      specsContainer.appendChild(div);
+    });
+
+    var sn=document.getElementById('sigName'); if(sn) sn.textContent = name;
+    var bi=document.getElementById('backId'); if(bi) bi.textContent = id;
+
+    const hash = 'SHA256: ' + Array.from({length:8}, () => Math.floor(Math.random()*16).toString(16)).join('') + '...' + Array.from({length:6}, () => Math.floor(Math.random()*16).toString(16)).join('');
+    var hv=document.getElementById('hashValue'); if(hv) hv.textContent = hash;
+
+    if(isFlipped) flipCard();
+  }
+
+  // === GOOGLE SIGN-IN ===
+  function handleCredentialResponse(response){
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const name = payload.name || (payload.given_name + ' ' + payload.family_name) || 'Usuario';
+    const picture = payload.picture || '';
+
+    document.getElementById('inputName').value = name;
+    document.getElementById('userDisplayName').textContent = name;
+    document.getElementById('userAvatar').src = picture;
+    document.getElementById('userInfo').style.display = 'flex';
+    document.querySelector('.g_id_signin').style.display = 'none';
+
+    generateLicense();
+  }
+
+  function logout(){
+    if(document.getElementById('userInfo')) document.getElementById('userInfo').style.display = 'none';
+    var gs = document.querySelector('.g_id_signin'); if(gs) gs.style.display = 'block';
+    if(document.getElementById('inputName')) document.getElementById('inputName').value = 'LEON CANALES';
+    generateLicense();
+  }
+
+  // Expose flip for strip button
+  window.flipCard = flipCard;
+  window.toggleQRScan = toggleQRScan;
+  window.handleCredentialResponse = handleCredentialResponse;
+  window.logout = logout;
+  window.generateLicense = generateLicense;
+})();
+</script>
+</script>
+
 </body>
 </html>
