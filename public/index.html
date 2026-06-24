@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://vibraalto.cl">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VIBRAALTO — Eleva tu frecuencia">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2309090b'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle' fill='%23fafafa' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='200 240 800 600'><rect x='200' y='240' width='800' height='600' fill='%2309090b' rx='40'/><polygon points='264,269 325,284 588,756 685,574 802,796 752,809 937,809 875,795 715,501 608,697 535,562 608,417 676,548 823,276 912,268 731,268 817,276 704,479 630,349 546,510 420,282 499,268' fill='%23b0b0b0'/><polygon points='488,602 376,804 316,804 316,809 449,809 448,804 385,802 491,610' fill='%23909090'/><polygon points='608,479 567,560 608,641 649,560' fill='%23cc0000'/><polygon points='608,479 567,560 608,560' fill='%23e02020'/><polygon points='608,479 649,560 608,560' fill='%23aa0808'/></svg>">
 <link rel="manifest" href="/manifest.json">
 <title>VIBRAALTO — Eleva tu frecuencia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1921,10 +1921,20 @@ body { cursor: none; }
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
 }
 #va-entry-logo {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.va-entry-svg {
+  width: clamp(100px, 18vw, 160px); height: auto;
+  opacity: 0; animation: vaLogoIn 1.2s ease-out 0.3s forwards;
+  filter: drop-shadow(0 0 30px rgba(224,16,48,0.15));
+}
+.va-entry-label {
   font-family: 'Geist Mono','JetBrains Mono',monospace;
   font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
   color: rgba(255,255,255,.18);
+  opacity: 0; animation: vaLogoIn 0.8s ease-out 0.8s forwards;
 }
+@keyframes vaLogoIn { to { opacity: 1; } }
 #va-entry-freq {
   font-family: 'Geist',-apple-system,sans-serif;
   font-size: clamp(64px,10vw,112px); font-weight: 700;
@@ -2820,7 +2830,74 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 <div id="va-cursor"></div>
 
 <div id="va-entry" role="dialog" aria-label="Entry sequence">
-  <div id="va-entry-logo">Vibraalto Lab · EST 2025</div>
+  <div id="va-entry-logo">
+    <svg viewBox="200 248 800 582" xmlns="http://www.w3.org/2000/svg" class="va-entry-svg" aria-label="VibraAlto">
+    <defs>
+      <linearGradient id="ve-metal" gradientUnits="userSpaceOnUse" x1="265" y1="268" x2="937" y2="809">
+        <stop offset="0%" stop-color="#f0f0f0"/><stop offset="8%" stop-color="#d8d8d8"/>
+        <stop offset="20%" stop-color="#b0b0b0"/><stop offset="33%" stop-color="#808080"/>
+        <stop offset="46%" stop-color="#565656"/><stop offset="55%" stop-color="#6e6e6e"/>
+        <stop offset="68%" stop-color="#a0a0a0"/><stop offset="82%" stop-color="#cccccc"/>
+        <stop offset="100%" stop-color="#b8b8b8"/>
+      </linearGradient>
+      <linearGradient id="ve-metal2" gradientUnits="userSpaceOnUse" x1="490" y1="604" x2="316" y2="809">
+        <stop offset="0%" stop-color="#e0e0e0"/><stop offset="25%" stop-color="#a0a0a0"/>
+        <stop offset="55%" stop-color="#606060"/><stop offset="80%" stop-color="#909090"/>
+        <stop offset="100%" stop-color="#c0c0c0"/>
+      </linearGradient>
+      <filter id="ve-brushed" color-interpolation-filters="sRGB" x="-2%" y="-2%" width="104%" height="104%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.50 0.005" numOctaves="4" seed="7" stitchTiles="stitch" result="nb"/>
+        <feColorMatrix type="saturate" values="0" in="nb" result="gb"/>
+        <feComponentTransfer in="gb" result="sb"><feFuncA type="linear" slope="0.18"/></feComponentTransfer>
+        <feTurbulence type="fractalNoise" baseFrequency="0.90" numOctaves="3" seed="23" stitchTiles="stitch" result="nf"/>
+        <feColorMatrix type="saturate" values="0" in="nf" result="gf"/>
+        <feComponentTransfer in="gf" result="sf"><feFuncA type="linear" slope="0.08"/></feComponentTransfer>
+        <feMerge result="tex"><feMergeNode in="sb"/><feMergeNode in="sf"/></feMerge>
+        <feComposite in="tex" in2="SourceGraphic" operator="in" result="texClip"/>
+        <feBlend in="SourceGraphic" in2="texClip" mode="overlay"/>
+      </filter>
+      <filter id="ve-sSym" x="-15%" y="-10%" width="130%" height="120%">
+        <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.80"/>
+      </filter>
+      <filter id="ve-bl" x="-50%" y="-30%" width="200%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="ve-gemG" cx="32%" cy="16%" r="68%">
+        <stop offset="0%" stop-color="#ff7070"/><stop offset="8%" stop-color="#e01010"/>
+        <stop offset="38%" stop-color="#880000"/><stop offset="100%" stop-color="#150000"/>
+      </radialGradient>
+      <filter id="ve-gGlow" x="-130%" y="-130%" width="360%" height="360%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <g filter="url(#ve-sSym)">
+      <polygon points="264,269 325,284 588,756 685,574 802,796 752,809 937,809 875,795 715,501 608,697 535,562 608,417 676,548 823,276 912,268 731,268 817,276 704,479 630,349 546,510 420,282 499,268"
+        fill="url(#ve-metal)" filter="url(#ve-brushed)" stroke="rgba(255,255,255,0.32)" stroke-width="1.5" stroke-linejoin="miter"/>
+      <polygon points="488,602 376,804 316,804 316,809 449,809 448,804 385,802 491,610"
+        fill="url(#ve-metal2)" filter="url(#ve-brushed)" stroke="rgba(255,255,255,0.28)" stroke-width="1.3" stroke-linejoin="miter"/>
+    </g>
+    <polyline points="264,269 325,284" fill="none" stroke="rgba(255,255,255,0.90)" stroke-width="1.8" filter="url(#ve-bl)"/>
+    <polyline points="731,268 817,276" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.6" filter="url(#ve-bl)"/>
+    <polyline points="823,276 912,268" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="1.4" filter="url(#ve-bl)"/>
+    <polyline points="752,809 937,809" fill="none" stroke="rgba(200,200,200,0.65)" stroke-width="1.4" filter="url(#ve-bl)"/>
+    <polyline points="316,809 449,809" fill="none" stroke="rgba(200,200,200,0.60)" stroke-width="1.3" filter="url(#ve-bl)"/>
+    <ellipse cx="608" cy="560" rx="54" ry="88" fill="#5a0000" opacity="0.55" filter="url(#ve-gGlow)"/>
+    <polygon points="608,479 567,560 608,641 649,560" fill="#5e0000"/>
+    <polygon points="608,479 567,560 608,560" fill="#d42020"/>
+    <polygon points="608,479 649,560 608,560" fill="#aa0808"/>
+    <polygon points="567,560 608,641 608,560" fill="#3d0000"/>
+    <polygon points="649,560 608,641 608,560" fill="#2e0000"/>
+    <line x1="608" y1="479" x2="608" y2="641" stroke="rgba(0,0,0,0.70)" stroke-width="0.9"/>
+    <line x1="567" y1="560" x2="649" y2="560" stroke="rgba(0,0,0,0.70)" stroke-width="0.9"/>
+    <polygon points="608,479 567,560 608,641 649,560" fill="none" stroke="rgba(0,0,0,0.80)" stroke-width="1.5"/>
+    <polygon points="608,479 622,513 608,520 593,513" fill="rgba(255,130,130,0.92)"/>
+    <polygon points="608,479 614,497 608,502 602,497" fill="rgba(255,240,240,1.0)"/>
+    <polygon points="567,560 583,531 588,547" fill="rgba(255,60,60,0.28)"/>
+    </svg>
+    <span class="va-entry-label">Vibraalto Lab · EST 2025</span>
+  </div>
   <div id="va-entry-freq">
     <span id="va-entry-num">0</span><span id="va-entry-hz">Hz</span>
   </div>
@@ -2917,7 +2994,7 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
     <a class="vb-item" data-id="hub"     href="https://vibraaltoai-11f55.web.app/hub">HUB</a>
     <a class="vb-item" data-id="jarvis"  href="https://jarvis-vibraaltoai.web.app/">J.A.R.V.I.S</a>
     <a class="vb-item" data-id="lc"      href="https://lc.vibraalto.cl">LC</a>
-    <a class="vb-item vb-admin" data-id="aura" href="#">AURA <span class="vb-lock">&middot;</span></a>
+    <a class="vb-item vb-admin" data-id="aura" href="https://vibrahalo-mempalace.vercel.app/public">AURA <span class="vb-lock">&middot;</span></a>
   </nav>
   <div class="vb-spacer"></div>
   <div class="vb-right">
@@ -3406,7 +3483,7 @@ html.deck-mode .va-chapters{ display:none; }
         <span class="kaldi-pill">🎯 Mentorías</span>
       </div>
 
-      <a class="kaldi-btn" href="https://vibraalto.cl/kaldi/" target="_blank" rel="noopener">
+      <a class="kaldi-btn" href="#kaldi">
         <span class="kaldi-btn-dot"></span>
         Visita Kaldi Coffee
         <span class="kaldi-btn-arrow">→</span>
