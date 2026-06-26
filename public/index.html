@@ -3061,6 +3061,192 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 @media(max-width:768px){ .va-chapters{ display:none; } }
 html.deck-mode .va-chapters{ display:none; }
 
+
+/* ═══ PUERTA GIRATORIA SLIDE ═══ */
+.pg-slide{
+  position:relative;
+  min-height:100vh;
+  background:linear-gradient(180deg,#0a0a12 0%,#0d0f1a 40%,#0a0a12 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 20px;
+  overflow:hidden;
+}
+.pg-slide::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,75,75,.06) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(0,212,255,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+.pg-grid{
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:48px;
+  max-width:960px;
+  width:100%;
+  align-items:start;
+}
+@media(max-width:800px){
+  .pg-grid{grid-template-columns:1fr;gap:32px;justify-items:center;}
+}
+
+/* ── Mini Card ── */
+.pg-card{
+  width:320px;
+  background:linear-gradient(145deg,rgba(15,18,32,.95),rgba(10,12,22,.98));
+  border:1px solid rgba(0,212,255,.15);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 0 40px rgba(0,212,255,.08),inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative;
+  overflow:hidden;
+}
+.pg-card::after{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(0,212,255,.03),transparent,rgba(255,75,75,.03),transparent);
+  animation:pgHolo 8s linear infinite;
+  pointer-events:none;
+}
+@keyframes pgHolo{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+.pg-card-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:4px;position:relative;z-index:1;
+}
+.pg-card-org{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;letter-spacing:3px;text-transform:uppercase;}
+.pg-card-rank{font-family:'Orbitron',monospace;font-size:10px;color:#ffb432;}
+
+.pg-card-logo{
+  text-align:center;margin:16px 0;position:relative;z-index:1;
+}
+.pg-card-logo svg{width:100px;height:auto;filter:drop-shadow(0 0 12px rgba(0,212,255,.2));}
+
+.pg-card-name{
+  font-family:'Orbitron',monospace;font-size:15px;color:#fff;text-align:center;
+  letter-spacing:2px;margin:8px 0 4px;position:relative;z-index:1;
+}
+.pg-card-form{
+  font-family:'Share Tech Mono',monospace;font-size:12px;color:#ff4b4b;text-align:center;
+  letter-spacing:1px;position:relative;z-index:1;
+}
+.pg-card-id{
+  font-family:'Share Tech Mono',monospace;font-size:10px;color:#7be3ff;opacity:.6;
+  text-align:center;margin:4px 0 12px;position:relative;z-index:1;
+}
+
+.pg-nem-row{
+  display:flex;gap:6px;justify-content:center;flex-wrap:wrap;
+  margin:10px 0 14px;position:relative;z-index:1;
+}
+.pg-nem{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:4px 10px;border-radius:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  color:#c8eeff;
+}
+
+.pg-stats-row{
+  display:flex;justify-content:space-around;
+  border-top:1px solid rgba(0,212,255,.1);
+  padding-top:14px;margin-top:10px;
+  position:relative;z-index:1;
+}
+.pg-stat{text-align:center;}
+.pg-stat-v{font-family:'Orbitron',monospace;font-size:18px;color:#00d4ff;}
+.pg-stat-l{font-family:'Share Tech Mono',monospace;font-size:8px;color:#7be3ff;opacity:.6;letter-spacing:1.5px;margin-top:2px;}
+
+/* ── Right Panel ── */
+.pg-info{position:relative;z-index:1;}
+
+.pg-title{
+  font-family:'Orbitron',monospace;font-size:10px;color:#ff4b4b;
+  letter-spacing:5px;text-transform:uppercase;margin-bottom:8px;
+}
+.pg-heading{
+  font-family:'Orbitron',monospace;font-size:clamp(22px,3.5vw,32px);
+  color:#fff;line-height:1.3;margin-bottom:24px;
+}
+.pg-heading em{color:#00d4ff;font-style:normal;}
+
+/* Estirpes */
+.pg-estirpes{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+.pg-estirpe{
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(255,75,75,.06);border:1px solid rgba(255,75,75,.18);
+  color:#ff8888;
+}
+
+/* Protocolo fases */
+.pg-fases{margin-bottom:28px;}
+.pg-fase{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 16px;margin-bottom:8px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+  font-family:'Share Tech Mono',monospace;font-size:13px;color:#c8eeff;
+}
+.pg-fase-icon{font-size:18px;width:28px;text-align:center;}
+.pg-fase-name{flex:1;}
+.pg-fase-tag{
+  font-size:10px;padding:3px 8px;border-radius:8px;
+  background:rgba(255,180,50,.08);border:1px solid rgba(255,180,50,.2);
+  color:#ffb432;letter-spacing:1px;
+}
+
+/* Countdown */
+.pg-countdown-box{
+  background:linear-gradient(135deg,rgba(255,75,75,.06),rgba(0,212,255,.04));
+  border:1px solid rgba(255,75,75,.15);
+  border-radius:14px;
+  padding:20px;text-align:center;
+  margin-bottom:28px;
+}
+.pg-countdown-label{
+  font-family:'Share Tech Mono',monospace;font-size:9px;
+  color:#ff4b4b;letter-spacing:4px;text-transform:uppercase;margin-bottom:4px;
+}
+.pg-countdown-sub{
+  font-family:'Orbitron',monospace;font-size:10px;color:#fff;
+  letter-spacing:3px;margin-bottom:10px;
+}
+.pg-countdown-date{
+  font-family:'Orbitron',monospace;font-size:clamp(28px,5vw,42px);
+  color:#ff4b4b;letter-spacing:4px;margin-bottom:8px;
+}
+.pg-countdown-desc{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:#7be3ff;opacity:.6;line-height:1.5;
+}
+.pg-countdown-timer{
+  font-family:'Orbitron',monospace;font-size:14px;
+  color:#ffb432;margin-top:10px;letter-spacing:2px;
+}
+
+/* CTAs */
+.pg-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+.pg-cta{
+  font-family:'Orbitron',monospace;font-size:12px;
+  padding:14px 28px;border-radius:10px;
+  text-decoration:none;letter-spacing:2px;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:all .3s ease;cursor:pointer;
+}
+.pg-cta-primary{
+  background:linear-gradient(135deg,#ff4b4b,#ff6b3d);
+  color:#fff;border:none;
+  box-shadow:0 4px 20px rgba(255,75,75,.3);
+}
+.pg-cta-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(255,75,75,.45);}
+.pg-cta-secondary{
+  background:transparent;color:#00d4ff;
+  border:1px solid rgba(0,212,255,.3);
+}
+.pg-cta-secondary:hover{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.5);}
+
 </style>
 <script>
 (function(){
@@ -3156,6 +3342,109 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 <!-- ════ NERHIA LIVE WINDOW ════ -->
+
+<!-- ═══ PUERTA GIRATORIA ═══ -->
+<section class="pg-slide" id="puerta-giratoria">
+  <div class="pg-grid">
+    <!-- Mini Card -->
+    <div class="pg-card">
+      <div class="pg-card-header">
+        <span class="pg-card-org">VIBRA·ALTO PROTOCOL</span>
+        <span class="pg-card-rank">★ NOVATO</span>
+      </div>
+      <div class="pg-card-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="200 248 800 582">
+  <defs>
+    <linearGradient id="pg-metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8a9bb0"/>
+      <stop offset="35%" stop-color="#c8d6e0"/>
+      <stop offset="50%" stop-color="#e8eef4"/>
+      <stop offset="65%" stop-color="#9aacbc"/>
+      <stop offset="100%" stop-color="#6a7b8a"/>
+    </linearGradient>
+    <radialGradient id="pg-gem" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#ff4444"/>
+      <stop offset="60%" stop-color="#cc0000"/>
+      <stop offset="100%" stop-color="#880000"/>
+    </radialGradient>
+  </defs>
+  <path d="M598 260 L820 780 L700 780 L598 530 L496 780 L376 780 Z" fill="url(#pg-metal)" opacity="0.9"/>
+  <path d="M598 260 L598 530 L496 780 L376 780 Z" fill="url(#pg-metal)" opacity="0.7"/>
+  <polygon points="598,340 618,390 598,380 578,390" fill="url(#pg-gem)"/>
+</svg></div>
+      <div class="pg-card-name">LEÓN CANALES</div>
+      <div class="pg-card-form">FORMA 1 · GOBLIN · <span style="color:#ff4b4b;">🩸 ONI</span></div>
+      <div class="pg-card-id">ID: VA-HUNT-2026-JUN1</div>
+      <div class="pg-nem-row">
+        <span class="pg-nem" style="color:#ff4b4b;border-color:rgba(255,75,75,.3);">💪 強化系</span>
+        <span class="pg-nem" style="color:#ff4b4b;border-color:rgba(255,75,75,.3);">🩸 ONI</span>
+        <span class="pg-nem">EVO 1/7</span>
+        <span class="pg-nem">ELO 1000</span>
+      </div>
+      <div class="pg-stats-row">
+        <div class="pg-stat">
+          <div class="pg-stat-v">0</div>
+          <div class="pg-stat-l">VICTORIAS</div>
+        </div>
+        <div class="pg-stat">
+          <div class="pg-stat-v" style="color:#ffb432;">1</div>
+          <div class="pg-stat-l">EVOLUCIÓN</div>
+        </div>
+        <div class="pg-stat">
+          <div class="pg-stat-v">💎 0</div>
+          <div class="pg-stat-l">VBC COINS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="pg-info">
+      <div class="pg-title">VBC PROTOCOL</div>
+      <div class="pg-heading">Tu Licencia de <em>Cazador</em></div>
+
+      <!-- Estirpes -->
+      <div class="pg-estirpes">
+        <span class="pg-estirpe">🩸 ONI · Sangre Demoníaca</span>
+        <span class="pg-estirpe" style="color:#00d4ff;border-color:rgba(0,212,255,.18);background:rgba(0,212,255,.06);">🐉 SAIYAN · Sangre Guerrera</span>
+        <span class="pg-estirpe" style="color:#ffb432;border-color:rgba(255,180,50,.18);background:rgba(255,180,50,.06);">🦁 CHIMERA · Sangre Quimérica</span>
+      </div>
+
+      <!-- Protocolo 3 fases -->
+      <div class="pg-fases">
+        <div class="pg-fase">
+          <span class="pg-fase-icon">🔥</span>
+          <span class="pg-fase-name">Fase 1 — Despertar del NEM</span>
+          <span class="pg-fase-tag">PENDIENTE</span>
+        </div>
+        <div class="pg-fase">
+          <span class="pg-fase-icon">⚡</span>
+          <span class="pg-fase-name">Fase 2 — Protocultura</span>
+          <span class="pg-fase-tag">PENDIENTE</span>
+        </div>
+        <div class="pg-fase">
+          <span class="pg-fase-icon">⚔</span>
+          <span class="pg-fase-name">Fase 3 — Bautismo de Sangre</span>
+          <span class="pg-fase-tag">PENDIENTE</span>
+        </div>
+      </div>
+
+      <!-- Countdown -->
+      <div class="pg-countdown-box">
+        <div class="pg-countdown-label">🇨🇱 CHILE — PRIMER PAÍS DEL PROTOCOLO</div>
+        <div class="pg-countdown-sub">INAUGURACIÓN</div>
+        <div class="pg-countdown-date">31 · OCT · 2026</div>
+        <div class="pg-countdown-desc">El Protocolo abre sus puertas<br>Las cartas se desbloquean · El juego comienza</div>
+        <div class="pg-countdown-timer" id="pgCountdown"></div>
+      </div>
+
+      <!-- CTAs -->
+      <div class="pg-ctas">
+        <a href="https://vbc.vibraalto.cl/app" class="pg-cta pg-cta-primary" target="_blank">🚀 ACCEDER A LA APP</a>
+        <a href="https://vbc.vibraalto.cl/download" class="pg-cta pg-cta-secondary" target="_blank">📥 DESCARGAR</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="nerhia-window-section" id="nerhia-live">
   <div class="nerhia-window-wrap">
 
@@ -5450,17 +5739,18 @@ atTick();
 <!-- ═══ CHAPTER SIDEBAR (Kindle-style) ═══ -->
 <nav class="va-chapters" id="chapter-nav" aria-label="Capítulos">
   <div class="ch active" data-target="hero"><span class="ch-label">I · La Señal</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nerhia-live"><span class="ch-label">II · Ciudad Viva</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="protocol"><span class="ch-label">III · Protocolo</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="manifesto"><span class="ch-label">IV · Manifiesto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="demos"><span class="ch-label">V · Demos</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="mempalace"><span class="ch-label">VI · MemPalace</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="experiments"><span class="ch-label">VII · Lab</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="kaldi"><span class="ch-label">VIII · Kaldi</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nexus-va"><span class="ch-label">IX · Nexus</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="licencia-va"><span class="ch-label">X · Licencia</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="contact"><span class="ch-label">XI · Contacto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="lab"><span class="ch-label">XII · Twin</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="puerta-giratoria"><span class="ch-label">II · Puerta</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nerhia-live"><span class="ch-label">III · Ciudad Viva</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="protocol"><span class="ch-label">IV · Protocolo</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="manifesto"><span class="ch-label">V · Manifiesto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="demos"><span class="ch-label">VI · Demos</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="mempalace"><span class="ch-label">VII · MemPalace</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="experiments"><span class="ch-label">VIII · Lab</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="kaldi"><span class="ch-label">IX · Kaldi</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nexus-va"><span class="ch-label">X · Nexus</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="licencia-va"><span class="ch-label">XI · Licencia</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="contact"><span class="ch-label">XII · Contacto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="lab"><span class="ch-label">XIII · Twin</span><span class="ch-dot"></span></div>
 </nav>
 
 <!-- ═══ LICENCIA VA SCRIPT ═══ -->
@@ -5571,6 +5861,26 @@ atTick();
   window.generateLicense = generateLicense;
 })();
 </script>
+
+
+// ═══ Puerta Giratoria Countdown ═══
+(function(){
+  var target = new Date('2026-10-31T00:00:00-03:00').getTime();
+  var el = document.getElementById('pgCountdown');
+  if(!el) return;
+  function tick(){
+    var now = Date.now();
+    var diff = target - now;
+    if(diff <= 0){ el.textContent = '¡EL PROTOCOLO ESTÁ ACTIVO!'; return; }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    el.textContent = d + 'd  ' + h + 'h  ' + m + 'm';
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+
 </script>
 
 </body>
