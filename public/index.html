@@ -2826,7 +2826,7 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-<div id="deck-counter"><span class="dc-cur" id="dc-cur">1</span><span class="dc-sep">/</span><span id="dc-tot">11</span></div>
+<div id="deck-counter"><span class="dc-cur" id="dc-cur">1</span><span class="dc-sep">/</span><span id="dc-tot">12</span></div>
 
 <!-- ═══ VIBRAALTO AT LAYER ═══ -->
 <div id="va-cursor"></div>
@@ -3062,6 +3062,136 @@ html.deck-mode #deck-counter { display: flex; align-items: baseline; gap: 2px; }
 html.deck-mode .va-chapters{ display:none; }
 
 
+
+/* ═══ HERO CAROUSEL ═══ */
+.hero-carousel{
+  position:relative;
+  width:100%;
+  overflow:hidden;
+  max-width:100vw;
+}
+.hero-carousel-track{
+  display:flex;
+  transition:transform .7s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.hero-slide{
+  flex:0 0 100%;
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+  position:relative;
+}
+/* Hero inside carousel containment */
+.hero-carousel .hero{
+  overflow:hidden;
+  position:relative;
+  contain:paint;
+}
+
+.hero-slide-2{
+  position:relative;
+  min-height:100vh;
+  background:#0a0a12;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:60px 20px;
+  overflow:hidden;
+}
+.hero-slide-2::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 20%,rgba(255,75,75,.06) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 80%,rgba(0,212,255,.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+
+/* Carousel dots */
+.carousel-dots{
+  position:absolute;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+  z-index:20;
+}
+.carousel-dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  border:1px solid rgba(0,212,255,.3);
+  cursor:pointer;
+  transition:all .3s ease;
+}
+.carousel-dot.active{
+  background:#00d4ff;
+  box-shadow:0 0 12px rgba(0,212,255,.5);
+  transform:scale(1.2);
+}
+.carousel-dot:hover{
+  background:rgba(0,212,255,.5);
+}
+
+/* Carousel arrows */
+.carousel-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;height:44px;
+  background:rgba(10,10,18,.6);
+  border:1px solid rgba(0,212,255,.2);
+  border-radius:50%;
+  color:#00d4ff;
+  font-size:18px;
+  cursor:pointer;
+  z-index:20;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s ease;
+  backdrop-filter:blur(8px);
+}
+.carousel-arrow:hover{
+  background:rgba(0,212,255,.15);
+  border-color:rgba(0,212,255,.5);
+  box-shadow:0 0 20px rgba(0,212,255,.2);
+}
+.carousel-arrow.prev{left:16px;}
+.carousel-arrow.next{right:16px;}
+@media(max-width:768px){
+  .carousel-arrow{width:36px;height:36px;font-size:14px;}
+  .carousel-arrow.prev{left:8px;}
+  .carousel-arrow.next{right:8px;}
+}
+
+/* ── Enhanced Mini Card holographic ── */
+.pg-card .pg-holo-lines{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent, transparent 2px,
+    rgba(0,212,255,.015) 2px, rgba(0,212,255,.015) 4px
+  );
+  pointer-events:none;z-index:0;
+}
+.pg-card .pg-holo-sweep{
+  position:absolute;inset:0;
+  background:linear-gradient(105deg,
+    transparent 30%,
+    rgba(0,212,255,.08) 45%,
+    rgba(255,75,75,.06) 50%,
+    rgba(0,212,255,.08) 55%,
+    transparent 70%
+  );
+  background-size:200% 100%;
+  animation:pgSweep 4s ease-in-out infinite;
+  pointer-events:none;z-index:0;
+}
+@keyframes pgSweep{
+  0%,100%{background-position:200% 0}
+  50%{background-position:-100% 0}
+}
+
+
 /* ═══ PUERTA GIRATORIA SLIDE ═══ */
 .pg-slide{
   position:relative;
@@ -3082,11 +3212,12 @@ html.deck-mode .va-chapters{ display:none; }
 .pg-grid{
   position:relative;z-index:1;
   display:grid;
-  grid-template-columns:320px 1fr;
-  gap:48px;
-  max-width:960px;
+  grid-template-columns:300px 1fr;
+  gap:36px;
+  max-width:900px;
   width:100%;
   align-items:start;
+  padding:0 24px;
 }
 @media(max-width:800px){
   .pg-grid{grid-template-columns:1fr;gap:32px;justify-items:center;}
@@ -3267,7 +3398,11 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 <!-- HERO -->
-<header id="top" class="hero">
+<div class="hero-carousel" id="heroCarousel">
+  <div class="hero-carousel-track" id="heroTrack">
+    <!-- SLIDE 1: VIBRAALTO -->
+    <div class="hero-slide">
+<header id="top" class="hero" style="min-height:100vh;">
   <!-- Reactor fills the right side -->
   <canvas id="symbol-canvas" width="920" height="920"></canvas>
   <div class="hero-veil"></div>
@@ -3333,21 +3468,15 @@ html.deck-mode .va-chapters{ display:none; }
     </div>
   </div>
 </header>
+    </div><!-- /slide 1 -->
 
-<!-- Marquee -->
-<div class="marquee-wrap">
-  <div class="marquee-label"><span class="ml-dot"></span><span data-i="now_resonating">Now resonating</span></div>
-  <div class="marquee-track" id="marqueeTrack"></div>
-</div>
-
-
-<!-- ════ NERHIA LIVE WINDOW ════ -->
-
-<!-- ═══ PUERTA GIRATORIA ═══ -->
-<section class="pg-slide" id="puerta-giratoria">
-  <div class="pg-grid">
+    <!-- SLIDE 2: PUERTA GIRATORIA -->
+    <div class="hero-slide hero-slide-2" id="puerta-giratoria">
+      <div class="pg-grid">
     <!-- Mini Card -->
     <div class="pg-card">
+      <div class="pg-holo-lines"></div>
+      <div class="pg-holo-sweep"></div>
       <div class="pg-card-header">
         <span class="pg-card-org">VIBRA·ALTO PROTOCOL</span>
         <span class="pg-card-rank">★ NOVATO</span>
@@ -3443,7 +3572,30 @@ html.deck-mode .va-chapters{ display:none; }
       </div>
     </div>
   </div>
-</section>
+    </div><!-- /slide 2 -->
+
+  </div><!-- /track -->
+
+  <!-- Carousel controls -->
+  <button class="carousel-arrow prev" id="carPrev" aria-label="Slide anterior">&#8249;</button>
+  <button class="carousel-arrow next" id="carNext" aria-label="Slide siguiente">&#8250;</button>
+  <div class="carousel-dots" id="carDots">
+    <span class="carousel-dot active" data-slide="0"></span>
+    <span class="carousel-dot" data-slide="1"></span>
+  </div>
+</div><!-- /hero-carousel -->
+
+<!-- Marquee -->
+<div class="marquee-wrap">
+  <div class="marquee-label"><span class="ml-dot"></span><span data-i="now_resonating">Now resonating</span></div>
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+
+<!-- ════ NERHIA LIVE WINDOW ════ -->
+
+<!-- ═══ PUERTA GIRATORIA ═══ -->
+
 
 <section class="nerhia-window-section" id="nerhia-live">
   <div class="nerhia-window-wrap">
@@ -5739,18 +5891,17 @@ atTick();
 <!-- ═══ CHAPTER SIDEBAR (Kindle-style) ═══ -->
 <nav class="va-chapters" id="chapter-nav" aria-label="Capítulos">
   <div class="ch active" data-target="hero"><span class="ch-label">I · La Señal</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="puerta-giratoria"><span class="ch-label">II · Puerta</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nerhia-live"><span class="ch-label">III · Ciudad Viva</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="protocol"><span class="ch-label">IV · Protocolo</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="manifesto"><span class="ch-label">V · Manifiesto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="demos"><span class="ch-label">VI · Demos</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="mempalace"><span class="ch-label">VII · MemPalace</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="experiments"><span class="ch-label">VIII · Lab</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="kaldi"><span class="ch-label">IX · Kaldi</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="nexus-va"><span class="ch-label">X · Nexus</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="licencia-va"><span class="ch-label">XI · Licencia</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="contact"><span class="ch-label">XII · Contacto</span><span class="ch-dot"></span></div>
-  <div class="ch" data-target="lab"><span class="ch-label">XIII · Twin</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nerhia-live"><span class="ch-label">II · Ciudad Viva</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="protocol"><span class="ch-label">III · Protocolo</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="manifesto"><span class="ch-label">IV · Manifiesto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="demos"><span class="ch-label">V · Demos</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="mempalace"><span class="ch-label">VI · MemPalace</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="experiments"><span class="ch-label">VII · Lab</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="kaldi"><span class="ch-label">VIII · Kaldi</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="nexus-va"><span class="ch-label">IX · Nexus</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="licencia-va"><span class="ch-label">X · Licencia</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="contact"><span class="ch-label">XI · Contacto</span><span class="ch-dot"></span></div>
+  <div class="ch" data-target="lab"><span class="ch-label">XII · Twin</span><span class="ch-dot"></span></div>
 </nav>
 
 <!-- ═══ LICENCIA VA SCRIPT ═══ -->
@@ -5881,6 +6032,58 @@ atTick();
   setInterval(tick, 60000);
 })();
 
+
+/* ═══ HERO CAROUSEL ═══ */
+(function(){
+  var track=document.getElementById('heroTrack');
+  var dots=document.querySelectorAll('.carousel-dot');
+  var prevBtn=document.getElementById('carPrev');
+  var nextBtn=document.getElementById('carNext');
+  if(!track||!dots.length)return;
+  
+  var current=0,total=2,autoTimer=null;
+  
+  function goTo(idx){
+    current=((idx%total)+total)%total;
+    track.style.transform='translateX(-'+(current*100)+'%)';
+    dots.forEach(function(d,i){d.classList.toggle('active',i===current);});
+  }
+  
+  function next(){goTo(current+1);}
+  function prev(){goTo(current-1);}
+  
+  function startAuto(){
+    stopAuto();
+    autoTimer=setInterval(next,8000);
+  }
+  function stopAuto(){
+    if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
+  }
+  
+  if(prevBtn) prevBtn.addEventListener('click',function(){prev();startAuto();});
+  if(nextBtn) nextBtn.addEventListener('click',function(){next();startAuto();});
+  dots.forEach(function(d){
+    d.addEventListener('click',function(){goTo(+this.dataset.slide);startAuto();});
+  });
+  
+  // Touch/swipe
+  var touchStartX=0;
+  var carousel=document.getElementById('heroCarousel');
+  if(carousel){
+    carousel.addEventListener('touchstart',function(e){touchStartX=e.changedTouches[0].screenX;},{passive:true});
+    carousel.addEventListener('touchend',function(e){
+      var diff=touchStartX-e.changedTouches[0].screenX;
+      if(Math.abs(diff)>50){
+        if(diff>0)next();else prev();
+        startAuto();
+      }
+    },{passive:true});
+    carousel.addEventListener('mouseenter',stopAuto);
+    carousel.addEventListener('mouseleave',startAuto);
+  }
+  
+  startAuto();
+})();
 </script>
 
 </body>
