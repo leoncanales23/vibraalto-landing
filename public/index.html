@@ -3081,20 +3081,12 @@ html.deck-mode .va-chapters{ display:none; }
   min-height:100vh;
   overflow:hidden;
   position:relative;
-  clip-path:inset(0);
-  -webkit-clip-path:inset(0);
-  isolation:isolate;
 }
 /* Hero inside carousel containment */
 .hero-carousel .hero{
   overflow:hidden;
   position:relative;
-}
-.hero-carousel #symbol-canvas{
-  position:absolute;
-  right:-10%;
-  top:50%;
-  transform:translateY(-50%);
+  contain:paint;
 }
 
 .hero-slide-2{
@@ -3106,11 +3098,6 @@ html.deck-mode .va-chapters{ display:none; }
   justify-content:center;
   padding:60px 20px;
   overflow:hidden;
-  z-index:2;
-}
-.hero-slide-2 .pg-grid{
-  position:relative;
-  z-index:3;
 }
 .hero-slide-2::before{
   content:'';position:absolute;inset:0;
