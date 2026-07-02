@@ -3072,12 +3072,13 @@ html.deck-mode .va-chapters{ display:none; }
 }
 .hero-carousel-track{
   display:flex;
+  width:200%;
   transition:transform .7s cubic-bezier(.4,0,.2,1);
   will-change:transform;
 }
 .hero-slide{
-  flex:0 0 100%;
-  width:100%;
+  flex:0 0 50%;
+  width:50%;
   min-height:100vh;
   overflow:hidden;
   position:relative;
@@ -6011,8 +6012,6 @@ atTick();
   window.logout = logout;
   window.generateLicense = generateLicense;
 })();
-</script>
-
 
 // ═══ Puerta Giratoria Countdown ═══
 (function(){
@@ -6045,7 +6044,7 @@ atTick();
   
   function goTo(idx){
     current=((idx%total)+total)%total;
-    track.style.transform='translateX(-'+(current*100)+'%)';
+    track.style.transform='translateX(-'+(current*50)+'%)';
     dots.forEach(function(d,i){d.classList.toggle('active',i===current);});
   }
   
