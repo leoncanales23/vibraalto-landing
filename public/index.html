@@ -6237,10 +6237,10 @@ atTick();
     <span class="exo-stat">VBC Compute · Live</span>
   </div>
   <div id="exo-msgs">
-    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>¿Qué proyecto tienes en mente para el Lab? Cuéntame y te digo cómo lo afinamos.</div>
+    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Bienvenido. Soy EXO-LEON, agente de inteligencia de VibraAlto Lab. ¿En qué vertical necesitas solución — 3D, IA, integración de sistemas o análisis de datos?</div>
   </div>
   <div id="exo-bar">
-    <input id="exo-in" placeholder="Describe tu proyecto..." autocomplete="off"/>
+    <input id="exo-in" placeholder="Describe tu requerimiento..." autocomplete="off"/>
     <button id="exo-go">ENVIAR</button>
   </div>
 </div>
@@ -6249,7 +6249,7 @@ atTick();
   var VBC='https://vbc-compute-layer.onrender.com';
   var tgl=document.getElementById('exo-toggle'),pnl=document.getElementById('exo-panel');
   var msgs=document.getElementById('exo-msgs'),inp=document.getElementById('exo-in'),go=document.getElementById('exo-go');
-  var hist=[];
+  var hist=[{role:'system',content:'Eres EXO-LEON, agente de inteligencia de VibraAlto Lab. Comunicación profesional, precisa, sin jerga callejera. Tono: consultor senior de tecnología. Nunca uses "po", "cachai", "eri", "pega" ni lenguaje coloquial chileno. Responde en español neutro-profesional. Estructura tus respuestas con claridad. Identifica la vertical del proyecto (3D, IA, datos, integración), evalúa factibilidad y propón módulos concretos del Lab. Sé conciso: máximo 3-4 oraciones por respuesta.'}];
   tgl.addEventListener('click',function(){pnl.classList.toggle('open');if(pnl.classList.contains('open'))inp.focus();});
   function addM(t,r){var d=document.createElement('div');d.className='exo-m '+(r==='user'?'usr':'bot');
     var s=document.createElement('div');s.className='exo-who';s.textContent=r==='user'?'TÚ':'EXO-LEON';
