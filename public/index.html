@@ -3064,42 +3064,64 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 /* ═══ HERO CAROUSEL ═══ */
+/* ═══ PUERTA GIRATORIA DE CRISTAL ═══ */
 .hero-carousel{
   position:relative;
   width:100%;
+  max-width:100vw;
   overflow:hidden;
   clip-path:inset(0);
-  max-width:100vw;
 }
 .hero-carousel-track{
-  display:flex;
-  width:200%;
-  transition:transform .7s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.hero-slide{
-  flex:0 0 50%;
-  width:50%;
+  width:100%;
   min-height:100vh;
-  overflow:hidden;
   position:relative;
 }
-/* Hero inside carousel containment */
+.hero-slide{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+  /* Cada slide se rota individualmente con perspective() inline */
+  transform-origin:center center;
+  will-change:transform,opacity;
+}
+/* Slide 2 empieza oculto (detrás de la puerta) */
+.hero-slide:nth-child(2){
+  visibility:hidden;
+}
+/* Reflejo cristal — sheen de vidrio durante giro */
+.hero-slide::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,
+    transparent 35%,
+    rgba(255,255,255,.03) 40%,
+    rgba(255,255,255,.12) 48%,
+    rgba(255,255,255,.18) 50%,
+    rgba(255,255,255,.12) 52%,
+    rgba(255,255,255,.03) 60%,
+    transparent 65%);
+  pointer-events:none;z-index:5;
+  opacity:0;
+  transition:opacity .3s ease;
+}
+.hero-slide.door-rotating::after{
+  opacity:1;
+}
+/* Hero inside carousel containment — no contain:paint, breaks WebGL in 3D */
 .hero-carousel .hero{
   overflow:hidden;
   position:relative;
-  contain:paint;
 }
 
 .hero-slide-2{
-  position:relative;
   min-height:100vh;
   background:#0a0a12;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:60px 20px;
-  overflow:hidden;
 }
 .hero-slide-2::before{
   content:'';position:absolute;inset:0;
@@ -3690,8 +3712,8 @@ html.deck-mode .va-chapters{ display:none; }
   </div><!-- /track -->
 
   <!-- Carousel controls -->
-  <button class="carousel-arrow prev" id="carPrev" aria-label="Slide anterior">&#8249;</button>
-  <button class="carousel-arrow next" id="carNext" aria-label="Slide siguiente">&#8250;</button>
+  <button class="carousel-arrow prev" id="carPrev" aria-label="Girar anterior">&#8249;</button>
+  <button class="carousel-arrow next" id="carNext" aria-label="Girar siguiente">&#8250;</button>
   <div class="carousel-dots" id="carDots">
     <span class="carousel-dot active" data-slide="0"></span>
     <span class="carousel-dot" data-slide="1"></span>
@@ -6169,40 +6191,81 @@ atTick();
 })();
 
 
-/* ═══ HERO CAROUSEL ═══ */
+/* ═══ PUERTA GIRATORIA DE CRISTAL ═══ */
 (function(){
   var track=document.getElementById('heroTrack');
   var dots=document.querySelectorAll('.carousel-dot');
   var prevBtn=document.getElementById('carPrev');
   var nextBtn=document.getElementById('carNext');
   if(!track||!dots.length)return;
-  
-  var current=0,total=2,autoTimer=null;
-  
-  function goTo(idx){
-    current=((idx%total)+total)%total;
-    track.style.transform='translateX(-'+(current*50)+'%)';
-    dots.forEach(function(d,i){d.classList.toggle('active',i===current);});
+
+  var slides=track.children;
+  var current=0,total=slides.length,animating=false,autoTimer=null;
+  var DURATION=1200; /* ms — tiempo del giro completo */
+  var PERSP='perspective(1800px) ';
+
+  /* Init: slide 0 visible, rest hidden */
+  for(var i=0;i<total;i++){
+    slides[i].style.transform=PERSP+'rotateY(0deg)';
+    slides[i].style.visibility=(i===0)?'visible':'hidden';
+    slides[i].style.opacity=(i===0)?'1':'0';
   }
-  
-  function next(){goTo(current+1);}
-  function prev(){goTo(current-1);}
-  
-  function startAuto(){
-    stopAuto();
-    autoTimer=setInterval(next,8000);
+
+  function goTo(idx,dir){
+    var next=((idx%total)+total)%total;
+    if(next===current||animating)return;
+    animating=true;
+
+    var curSlide=slides[current];
+    var nxtSlide=slides[next];
+    var dirSign=(dir==='prev')?1:-1;
+
+    /* Glass sheen */
+    curSlide.classList.add('door-rotating');
+    nxtSlide.classList.add('door-rotating');
+
+    /* Current panel swings out like a revolving door */
+    curSlide.style.transition='transform '+DURATION+'ms cubic-bezier(.77,0,.175,1), opacity '+(DURATION*0.4)+'ms ease '+(DURATION*0.3)+'ms';
+    curSlide.style.transform=PERSP+'rotateY('+(dirSign*-110)+'deg)';
+    curSlide.style.opacity='0';
+
+    /* Next panel swings in from the other side */
+    nxtSlide.style.transition='none';
+    nxtSlide.style.transform=PERSP+'rotateY('+(dirSign*110)+'deg)';
+    nxtSlide.style.visibility='visible';
+    nxtSlide.style.opacity='0';
+    nxtSlide.offsetHeight; /* force reflow */
+
+    nxtSlide.style.transition='transform '+DURATION+'ms cubic-bezier(.77,0,.175,1), opacity '+(DURATION*0.3)+'ms ease '+(DURATION*0.15)+'ms';
+    nxtSlide.style.transform=PERSP+'rotateY(0deg)';
+    nxtSlide.style.opacity='1';
+
+    /* Update dots */
+    dots.forEach(function(d,i){d.classList.toggle('active',i===next);});
+
+    /* Cleanup after animation */
+    setTimeout(function(){
+      curSlide.style.visibility='hidden';
+      curSlide.classList.remove('door-rotating');
+      nxtSlide.classList.remove('door-rotating');
+      current=next;
+      animating=false;
+    },DURATION+50);
   }
-  function stopAuto(){
-    if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
-  }
-  
+
+  function next(){goTo(current+1,'next');}
+  function prev(){goTo(current-1,'prev');}
+
+  function startAuto(){stopAuto();autoTimer=setInterval(next,8000);}
+  function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}}
+
   if(prevBtn) prevBtn.addEventListener('click',function(){prev();startAuto();});
   if(nextBtn) nextBtn.addEventListener('click',function(){next();startAuto();});
   dots.forEach(function(d){
-    d.addEventListener('click',function(){goTo(+this.dataset.slide);startAuto();});
+    d.addEventListener('click',function(){goTo(+this.dataset.slide,(+this.dataset.slide>current)?'next':'prev');startAuto();});
   });
-  
-  // Touch/swipe
+
+  /* Touch/swipe */
   var touchStartX=0;
   var carousel=document.getElementById('heroCarousel');
   if(carousel){
@@ -6217,7 +6280,7 @@ atTick();
     carousel.addEventListener('mouseenter',stopAuto);
     carousel.addEventListener('mouseleave',startAuto);
   }
-  
+
   startAuto();
 })();
 </script>
