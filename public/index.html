@@ -3064,42 +3064,64 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 /* ═══ HERO CAROUSEL ═══ */
+/* ═══ PUERTA GIRATORIA DE CRISTAL ═══ */
 .hero-carousel{
   position:relative;
   width:100%;
+  max-width:100vw;
   overflow:hidden;
   clip-path:inset(0);
-  max-width:100vw;
 }
 .hero-carousel-track{
-  display:flex;
-  width:200%;
-  transition:transform .7s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.hero-slide{
-  flex:0 0 50%;
-  width:50%;
+  width:100%;
   min-height:100vh;
-  overflow:hidden;
   position:relative;
 }
-/* Hero inside carousel containment */
+.hero-slide{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  min-height:100vh;
+  overflow:hidden;
+  /* Cada slide se rota individualmente con perspective() inline */
+  transform-origin:center center;
+  will-change:transform,opacity;
+}
+/* Slide 2 empieza oculto (detrás de la puerta) */
+.hero-slide:nth-child(2){
+  visibility:hidden;
+}
+/* Reflejo cristal — sheen de vidrio durante giro */
+.hero-slide::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,
+    transparent 35%,
+    rgba(255,255,255,.03) 40%,
+    rgba(255,255,255,.12) 48%,
+    rgba(255,255,255,.18) 50%,
+    rgba(255,255,255,.12) 52%,
+    rgba(255,255,255,.03) 60%,
+    transparent 65%);
+  pointer-events:none;z-index:5;
+  opacity:0;
+  transition:opacity .3s ease;
+}
+.hero-slide.door-rotating::after{
+  opacity:1;
+}
+/* Hero inside carousel containment — no contain:paint, breaks WebGL in 3D */
 .hero-carousel .hero{
   overflow:hidden;
   position:relative;
-  contain:paint;
 }
 
 .hero-slide-2{
-  position:relative;
   min-height:100vh;
   background:#0a0a12;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:60px 20px;
-  overflow:hidden;
 }
 .hero-slide-2::before{
   content:'';position:absolute;inset:0;
@@ -3195,6 +3217,30 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 /* ═══ PUERTA GIRATORIA SLIDE ═══ */
+/* ═══ SLIDES 3 & 4 — Nexus & Kaldi inside carousel ═══ */
+.hero-slide-3,
+.hero-slide-4 {
+  background: transparent;
+}
+.hero-slide-3 .nexus-strip,
+.hero-slide-4 .kaldi-strip {
+  min-height: 100vh;
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+/* Vertically center the grid content */
+.hero-slide-3 .nexus-inner,
+.hero-slide-4 .kaldi-inner {
+  min-height: 100vh;
+  align-content: center;
+}
+/* Hide slides 3 & 4 initially */
+.hero-slide:nth-child(3),
+.hero-slide:nth-child(4) {
+  visibility: hidden;
+}
+
 .pg-slide{
   position:relative;
   min-height:100vh;
@@ -3687,14 +3733,229 @@ html.deck-mode .va-chapters{ display:none; }
   </div>
     </div><!-- /slide 2 -->
 
+    <!-- SLIDE 3: NEXUS VA -->
+    <div class="hero-slide hero-slide-3">
+<section class="nexus-strip" id="nexus-va">
+  <canvas id="nexus-bg-canvas"></canvas>
+
+  <div class="nexus-inner">
+
+    <!-- LEFT: TV holográfica + productos -->
+    <div class="nexus-left">
+
+      <!-- OS Window / TV display -->
+      <div class="nexus-tv">
+        <div class="nexus-tv-bar">
+          <div class="nexus-tv-dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span class="nexus-tv-path">nexus.vibraalto.cl / <span style="color:rgba(0,212,255,0.55)">va</span> / exoleón</span>
+          <span class="nexus-tv-badge">EXOLEÓN VA</span>
+        </div>
+        <div class="nexus-canvas-wrap">
+          <canvas id="nexus-tv-canvas"></canvas>
+          <div class="nexus-tv-scan"></div>
+        </div>
+        <div class="nexus-tv-bottombar">
+          <span>● SISTEMA ACTIVO</span>
+          <span style="flex:1;text-align:center">LÍNEA VA · INFRAESTRUCTURA VISUAL</span>
+          <span>NERHIA OK</span>
+        </div>
+      </div>
+
+      <!-- 4 productos VA -->
+      <div class="nexus-products">
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA ONE</div>
+          <div class="nexus-prod-desc">Señalética · Corporativo esencial</div>
+          <div class="nexus-prod-tag">4K · 18/7 · Android 13</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA PRO</div>
+          <div class="nexus-prod-desc">Educación · Touch interactivo</div>
+          <div class="nexus-prod-tag">4K · 20pts touch · LMS nativo</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA EDGE</div>
+          <div class="nexus-prod-desc">Dirección · Auditorios premium</div>
+          <div class="nexus-prod-tag">8K · OLED · 24/7 SLA</div>
+        </a>
+        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+          <div class="nexus-prod-name">VA CORE</div>
+          <div class="nexus-prod-desc">IoT · Kioscos · Vending</div>
+          <div class="nexus-prod-tag">REST · MQTT · Cloud fleet</div>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: copy + CTA -->
+    <div class="nexus-right">
+
+      <div class="nexus-pause-tag">Infraestructura Visual Inteligente</div>
+
+      <div class="nexus-wordmark">
+        <span class="nexus-word-main">NEXUS VA</span>
+        <span class="nexus-word-sub">Línea VA · VibraAlto · LATAM 2026</span>
+      </div>
+
+      <p class="nexus-manifesto">
+        Pantallas <em>de nivel infraestructura</em> para gobiernos, educación, corporativo y minería.
+      </p>
+
+      <div class="nexus-tagline">12+ años OEM global · Exclusividad LATAM</div>
+
+      <div class="nexus-sectors">
+        <span class="nexus-sector">🏛️ Gobierno</span>
+        <span class="nexus-sector">🎓 Educación</span>
+        <span class="nexus-sector">⛏️ Minería</span>
+        <span class="nexus-sector">🤖 IoT</span>
+        <span class="nexus-sector">🏢 Corporativo</span>
+      </div>
+
+      <div class="nexus-stats">
+        <div class="nexus-stat"><div class="nexus-stat-val">12+</div><div class="nexus-stat-label">Años OEM</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">40+</div><div class="nexus-stat-label">Países</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">8K</div><div class="nexus-stat-label">Resolución</div></div>
+        <div class="nexus-stat"><div class="nexus-stat-val">24/7</div><div class="nexus-stat-label">Operación</div></div>
+      </div>
+
+      <a class="nexus-btn" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
+        <span class="nexus-btn-dot"></span>
+        Ver Línea VA completa
+        <span class="nexus-btn-arrow">→</span>
+      </a>
+
+      <div class="nexus-powered">
+        <span>Powered by</span>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://nerhia.com">NERHIA</a>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://nexus.vibraalto.cl/va">NEXUS</a>
+        <span style="color:rgba(0,212,255,0.1)">·</span>
+        <a href="https://vibraalto.cl">VibraAlto</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+    </div><!-- /slide 3 -->
+
+    <!-- SLIDE 4: KALDI COFFEE -->
+    <div class="hero-slide hero-slide-4">
+<section class="kaldi-strip" id="kaldi">
+  <canvas id="kaldi-canvas"></canvas>
+
+  <div class="kaldi-inner">
+
+    <!-- LEFT: Identity + CTA -->
+    <div class="kaldi-left">
+
+      <div class="kaldi-pause-tag">Antes de seguir</div>
+
+      <div class="kaldi-wordmark">
+        <span class="kaldi-word-kaldi">KALDi</span>
+        <span class="kaldi-word-coffee">Coffee</span>
+      </div>
+
+      <p class="kaldi-manifesto">
+        El lugar donde las <em>ideas</em> encuentran su temperatura perfecta.
+      </p>
+
+      <div class="kaldi-tagline">Awaken your senses · Santiago, Chile</div>
+
+      <div class="kaldi-pillars">
+        <span class="kaldi-pill">☕ Café especialidad</span>
+        <span class="kaldi-pill">⚡ Tech</span>
+        <span class="kaldi-pill">🏆 Deporte</span>
+        <span class="kaldi-pill">💡 Innovación</span>
+        <span class="kaldi-pill">🎯 Mentorías</span>
+      </div>
+
+      <a class="kaldi-btn" href="#kaldi">
+        <span class="kaldi-btn-dot"></span>
+        Visita Kaldi Coffee
+        <span class="kaldi-btn-arrow">→</span>
+      </a>
+
+      <div class="kaldi-powered">
+        <span>Editorial engine</span>
+        <span style="color:rgba(245,166,35,0.12)">·</span>
+        <a href="https://vibraalto.cl">VibraAlto AI</a>
+        <span style="color:rgba(245,166,35,0.12)">·</span>
+        <a href="https://nerhia.com">NERHIA</a>
+      </div>
+    </div>
+
+    <!-- RIGHT: Atmosphere canvas + stats -->
+    <div class="kaldi-right">
+
+      <!-- OS-style video window -->
+      <div class="kaldi-video-frame">
+        <div class="kaldi-video-bar">
+          <div class="kaldi-video-dots">
+            <span style="background:#ff5f57"></span>
+            <span style="background:#febc2e"></span>
+            <span style="background:#28c840"></span>
+          </div>
+          <span class="kaldi-video-path">kaldi.vibraalto.cl <span style="color:rgba(245,166,35,0.5)">/</span> señales</span>
+          <span class="kaldi-video-badge">NERHIA LIVE</span>
+        </div>
+        <div class="kaldi-canvas-wrap">
+          <canvas id="kaldi-video-canvas"></canvas>
+          <div class="kaldi-video-scan"></div>
+          <div class="kaldi-video-overlay">
+            <div class="kaldi-score" id="kaldi-uvx">—</div>
+            <div class="kaldi-score-sub">ALIVE · UVX SANTIAGO</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NERHIA live stats -->
+      <div class="kaldi-stats">
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-signals">—</div>
+          <div class="kaldi-stat-label">Señales NERHIA</div>
+        </div>
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-nodes">—</div>
+          <div class="kaldi-stat-label">Nodos activos</div>
+        </div>
+        <div class="kaldi-stat">
+          <div class="kaldi-stat-val" id="ks-conf">—</div>
+          <div class="kaldi-stat-label">Confianza avg</div>
+        </div>
+      </div>
+
+      <!-- Pipeline tag -->
+      <div class="kaldi-pipeline">
+        <span class="kaldi-pipeline-dot"></span>
+        Instagram Signal Intake
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span>NERHIA Engine</span>
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span>Kaldi Feed</span>
+        <span style="color:rgba(245,166,35,0.12)">→</span>
+        <span style="color:rgba(245,166,35,0.45)">Pipeline activo</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+    </div><!-- /slide 4 -->
+
   </div><!-- /track -->
 
   <!-- Carousel controls -->
-  <button class="carousel-arrow prev" id="carPrev" aria-label="Slide anterior">&#8249;</button>
-  <button class="carousel-arrow next" id="carNext" aria-label="Slide siguiente">&#8250;</button>
+  <button class="carousel-arrow prev" id="carPrev" aria-label="Girar anterior">&#8249;</button>
+  <button class="carousel-arrow next" id="carNext" aria-label="Girar siguiente">&#8250;</button>
   <div class="carousel-dots" id="carDots">
     <span class="carousel-dot active" data-slide="0"></span>
     <span class="carousel-dot" data-slide="1"></span>
+    <span class="carousel-dot" data-slide="2"></span>
+    <span class="carousel-dot" data-slide="3"></span>
   </div>
 </div><!-- /hero-carousel -->
 
@@ -4033,221 +4294,8 @@ html.deck-mode .va-chapters{ display:none; }
 
   </div>
 </section>
-
-<!-- ════ KALDI COFFEE STRIP ════ -->
-<section class="kaldi-strip" id="kaldi">
-  <canvas id="kaldi-canvas"></canvas>
-
-  <div class="kaldi-inner">
-
-    <!-- LEFT: Identity + CTA -->
-    <div class="kaldi-left">
-
-      <div class="kaldi-pause-tag">Antes de seguir</div>
-
-      <div class="kaldi-wordmark">
-        <span class="kaldi-word-kaldi">KALDi</span>
-        <span class="kaldi-word-coffee">Coffee</span>
-      </div>
-
-      <p class="kaldi-manifesto">
-        El lugar donde las <em>ideas</em> encuentran su temperatura perfecta.
-      </p>
-
-      <div class="kaldi-tagline">Awaken your senses · Santiago, Chile</div>
-
-      <div class="kaldi-pillars">
-        <span class="kaldi-pill">☕ Café especialidad</span>
-        <span class="kaldi-pill">⚡ Tech</span>
-        <span class="kaldi-pill">🏆 Deporte</span>
-        <span class="kaldi-pill">💡 Innovación</span>
-        <span class="kaldi-pill">🎯 Mentorías</span>
-      </div>
-
-      <a class="kaldi-btn" href="#kaldi">
-        <span class="kaldi-btn-dot"></span>
-        Visita Kaldi Coffee
-        <span class="kaldi-btn-arrow">→</span>
-      </a>
-
-      <div class="kaldi-powered">
-        <span>Editorial engine</span>
-        <span style="color:rgba(245,166,35,0.12)">·</span>
-        <a href="https://vibraalto.cl">VibraAlto AI</a>
-        <span style="color:rgba(245,166,35,0.12)">·</span>
-        <a href="https://nerhia.com">NERHIA</a>
-      </div>
-    </div>
-
-    <!-- RIGHT: Atmosphere canvas + stats -->
-    <div class="kaldi-right">
-
-      <!-- OS-style video window -->
-      <div class="kaldi-video-frame">
-        <div class="kaldi-video-bar">
-          <div class="kaldi-video-dots">
-            <span style="background:#ff5f57"></span>
-            <span style="background:#febc2e"></span>
-            <span style="background:#28c840"></span>
-          </div>
-          <span class="kaldi-video-path">kaldi.vibraalto.cl <span style="color:rgba(245,166,35,0.5)">/</span> señales</span>
-          <span class="kaldi-video-badge">NERHIA LIVE</span>
-        </div>
-        <div class="kaldi-canvas-wrap">
-          <canvas id="kaldi-video-canvas"></canvas>
-          <div class="kaldi-video-scan"></div>
-          <div class="kaldi-video-overlay">
-            <div class="kaldi-score" id="kaldi-uvx">—</div>
-            <div class="kaldi-score-sub">ALIVE · UVX SANTIAGO</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- NERHIA live stats -->
-      <div class="kaldi-stats">
-        <div class="kaldi-stat">
-          <div class="kaldi-stat-val" id="ks-signals">—</div>
-          <div class="kaldi-stat-label">Señales NERHIA</div>
-        </div>
-        <div class="kaldi-stat">
-          <div class="kaldi-stat-val" id="ks-nodes">—</div>
-          <div class="kaldi-stat-label">Nodos activos</div>
-        </div>
-        <div class="kaldi-stat">
-          <div class="kaldi-stat-val" id="ks-conf">—</div>
-          <div class="kaldi-stat-label">Confianza avg</div>
-        </div>
-      </div>
-
-      <!-- Pipeline tag -->
-      <div class="kaldi-pipeline">
-        <span class="kaldi-pipeline-dot"></span>
-        Instagram Signal Intake
-        <span style="color:rgba(245,166,35,0.12)">→</span>
-        <span>NERHIA Engine</span>
-        <span style="color:rgba(245,166,35,0.12)">→</span>
-        <span>Kaldi Feed</span>
-        <span style="color:rgba(245,166,35,0.12)">→</span>
-        <span style="color:rgba(245,166,35,0.45)">Pipeline activo</span>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ════ NEXUS VA STRIP — Pantallas Inteligentes ════ -->
-<section class="nexus-strip" id="nexus-va">
-  <canvas id="nexus-bg-canvas"></canvas>
-
-  <div class="nexus-inner">
-
-    <!-- LEFT: TV holográfica + productos -->
-    <div class="nexus-left">
-
-      <!-- OS Window / TV display -->
-      <div class="nexus-tv">
-        <div class="nexus-tv-bar">
-          <div class="nexus-tv-dots">
-            <span style="background:#ff5f57"></span>
-            <span style="background:#febc2e"></span>
-            <span style="background:#28c840"></span>
-          </div>
-          <span class="nexus-tv-path">nexus.vibraalto.cl / <span style="color:rgba(0,212,255,0.55)">va</span> / exoleón</span>
-          <span class="nexus-tv-badge">EXOLEÓN VA</span>
-        </div>
-        <div class="nexus-canvas-wrap">
-          <canvas id="nexus-tv-canvas"></canvas>
-          <div class="nexus-tv-scan"></div>
-        </div>
-        <div class="nexus-tv-bottombar">
-          <span>● SISTEMA ACTIVO</span>
-          <span style="flex:1;text-align:center">LÍNEA VA · INFRAESTRUCTURA VISUAL</span>
-          <span>NERHIA OK</span>
-        </div>
-      </div>
-
-      <!-- 4 productos VA -->
-      <div class="nexus-products">
-        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
-          <div class="nexus-prod-name">VA ONE</div>
-          <div class="nexus-prod-desc">Señalética · Corporativo esencial</div>
-          <div class="nexus-prod-tag">4K · 18/7 · Android 13</div>
-        </a>
-        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
-          <div class="nexus-prod-name">VA PRO</div>
-          <div class="nexus-prod-desc">Educación · Touch interactivo</div>
-          <div class="nexus-prod-tag">4K · 20pts touch · LMS nativo</div>
-        </a>
-        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
-          <div class="nexus-prod-name">VA EDGE</div>
-          <div class="nexus-prod-desc">Dirección · Auditorios premium</div>
-          <div class="nexus-prod-tag">8K · OLED · 24/7 SLA</div>
-        </a>
-        <a class="nexus-prod" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
-          <div class="nexus-prod-name">VA CORE</div>
-          <div class="nexus-prod-desc">IoT · Kioscos · Vending</div>
-          <div class="nexus-prod-tag">REST · MQTT · Cloud fleet</div>
-        </a>
-      </div>
-
-    </div>
-
-    <!-- RIGHT: copy + CTA -->
-    <div class="nexus-right">
-
-      <div class="nexus-pause-tag">Infraestructura Visual Inteligente</div>
-
-      <div class="nexus-wordmark">
-        <span class="nexus-word-main">NEXUS VA</span>
-        <span class="nexus-word-sub">Línea VA · VibraAlto · LATAM 2026</span>
-      </div>
-
-      <p class="nexus-manifesto">
-        Pantallas <em>de nivel infraestructura</em> para gobiernos, educación, corporativo y minería.
-      </p>
-
-      <div class="nexus-tagline">12+ años OEM global · Exclusividad LATAM</div>
-
-      <div class="nexus-sectors">
-        <span class="nexus-sector">🏛️ Gobierno</span>
-        <span class="nexus-sector">🎓 Educación</span>
-        <span class="nexus-sector">⛏️ Minería</span>
-        <span class="nexus-sector">🤖 IoT</span>
-        <span class="nexus-sector">🏢 Corporativo</span>
-      </div>
-
-      <div class="nexus-stats">
-        <div class="nexus-stat"><div class="nexus-stat-val">12+</div><div class="nexus-stat-label">Años OEM</div></div>
-        <div class="nexus-stat"><div class="nexus-stat-val">40+</div><div class="nexus-stat-label">Países</div></div>
-        <div class="nexus-stat"><div class="nexus-stat-val">8K</div><div class="nexus-stat-label">Resolución</div></div>
-        <div class="nexus-stat"><div class="nexus-stat-val">24/7</div><div class="nexus-stat-label">Operación</div></div>
-      </div>
-
-      <a class="nexus-btn" href="https://nexus.vibraalto.cl/va" target="_blank" rel="noopener">
-        <span class="nexus-btn-dot"></span>
-        Ver Línea VA completa
-        <span class="nexus-btn-arrow">→</span>
-      </a>
-
-      <div class="nexus-powered">
-        <span>Powered by</span>
-        <span style="color:rgba(0,212,255,0.1)">·</span>
-        <a href="https://nerhia.com">NERHIA</a>
-        <span style="color:rgba(0,212,255,0.1)">·</span>
-        <a href="https://nexus.vibraalto.cl/va">NEXUS</a>
-        <span style="color:rgba(0,212,255,0.1)">·</span>
-        <a href="https://vibraalto.cl">VibraAlto</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
+<!-- Kaldi Coffee → hero carousel slide 4 -->
+<!-- Nexus VA → hero carousel slide 3 -->
 <!-- ═══ LICENCIA VA STRIP ═══ -->
 <!-- ═══════════════════════════════════════════════════════════
      FRANJA · LICENCIA VA · credencial de seguridad holográfica
@@ -6169,40 +6217,81 @@ atTick();
 })();
 
 
-/* ═══ HERO CAROUSEL ═══ */
+/* ═══ PUERTA GIRATORIA DE CRISTAL ═══ */
 (function(){
   var track=document.getElementById('heroTrack');
   var dots=document.querySelectorAll('.carousel-dot');
   var prevBtn=document.getElementById('carPrev');
   var nextBtn=document.getElementById('carNext');
   if(!track||!dots.length)return;
-  
-  var current=0,total=2,autoTimer=null;
-  
-  function goTo(idx){
-    current=((idx%total)+total)%total;
-    track.style.transform='translateX(-'+(current*50)+'%)';
-    dots.forEach(function(d,i){d.classList.toggle('active',i===current);});
+
+  var slides=track.children;
+  var current=0,total=slides.length,animating=false,autoTimer=null;
+  var DURATION=1200; /* ms — tiempo del giro completo */
+  var PERSP='perspective(1800px) ';
+
+  /* Init: slide 0 visible, rest hidden */
+  for(var i=0;i<total;i++){
+    slides[i].style.transform=PERSP+'rotateY(0deg)';
+    slides[i].style.visibility=(i===0)?'visible':'hidden';
+    slides[i].style.opacity=(i===0)?'1':'0';
   }
-  
-  function next(){goTo(current+1);}
-  function prev(){goTo(current-1);}
-  
-  function startAuto(){
-    stopAuto();
-    autoTimer=setInterval(next,8000);
+
+  function goTo(idx,dir){
+    var next=((idx%total)+total)%total;
+    if(next===current||animating)return;
+    animating=true;
+
+    var curSlide=slides[current];
+    var nxtSlide=slides[next];
+    var dirSign=(dir==='prev')?1:-1;
+
+    /* Glass sheen */
+    curSlide.classList.add('door-rotating');
+    nxtSlide.classList.add('door-rotating');
+
+    /* Current panel swings out like a revolving door */
+    curSlide.style.transition='transform '+DURATION+'ms cubic-bezier(.77,0,.175,1), opacity '+(DURATION*0.4)+'ms ease '+(DURATION*0.3)+'ms';
+    curSlide.style.transform=PERSP+'rotateY('+(dirSign*-110)+'deg)';
+    curSlide.style.opacity='0';
+
+    /* Next panel swings in from the other side */
+    nxtSlide.style.transition='none';
+    nxtSlide.style.transform=PERSP+'rotateY('+(dirSign*110)+'deg)';
+    nxtSlide.style.visibility='visible';
+    nxtSlide.style.opacity='0';
+    nxtSlide.offsetHeight; /* force reflow */
+
+    nxtSlide.style.transition='transform '+DURATION+'ms cubic-bezier(.77,0,.175,1), opacity '+(DURATION*0.3)+'ms ease '+(DURATION*0.15)+'ms';
+    nxtSlide.style.transform=PERSP+'rotateY(0deg)';
+    nxtSlide.style.opacity='1';
+
+    /* Update dots */
+    dots.forEach(function(d,i){d.classList.toggle('active',i===next);});
+
+    /* Cleanup after animation */
+    setTimeout(function(){
+      curSlide.style.visibility='hidden';
+      curSlide.classList.remove('door-rotating');
+      nxtSlide.classList.remove('door-rotating');
+      current=next;
+      animating=false;
+    },DURATION+50);
   }
-  function stopAuto(){
-    if(autoTimer){clearInterval(autoTimer);autoTimer=null;}
-  }
-  
+
+  function next(){goTo(current+1,'next');}
+  function prev(){goTo(current-1,'prev');}
+
+  function startAuto(){stopAuto();autoTimer=setInterval(next,8000);}
+  function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}}
+
   if(prevBtn) prevBtn.addEventListener('click',function(){prev();startAuto();});
   if(nextBtn) nextBtn.addEventListener('click',function(){next();startAuto();});
   dots.forEach(function(d){
-    d.addEventListener('click',function(){goTo(+this.dataset.slide);startAuto();});
+    d.addEventListener('click',function(){goTo(+this.dataset.slide,(+this.dataset.slide>current)?'next':'prev');startAuto();});
   });
-  
-  // Touch/swipe
+
+  /* Touch/swipe */
   var touchStartX=0;
   var carousel=document.getElementById('heroCarousel');
   if(carousel){
@@ -6217,7 +6306,7 @@ atTick();
     carousel.addEventListener('mouseenter',stopAuto);
     carousel.addEventListener('mouseleave',startAuto);
   }
-  
+
   startAuto();
 })();
 </script>
