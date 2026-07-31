@@ -11,6 +11,18 @@
           { "key": "Pragma", "value": "no-cache" }
         ]
       }
+    ],
+    "redirects": [
+      {
+        "source": "/hub",
+        "destination": "https://hub.vibraalto.cl/",
+        "type": 302
+      },
+      {
+        "source": "/hub/**",
+        "destination": "https://hub.vibraalto.cl/",
+        "type": 302
+      }
     ]
   }
 }
