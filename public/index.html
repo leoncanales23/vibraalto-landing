@@ -4000,27 +4000,107 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 
-<!-- ═══ ECC · Agent Operating System ═══ -->
-<section class="ecc-section" id="ecc-os">
-  <div class="ecc-inner">
-    <div class="ecc-badge"><span class="ecc-badge-dot"></span>ECC · AGENT OS</div>
-    <h2 class="ecc-h2">El Sistema Operativo de <em>Agentes</em></h2>
-    <p class="ecc-sub">ECC impulsa cada workflow del Lab — desde revisión de código hasta captación de proyectos. Un ecosistema de agentes especializados que piensa, actúa y escala.</p>
-    <div class="ecc-stats-row">
-      <div class="ecc-stat"><div class="ecc-stat-v">63</div><div class="ecc-stat-l">AGENTES</div></div>
-      <div class="ecc-stat"><div class="ecc-stat-v">249</div><div class="ecc-stat-l">SKILLS</div></div>
-      <div class="ecc-stat"><div class="ecc-stat-v">12</div><div class="ecc-stat-l">LENGUAJES</div></div>
-      <div class="ecc-stat"><div class="ecc-stat-v">∞</div><div class="ecc-stat-l">WORKFLOWS</div></div>
+<!-- ═══ EXOLEÓN · ECC COGNITIVE ATTENTION FIELD ═══ -->
+<style>
+.exo-attention{
+  position:relative;overflow:hidden;border-block:1px solid rgba(255,255,255,.07);
+  background:
+    radial-gradient(ellipse 58% 72% at 18% 46%,rgba(83,48,191,.18),transparent 72%),
+    radial-gradient(ellipse 52% 68% at 88% 45%,rgba(241,189,53,.07),transparent 72%),
+    #08070d;content-visibility:auto;contain-intrinsic-size:900px;
+}
+.exo-attention::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.16;
+  background-image:linear-gradient(rgba(102,126,234,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(102,126,234,.12) 1px,transparent 1px);
+  background-size:52px 52px;mask-image:linear-gradient(90deg,#000,transparent 48%,#000);
+}
+.exo-attention-inner{position:relative;z-index:1;max-width:1240px;margin:auto;padding:88px 24px;display:grid;grid-template-columns:minmax(360px,.92fr) minmax(390px,1.08fr);gap:42px;align-items:center;}
+.exo-identity{min-width:0;}
+.exo-kicker{display:flex;align-items:center;gap:9px;margin-bottom:14px;font:10px var(--f-mono);letter-spacing:.18em;color:#f1bd35;text-transform:uppercase;}
+.exo-kicker i{width:7px;height:7px;border-radius:50%;background:#2df18c;box-shadow:0 0 12px rgba(45,241,140,.8);animation:exoFieldPulse 2s ease-in-out infinite;}
+.exo-title{max-width:13ch;color:#fff;font-size:clamp(36px,5vw,66px);line-height:.96;letter-spacing:-.05em;}
+.exo-title em{font-style:normal;background:linear-gradient(90deg,#f1bd35,#ff7b4f 46%,#8a6cff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.exo-intro{max-width:55ch;margin-top:20px;color:#aeb5c7;font-size:15px;line-height:1.7;}
+.exo-method{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px;}
+.exo-method span{padding:7px 10px;border:1px solid rgba(132,101,255,.22);border-radius:999px;background:rgba(132,101,255,.055);color:#c9c2ff;font:9px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;}
+.exo-brain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:24px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.07);border-radius:9px;overflow:hidden;}
+.exo-brain div{padding:13px 14px;background:rgba(9,9,17,.9);}
+.exo-brain b{display:block;color:#e9ebf4;font:10px var(--f-mono);letter-spacing:.08em;}
+.exo-brain small{display:block;margin-top:4px;color:#687187;font:9px var(--f-mono);}
+.exo-visual{position:relative;margin-top:25px;min-height:360px;display:grid;place-items:center;}
+.exo-visual::before{content:'';position:absolute;width:72%;aspect-ratio:1;border-radius:50%;border:1px solid rgba(136,90,203,.28);box-shadow:0 0 70px rgba(85,49,200,.2);animation:exoFieldOrbit 18s linear infinite;}
+.exo-visual::after{content:'';position:absolute;bottom:2%;width:65%;height:28px;border-radius:50%;background:radial-gradient(ellipse,rgba(241,189,53,.32),transparent 68%);filter:blur(10px);}
+.exo-visual img{position:relative;z-index:2;width:min(100%,520px);height:auto;display:block;filter:drop-shadow(0 24px 54px rgba(0,0,0,.55));animation:exoFieldFloat 7s ease-in-out infinite;}
+.exo-console{min-width:0;border:1px solid rgba(241,189,53,.18);border-radius:16px;background:rgba(7,9,17,.86);box-shadow:0 24px 80px rgba(0,0,0,.36),0 0 46px rgba(81,50,180,.08);overflow:hidden;backdrop-filter:blur(16px);}
+.exo-console-top{display:flex;align-items:center;gap:9px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.07);font:9px var(--f-mono);letter-spacing:.12em;color:#788197;text-transform:uppercase;}
+.exo-console-top strong{color:#f1bd35;font-weight:600}.exo-console-top .live{margin-left:auto;color:#2df18c}
+.exo-attention #exo-toggle,.exo-attention #exo-invite,.exo-attention .exo-close{display:none!important;}
+.exo-attention #exo-panel{position:static!important;display:flex!important;width:100%!important;max-height:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;}
+.exo-attention #exo-hdr{padding:14px 18px;}
+.exo-attention #exo-msgs{min-height:230px;max-height:330px;padding:18px;}
+.exo-attention .exo-m{font-size:13px;line-height:1.6;}
+.exo-attention .exo-quick{padding:0 18px 14px;}
+.exo-attention .exo-quick button{font-size:10px;padding:8px 11px;}
+.exo-attention #exo-lead{margin-inline:18px;}
+.exo-attention #exo-bar{padding:14px 18px;}
+.exo-attention #exo-in{min-height:44px;font-size:13px;}
+.exo-attention #exo-go{padding-inline:18px;}
+.exo-field-note{padding:0 18px 16px;color:#687187;font:9px var(--f-mono);line-height:1.5;}
+@keyframes exoFieldPulse{50%{opacity:.35;transform:scale(.76)}}
+@keyframes exoFieldOrbit{to{transform:rotate(360deg)}}
+@keyframes exoFieldFloat{50%{transform:translateY(-10px)}}
+@media(max-width:920px){.exo-attention-inner{grid-template-columns:1fr;gap:24px}.exo-identity{text-align:center}.exo-title,.exo-intro{margin-inline:auto}.exo-kicker,.exo-method{justify-content:center}.exo-visual{min-height:300px}.exo-visual img{max-width:440px}}
+@media(max-width:560px){.exo-attention-inner{padding:62px 14px}.exo-brain{grid-template-columns:1fr}.exo-visual{min-height:260px}.exo-console{border-radius:12px}.exo-attention #exo-msgs{min-height:250px}.exo-attention .exo-quick{gap:5px}}
+@media(prefers-reduced-motion:reduce){.exo-visual img,.exo-visual::before,.exo-kicker i{animation:none!important}}
+</style>
+<section class="exo-attention" id="exoleon">
+  <div class="exo-attention-inner">
+    <div class="exo-identity">
+      <div class="exo-kicker"><i></i> EXOLEÓN · ECC COGNITIVE FIELD · ONLINE</div>
+      <h2 class="exo-title">Tu proyecto empieza con una <em>conversación.</em></h2>
+      <p class="exo-intro">ExoLeón es la nueva cara de atención de VibraAlto. Absorbe la orquestación de ECC, consulta la capacidad del laboratorio y convierte una necesidad todavía difusa en un plan técnico, un alcance y un siguiente paso comercial.</p>
+      <div class="exo-method" aria-label="Método cognitivo de ExoLeón">
+        <span>01 · Escucha</span><span>02 · Analiza</span><span>03 · Orquesta</span><span>04 · Propone</span><span>05 · Conecta</span>
+      </div>
+      <div class="exo-brain">
+        <div><b>ECC · AGENT OS</b><small>descompone y coordina el trabajo</small></div>
+        <div><b>VBC COMPUTE</b><small>razona y genera la respuesta</small></div>
+        <div><b>NEXUS MEMORY</b><small>conecta capacidades y proyectos</small></div>
+        <div><b>LEÓN · HUMAN CLOSE</b><small>valida alcance, contrato y ejecución</small></div>
+      </div>
+      <div class="exo-visual">
+        <img src="/assets/exoleon-attention.svg" width="960" height="960" loading="lazy" decoding="async" alt="ExoLeón, inteligencia de atención y arquitectura de proyectos de VibraAlto">
+      </div>
     </div>
-    <div class="ecc-harnesses">
-      <span class="ecc-harness">Claude Code</span>
-      <span class="ecc-harness">Codex</span>
-      <span class="ecc-harness">Cursor</span>
-      <span class="ecc-harness">Gemini</span>
-      <span class="ecc-harness">OpenCode</span>
-      <span class="ecc-harness">Zed</span>
+
+    <div class="exo-console" aria-label="Campo de atención ExoLeón">
+      <div class="exo-console-top"><strong>CANAL DE PROYECTOS</strong><span>ECC → VBC → NEXUS</span><span class="live">● LIVE</span></div>
+      <button id="exo-invite" type="button" hidden>Cotiza tu proyecto con IA</button>
+      <button id="exo-toggle" type="button" hidden aria-expanded="true" aria-controls="exo-panel">Abrir ExoLeón</button>
+      <div id="exo-panel" class="open" role="region" aria-label="Consultor de proyectos EXO-LEON">
+        <div id="exo-hdr">
+          <span class="exo-dot"></span>
+          <span class="exo-name">EXO-LEON</span>
+          <span class="exo-stat" id="exo-status">ECC · VBC Compute</span>
+          <button class="exo-close" id="exo-close" aria-label="Cerrar chat" hidden>×</button>
+        </div>
+        <div id="exo-msgs" aria-live="polite">
+          <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Bienvenido al campo de atención VibraAlto. Cuéntame qué quieres construir o qué problema necesitas resolver. Voy a entenderlo, organizarlo y proponerte el camino más directo para convertirlo en proyecto.</div>
+        </div>
+        <div class="exo-quick" id="exo-quick">
+          <button data-prompt="Quiero automatizar un proceso de mi empresa">Automatización</button>
+          <button data-prompt="Necesito desarrollar una aplicación o plataforma con IA">Software + IA</button>
+          <button data-prompt="Necesito diseño, prototipado o fabricación 3D">Fabricación 3D</button>
+          <button data-prompt="Quiero integrar sistemas, datos o equipos físicos">Integraciones</button>
+        </div>
+        <div id="exo-lead" hidden></div>
+        <div id="exo-bar">
+          <input id="exo-in" placeholder="Describe tu proyecto o problema..." autocomplete="off" maxlength="2000">
+          <button id="exo-go">ANALIZAR</button>
+        </div>
+      </div>
+      <p class="exo-field-note">ExoLeón prepara el diagnóstico y la ficha del proyecto. La propuesta final, condiciones y contrato son validados por una persona.</p>
     </div>
-    <a href="https://github.com/leoncanales23/ECC" target="_blank" rel="noopener" class="ecc-link">VER EN GITHUB →</a>
   </div>
 </section>
 
@@ -6350,30 +6430,7 @@ atTick();
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- EXO-LEON Chat Widget -->
-<button id="exo-invite" type="button">Cotiza tu proyecto con IA →</button>
-<button id="exo-toggle" title="Hablar con EXO-LEON" aria-label="Abrir consultor de proyectos" aria-expanded="false" aria-controls="exo-panel">🦁</button>
-<div id="exo-panel" role="dialog" aria-label="Consultor de proyectos EXO-LEON">
-  <div id="exo-hdr">
-    <span class="exo-dot"></span>
-    <span class="exo-name">EXO-LEON</span>
-    <span class="exo-stat" id="exo-status">VBC Compute</span>
-    <button class="exo-close" id="exo-close" aria-label="Cerrar chat">×</button>
-  </div>
-  <div id="exo-msgs">
-    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Cuéntame qué quieres resolver. En pocos mensajes definiré una solución inicial, su alcance y el siguiente paso con VibraAlto.</div>
-  </div>
-  <div class="exo-quick" id="exo-quick">
-    <button data-prompt="Quiero automatizar un proceso de mi empresa">Automatización</button>
-    <button data-prompt="Necesito desarrollar una aplicación o plataforma con IA">Software + IA</button>
-    <button data-prompt="Quiero integrar sistemas, datos o equipos físicos">Integraciones</button>
-  </div>
-  <div id="exo-lead" hidden></div>
-  <div id="exo-bar">
-    <input id="exo-in" placeholder="Describe tu requerimiento..." autocomplete="off"/>
-    <button id="exo-go">ENVIAR</button>
-  </div>
-</div>
+<!-- ExoLeón conversation controller: UI lives in #exoleon -->
 <script>
 (function(){
   'use strict';
