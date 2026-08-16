@@ -3500,23 +3500,28 @@ html.deck-mode .va-chapters{ display:none; }
 /* ── EXO Chat Widget ── */
 #exo-toggle{position:fixed;bottom:96px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#f5c842,#d4a017);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(212,160,23,.45),0 0 24px rgba(245,200,66,.2);z-index:9999;border:2px solid rgba(245,200,66,.3);cursor:pointer;transition:transform .2s,box-shadow .2s;font-size:24px;color:#fff;}
 #exo-toggle:hover{transform:scale(1.12);box-shadow:0 6px 28px rgba(245,200,66,.55),0 0 32px rgba(212,160,23,.3);}
-#exo-panel{position:fixed;bottom:164px;right:28px;width:330px;max-height:420px;background:rgba(10,12,22,.97);border:1px solid rgba(212,160,23,.25);border-radius:14px;z-index:9998;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 20px rgba(212,160,23,.08);backdrop-filter:blur(12px);}
+#exo-panel{position:fixed;bottom:164px;right:28px;width:min(380px,calc(100vw - 32px));max-height:min(620px,calc(100vh - 190px));background:rgba(10,12,22,.98);border:1px solid rgba(212,160,23,.25);border-radius:14px;z-index:9998;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 20px rgba(212,160,23,.08);backdrop-filter:blur(12px);}
 #exo-panel.open{display:flex;}
 #exo-hdr{padding:12px 16px;border-bottom:1px solid rgba(212,160,23,.15);display:flex;align-items:center;gap:8px;}
 .exo-dot{width:7px;height:7px;border-radius:50%;background:#f5c842;box-shadow:0 0 10px rgba(245,200,66,.6);animation:pgPulse 2s ease-in-out infinite;}
 .exo-name{font-family:'Orbitron',monospace;font-size:10px;color:#f5c842;letter-spacing:2px;}
-.exo-stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;margin-left:auto;opacity:.6;}
+.exo-stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;margin-left:auto;opacity:.6;}\n.exo-close{border:0;background:transparent;color:#8c96a7;font-size:18px;line-height:1;cursor:pointer;padding:3px 0 3px 6px;}
 #exo-msgs{flex:1;overflow-y:auto;padding:12px 16px;min-height:180px;max-height:260px;}
 .exo-m{margin-bottom:10px;font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.5;}
 .exo-m.bot{color:#c8eeff;}
 .exo-m.usr{color:#ffb432;text-align:right;}
 .exo-m .exo-who{font-size:9px;color:#7be3ff;opacity:.5;letter-spacing:1px;margin-bottom:2px;}
+.exo-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
+.exo-quick button,.exo-lead-cta{background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.22);border-radius:999px;color:#f5d56b;padding:7px 10px;font:10px 'Share Tech Mono',monospace;cursor:pointer;}
+.exo-quick button:hover,.exo-lead-cta:hover{background:rgba(245,200,66,.14);}
+.exo-lead{margin:0 16px 10px;padding:10px 12px;border:1px solid rgba(37,211,102,.22);border-radius:10px;background:rgba(37,211,102,.06);font:11px 'Share Tech Mono',monospace;color:#c8eeff;}
+.exo-lead-cta{display:inline-block;margin-top:8px;color:#7cf2a8;border-color:rgba(37,211,102,.3);text-decoration:none;}
 #exo-bar{display:flex;gap:6px;padding:10px 16px;border-top:1px solid rgba(212,160,23,.15);}
 #exo-in{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
 #exo-in:focus{border-color:rgba(212,160,23,.4);}
 #exo-go{background:linear-gradient(135deg,#d4a017,#f5c842);border:none;border-radius:8px;padding:8px 12px;color:#0a0c16;font-weight:700;font-family:'Orbitron',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;}
 #exo-go:disabled{opacity:.4;cursor:wait;}
-@media(max-width:500px){#exo-panel{width:calc(100vw - 56px);right:28px;}}
+@media(max-width:500px){#exo-panel{right:16px;bottom:148px;}#exo-toggle,#wa-float{right:16px;}}
 
 </style>
 <script>
@@ -6332,16 +6337,23 @@ atTick();
 </a>
 
 <!-- EXO-LEON Chat Widget -->
-<button id="exo-toggle" title="EXO-LEON · Agente IA">🦁</button>
-<div id="exo-panel">
+<button id="exo-toggle" title="Hablar con EXO-LEON" aria-label="Abrir consultor de proyectos" aria-expanded="false" aria-controls="exo-panel">🦁</button>
+<div id="exo-panel" role="dialog" aria-label="Consultor de proyectos EXO-LEON">
   <div id="exo-hdr">
     <span class="exo-dot"></span>
     <span class="exo-name">EXO-LEON</span>
-    <span class="exo-stat">VBC Compute · Live</span>
+    <span class="exo-stat" id="exo-status">VBC Compute</span>
+    <button class="exo-close" id="exo-close" aria-label="Cerrar chat">×</button>
   </div>
   <div id="exo-msgs">
-    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Bienvenido. Soy EXO-LEON, agente de inteligencia de VibraAlto Lab. ¿En qué vertical necesitas solución — 3D, IA, integración de sistemas o análisis de datos?</div>
+    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Cuéntame qué quieres resolver. En pocos mensajes definiré una solución inicial, su alcance y el siguiente paso con VibraAlto.</div>
   </div>
+  <div class="exo-quick" id="exo-quick">
+    <button data-prompt="Quiero automatizar un proceso de mi empresa">Automatización</button>
+    <button data-prompt="Necesito desarrollar una aplicación o plataforma con IA">Software + IA</button>
+    <button data-prompt="Quiero integrar sistemas, datos o equipos físicos">Integraciones</button>
+  </div>
+  <div id="exo-lead" hidden></div>
   <div id="exo-bar">
     <input id="exo-in" placeholder="Describe tu requerimiento..." autocomplete="off"/>
     <button id="exo-go">ENVIAR</button>
@@ -6349,24 +6361,39 @@ atTick();
 </div>
 <script>
 (function(){
-  var VBC='https://vbc-compute-layer.onrender.com';
+  'use strict';
+  var VBC='https://vbc-compute-layer.onrender.com', MAX_HISTORY=12, REQUEST_TIMEOUT=25000;
   var tgl=document.getElementById('exo-toggle'),pnl=document.getElementById('exo-panel');
   var msgs=document.getElementById('exo-msgs'),inp=document.getElementById('exo-in'),go=document.getElementById('exo-go');
-  var hist=[{role:'system',content:'Eres EXO-LEON, agente de inteligencia de VibraAlto Lab. Comunicación profesional, precisa, sin jerga callejera. Tono: consultor senior de tecnología. Nunca uses "po", "cachai", "eri", "pega" ni lenguaje coloquial chileno. Responde en español neutro-profesional. Estructura tus respuestas con claridad. Identifica la vertical del proyecto (3D, IA, datos, integración), evalúa factibilidad y propón módulos concretos del Lab. Sé conciso: máximo 3-4 oraciones por respuesta.'}];
-  tgl.addEventListener('click',function(){pnl.classList.toggle('open');if(pnl.classList.contains('open'))inp.focus();});
+  var close=document.getElementById('exo-close'),quick=document.getElementById('exo-quick');
+  var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status');
+  var hist=[],userTurns=0,qualified=false;
+  function setOpen(open){pnl.classList.toggle('open',open);tgl.setAttribute('aria-expanded',String(open));if(open)inp.focus();}
+  tgl.addEventListener('click',function(){setOpen(!pnl.classList.contains('open'));});
+  close.addEventListener('click',function(){setOpen(false);tgl.focus();});
   function addM(t,r){var d=document.createElement('div');d.className='exo-m '+(r==='user'?'usr':'bot');
     var s=document.createElement('div');s.className='exo-who';s.textContent=r==='user'?'TÚ':'EXO-LEON';
     d.appendChild(s);d.appendChild(document.createTextNode(t));msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
-  async function send(){var t=inp.value.trim();if(!t)return;inp.value='';addM(t,'user');
-    hist.push({role:'user',content:t});go.disabled=true;go.textContent='···';
-    try{var r=await fetch(VBC+'/exo/chat',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:hist})});var d=await r.json();
-      var reply=d.result||'Sin respuesta. Intenta de nuevo.';addM(reply,'bot');
-      hist.push({role:'assistant',content:reply});
-    }catch(e){addM('Compute layer despertando... intenta en 10s o escríbeme al WhatsApp →','bot');}
+  async function request(path,payload){var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},REQUEST_TIMEOUT);
+    try{var r=await fetch(VBC+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+      var d=await r.json();if(!r.ok||d.ok===false)throw new Error(d.error||'VBC no disponible');return d;
+    }finally{clearTimeout(timer);}}
+  function whatsapp(summary){return 'https://wa.me/56971747072?text='+encodeURIComponent('Hola VibraAlto, conversé con EXO-LEON. '+summary);}
+  async function qualify(){if(qualified||userTurns<3)return;qualified=true;
+    try{var q=await request('/exo/qualify',{messages:hist.slice(-MAX_HISTORY)});var summary=q.summary||'Quiero revisar mi proyecto y coordinar una conversación.';
+      lead.hidden=false;lead.className='exo-lead';lead.textContent='Proyecto perfilado. Podemos revisar alcance y próximos pasos contigo.';
+      var a=document.createElement('a');a.className='exo-lead-cta';a.href=whatsapp(summary);a.target='_blank';a.rel='noopener';a.textContent='Continuar con León por WhatsApp →';lead.appendChild(document.createElement('br'));lead.appendChild(a);
+    }catch(_){qualified=false;}}
+  async function send(value){var t=(typeof value==='string'?value:inp.value).trim();if(!t||go.disabled)return;inp.value='';quick.hidden=true;addM(t,'user');
+    hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='···';status.textContent='Analizando…';
+    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing'});var reply=d.result||'No pude construir una respuesta todavía.';addM(reply,'bot');
+      hist.push({role:'assistant',content:reply});hist=hist.slice(-MAX_HISTORY);status.textContent='VBC · '+(d.engine||'online');qualify();
+    }catch(e){status.textContent='VBC · reintentando';addM('El motor está tardando en responder. Puedes reintentar o continuar el diagnóstico directamente por WhatsApp.','bot');
+      lead.hidden=false;lead.className='exo-lead';lead.innerHTML='<a class="exo-lead-cta" target="_blank" rel="noopener" href="'+whatsapp('Quiero conversar sobre un proyecto tecnológico.')+'">Hablar con León por WhatsApp →</a>';}
     go.disabled=false;go.textContent='ENVIAR';}
   go.addEventListener('click',send);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+  quick.addEventListener('click',function(e){var b=e.target.closest('button[data-prompt]');if(b)send(b.dataset.prompt);});
 })();
 </script>
 </body>
