@@ -1,0 +1,61 @@
+name: Deploy VibraAlto Landing
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vibraalto-landing-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Validate and deploy Firebase Hosting
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify landing source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f public/index.html
+          test -f firebase.json
+          grep -q '/exo/chat' public/index.html
+          grep -q '/exo/qualify' public/index.html
+          if grep -q "role:'system'" public/index.html; then
+            echo "A system prompt must not be exposed in the browser"
+            exit 1
+          fi
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools
+
+      - name: Deploy hosting target
+        run: firebase deploy --only hosting:vibraalto-landing --project vibraaltoai-11f55 --non-interactive
+
+      - name: Verify production
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 12); do
+            page=$(curl -fsSL --max-time 20 https://vibraalto.cl || true)
+            if grep -q 'Quiero automatizar un proceso de mi empresa' <<<"$page"; then
+              echo "EXO-LEON commercial landing is live"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Production did not expose the expected release in time"
+          exit 1
