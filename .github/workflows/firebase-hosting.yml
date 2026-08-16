@@ -34,14 +34,21 @@ jobs:
             exit 1
           fi
 
+      - name: Install Firebase CLI
+        run: npm install --global firebase-tools
+
       - name: Deploy hosting target
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          channelId: live
-          projectId: vibraaltoai-11f55
-          target: vibraalto-landing
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$FIREBASE_TOKEN" || { echo "Missing FIREBASE_TOKEN"; exit 1; }
+          firebase deploy \
+            --only hosting:vibraalto-landing \
+            --project vibraaltoai-11f55 \
+            --token "$FIREBASE_TOKEN" \
+            --non-interactive
 
       - name: Verify production
         shell: bash
