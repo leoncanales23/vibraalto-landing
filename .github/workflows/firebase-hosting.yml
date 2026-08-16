@@ -34,16 +34,14 @@ jobs:
             exit 1
           fi
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
-      - name: Install Firebase CLI
-        run: npm install --global firebase-tools
-
       - name: Deploy hosting target
-        run: firebase deploy --only hosting:vibraalto-landing --project vibraaltoai-11f55 --non-interactive
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+          projectId: vibraaltoai-11f55
+          target: vibraalto-landing
 
       - name: Verify production
         shell: bash
