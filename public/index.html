@@ -3505,7 +3505,8 @@ html.deck-mode .va-chapters{ display:none; }
 #exo-hdr{padding:12px 16px;border-bottom:1px solid rgba(212,160,23,.15);display:flex;align-items:center;gap:8px;}
 .exo-dot{width:7px;height:7px;border-radius:50%;background:#f5c842;box-shadow:0 0 10px rgba(245,200,66,.6);animation:pgPulse 2s ease-in-out infinite;}
 .exo-name{font-family:'Orbitron',monospace;font-size:10px;color:#f5c842;letter-spacing:2px;}
-.exo-stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;margin-left:auto;opacity:.6;}\n.exo-close{border:0;background:transparent;color:#8c96a7;font-size:18px;line-height:1;cursor:pointer;padding:3px 0 3px 6px;}
+.exo-stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;margin-left:auto;opacity:.6;}
+.exo-close{border:0;background:transparent;color:#8c96a7;font-size:18px;line-height:1;cursor:pointer;padding:3px 0 3px 6px;}
 #exo-msgs{flex:1;overflow-y:auto;padding:12px 16px;min-height:180px;max-height:260px;}
 .exo-m{margin-bottom:10px;font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.5;}
 .exo-m.bot{color:#c8eeff;}
@@ -3516,12 +3517,25 @@ html.deck-mode .va-chapters{ display:none; }
 .exo-quick button:hover,.exo-lead-cta:hover{background:rgba(245,200,66,.14);}
 .exo-lead{margin:0 16px 10px;padding:10px 12px;border:1px solid rgba(37,211,102,.22);border-radius:10px;background:rgba(37,211,102,.06);font:11px 'Share Tech Mono',monospace;color:#c8eeff;}
 .exo-lead-cta{display:inline-block;margin-top:8px;color:#7cf2a8;border-color:rgba(37,211,102,.3);text-decoration:none;}
+#exo-invite{position:fixed;right:94px;bottom:108px;z-index:9998;padding:8px 12px;border:1px solid rgba(245,200,66,.22);border-radius:999px;background:rgba(10,12,22,.94);color:#f5d56b;font:10px 'Share Tech Mono',monospace;letter-spacing:.04em;box-shadow:0 6px 22px rgba(0,0,0,.32);cursor:pointer;transition:opacity .2s,transform .2s;}
+#exo-invite:hover{transform:translateY(-2px);}
+#exo-invite[hidden]{display:none;}
+.exo-intake{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px;}
+.exo-intake input,.exo-intake select{min-width:0;width:100%;padding:7px 8px;border:1px solid rgba(255,255,255,.1);border-radius:7px;background:#111522;color:#eef7ff;font:10px 'Share Tech Mono',monospace;outline:none;}
+.exo-intake input:focus,.exo-intake select:focus{border-color:rgba(245,200,66,.45);}
+.exo-intake .exo-wide{grid-column:1/-1;}
+.exo-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:6px;color:#95a4b8;font-size:9px;line-height:1.35;}
+.exo-consent input{width:auto;margin-top:2px;}
+.exo-submit{grid-column:1/-1;border:0;border-radius:8px;padding:9px;background:linear-gradient(135deg,#25d366,#54e58c);color:#07130b;font:700 10px 'Orbitron',monospace;letter-spacing:.08em;cursor:pointer;}
+.exo-submit:disabled{opacity:.45;cursor:not-allowed;}
+.exo-privacy{grid-column:1/-1;color:#718096;font-size:8px;line-height:1.35;}
+@media(max-width:500px){#exo-invite{right:82px;bottom:108px;}}
 #exo-bar{display:flex;gap:6px;padding:10px 16px;border-top:1px solid rgba(212,160,23,.15);}
 #exo-in{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
 #exo-in:focus{border-color:rgba(212,160,23,.4);}
 #exo-go{background:linear-gradient(135deg,#d4a017,#f5c842);border:none;border-radius:8px;padding:8px 12px;color:#0a0c16;font-weight:700;font-family:'Orbitron',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;}
 #exo-go:disabled{opacity:.4;cursor:wait;}
-@media(max-width:500px){#exo-panel{right:16px;bottom:148px;}#exo-toggle,#wa-float{right:16px;}}
+@media(max-width:500px){#exo-panel{right:16px;bottom:148px;}#exo-toggle,#wa-float{right:16px;}.exo-intake{grid-template-columns:1fr;}.exo-intake .exo-wide,.exo-consent,.exo-submit,.exo-privacy{grid-column:1;}}
 
 </style>
 <script>
@@ -6337,6 +6351,7 @@ atTick();
 </a>
 
 <!-- EXO-LEON Chat Widget -->
+<button id="exo-invite" type="button">Cotiza tu proyecto con IA →</button>
 <button id="exo-toggle" title="Hablar con EXO-LEON" aria-label="Abrir consultor de proyectos" aria-expanded="false" aria-controls="exo-panel">🦁</button>
 <div id="exo-panel" role="dialog" aria-label="Consultor de proyectos EXO-LEON">
   <div id="exo-hdr">
@@ -6366,10 +6381,12 @@ atTick();
   var tgl=document.getElementById('exo-toggle'),pnl=document.getElementById('exo-panel');
   var msgs=document.getElementById('exo-msgs'),inp=document.getElementById('exo-in'),go=document.getElementById('exo-go');
   var close=document.getElementById('exo-close'),quick=document.getElementById('exo-quick');
-  var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status');
+  var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status'),invite=document.getElementById('exo-invite');
   var hist=[],userTurns=0,qualified=false;
-  function setOpen(open){pnl.classList.toggle('open',open);tgl.setAttribute('aria-expanded',String(open));if(open)inp.focus();}
+  function track(event,detail){if(Array.isArray(window.dataLayer))window.dataLayer.push({event:event,exo_detail:detail||''});}
+  function setOpen(open){pnl.classList.toggle('open',open);tgl.setAttribute('aria-expanded',String(open));if(open){invite.hidden=true;inp.focus();track('exo_open','project_intake');}}
   tgl.addEventListener('click',function(){setOpen(!pnl.classList.contains('open'));});
+  invite.addEventListener('click',function(){setOpen(true);});
   close.addEventListener('click',function(){setOpen(false);tgl.focus();});
   function addM(t,r){var d=document.createElement('div');d.className='exo-m '+(r==='user'?'usr':'bot');
     var s=document.createElement('div');s.className='exo-who';s.textContent=r==='user'?'TÚ':'EXO-LEON';
@@ -6379,10 +6396,31 @@ atTick();
       var d=await r.json();if(!r.ok||d.ok===false)throw new Error(d.error||'VBC no disponible');return d;
     }finally{clearTimeout(timer);}}
   function whatsapp(summary){return 'https://wa.me/56971747072?text='+encodeURIComponent('Hola VibraAlto, conversé con EXO-LEON. '+summary);}
+  function renderIntake(summary){
+    lead.hidden=false;lead.className='exo-lead';
+    lead.innerHTML='<strong>Proyecto perfilado.</strong> Completa estos datos para enviarlo a León con el diagnóstico de EXO-LEON.'+
+      '<form class="exo-intake" id="exo-intake">'+
+      '<input name="name" autocomplete="name" placeholder="Tu nombre *" required maxlength="80">'+
+      '<input name="company" autocomplete="organization" placeholder="Empresa / proyecto" maxlength="100">'+
+      '<select name="budget" aria-label="Presupuesto aproximado" required><option value="">Presupuesto *</option><option>Por definir</option><option>Hasta $500.000 CLP</option><option>$500.000–$2.000.000 CLP</option><option>$2.000.000–$5.000.000 CLP</option><option>Más de $5.000.000 CLP</option></select>'+
+      '<select name="timeline" aria-label="Plazo esperado" required><option value="">Plazo *</option><option>Lo antes posible</option><option>Durante este mes</option><option>1–3 meses</option><option>Estoy explorando</option></select>'+
+      '<input class="exo-wide" name="contact" autocomplete="tel" placeholder="WhatsApp o correo *" required maxlength="120">'+
+      '<label class="exo-consent"><input name="consent" type="checkbox" required> Autorizo usar estos datos únicamente para responder sobre este proyecto.</label>'+
+      '<button class="exo-submit" type="submit">ENVIAR PROYECTO POR WHATSAPP →</button>'+
+      '<div class="exo-privacy">VibraAlto no guarda esta ficha en el navegador: se envía sólo cuando confirmas en WhatsApp.</div></form>';
+    document.getElementById('exo-intake').addEventListener('submit',function(e){
+      e.preventDefault();var fd=new FormData(e.currentTarget);
+      var brief='Proyecto calificado por EXO-LEON.%0A%0A'+
+        'Nombre: '+fd.get('name')+'%0AEmpresa/proyecto: '+(fd.get('company')||'No indicada')+
+        '%0AContacto: '+fd.get('contact')+'%0APresupuesto: '+fd.get('budget')+
+        '%0APlazo: '+fd.get('timeline')+'%0A%0ADiagnóstico: '+summary;
+      track('exo_lead_submit',fd.get('budget'));window.open(whatsapp(brief.replace(/%0A/g,'\n')),'_blank','noopener');
+    });
+    track('exo_qualified','intake_shown');
+  }
   async function qualify(){if(qualified||userTurns<3)return;qualified=true;
     try{var q=await request('/exo/qualify',{messages:hist.slice(-MAX_HISTORY)});var summary=q.summary||'Quiero revisar mi proyecto y coordinar una conversación.';
-      lead.hidden=false;lead.className='exo-lead';lead.textContent='Proyecto perfilado. Podemos revisar alcance y próximos pasos contigo.';
-      var a=document.createElement('a');a.className='exo-lead-cta';a.href=whatsapp(summary);a.target='_blank';a.rel='noopener';a.textContent='Continuar con León por WhatsApp →';lead.appendChild(document.createElement('br'));lead.appendChild(a);
+      renderIntake(summary);
     }catch(_){qualified=false;}}
   async function send(value){var t=(typeof value==='string'?value:inp.value).trim();if(!t||go.disabled)return;inp.value='';quick.hidden=true;addM(t,'user');
     hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='···';status.textContent='Analizando…';
