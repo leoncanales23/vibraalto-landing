@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://vibraalto.cl">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VIBRAALTO — Eleva tu frecuencia">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='200 240 800 600'><rect x='200' y='240' width='800' height='600' fill='%2309090b' rx='40'/><polygon points='264,269 325,284 588,756 685,574 802,796 752,809 937,809 875,795 715,501 608,697 535,562 608,417 676,548 823,276 912,268 731,268 817,276 704,479 630,349 546,510 420,282 499,268' fill='%23b0b0b0'/><polygon points='488,602 376,804 316,804 316,809 449,809 448,804 385,802 491,610' fill='%23909090'/><polygon points='608,479 567,560 608,641 649,560' fill='%23cc0000'/><polygon points='608,479 567,560 608,560' fill='%23e02020'/><polygon points='608,479 649,560 608,560' fill='%23aa0808'/></svg>">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="manifest" href="/manifest.json">
 <title>VIBRAALTO — Eleva tu frecuencia</title>
 <link rel="preconnect" href="https://nerhia-api-852702111467.us-central1.run.app" crossorigin>
@@ -3500,42 +3500,23 @@ html.deck-mode .va-chapters{ display:none; }
 /* ── EXO Chat Widget ── */
 #exo-toggle{position:fixed;bottom:96px;right:28px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#d4a017,#f5c842,#d4a017);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(212,160,23,.45),0 0 24px rgba(245,200,66,.2);z-index:9999;border:2px solid rgba(245,200,66,.3);cursor:pointer;transition:transform .2s,box-shadow .2s;font-size:24px;color:#fff;}
 #exo-toggle:hover{transform:scale(1.12);box-shadow:0 6px 28px rgba(245,200,66,.55),0 0 32px rgba(212,160,23,.3);}
-#exo-panel{position:fixed;bottom:164px;right:28px;width:min(380px,calc(100vw - 32px));max-height:min(620px,calc(100vh - 190px));background:rgba(10,12,22,.98);border:1px solid rgba(212,160,23,.25);border-radius:14px;z-index:9998;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 20px rgba(212,160,23,.08);backdrop-filter:blur(12px);}
+#exo-panel{position:fixed;bottom:164px;right:28px;width:330px;max-height:420px;background:rgba(10,12,22,.97);border:1px solid rgba(212,160,23,.25);border-radius:14px;z-index:9998;display:none;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5),0 0 20px rgba(212,160,23,.08);backdrop-filter:blur(12px);}
 #exo-panel.open{display:flex;}
 #exo-hdr{padding:12px 16px;border-bottom:1px solid rgba(212,160,23,.15);display:flex;align-items:center;gap:8px;}
 .exo-dot{width:7px;height:7px;border-radius:50%;background:#f5c842;box-shadow:0 0 10px rgba(245,200,66,.6);animation:pgPulse 2s ease-in-out infinite;}
 .exo-name{font-family:'Orbitron',monospace;font-size:10px;color:#f5c842;letter-spacing:2px;}
 .exo-stat{font-family:'Share Tech Mono',monospace;font-size:9px;color:#7be3ff;margin-left:auto;opacity:.6;}
-.exo-close{border:0;background:transparent;color:#8c96a7;font-size:18px;line-height:1;cursor:pointer;padding:3px 0 3px 6px;}
 #exo-msgs{flex:1;overflow-y:auto;padding:12px 16px;min-height:180px;max-height:260px;}
 .exo-m{margin-bottom:10px;font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.5;}
 .exo-m.bot{color:#c8eeff;}
 .exo-m.usr{color:#ffb432;text-align:right;}
 .exo-m .exo-who{font-size:9px;color:#7be3ff;opacity:.5;letter-spacing:1px;margin-bottom:2px;}
-.exo-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
-.exo-quick button,.exo-lead-cta{background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.22);border-radius:999px;color:#f5d56b;padding:7px 10px;font:10px 'Share Tech Mono',monospace;cursor:pointer;}
-.exo-quick button:hover,.exo-lead-cta:hover{background:rgba(245,200,66,.14);}
-.exo-lead{margin:0 16px 10px;padding:10px 12px;border:1px solid rgba(37,211,102,.22);border-radius:10px;background:rgba(37,211,102,.06);font:11px 'Share Tech Mono',monospace;color:#c8eeff;}
-.exo-lead-cta{display:inline-block;margin-top:8px;color:#7cf2a8;border-color:rgba(37,211,102,.3);text-decoration:none;}
-#exo-invite{position:fixed;right:94px;bottom:108px;z-index:9998;padding:8px 12px;border:1px solid rgba(245,200,66,.22);border-radius:999px;background:rgba(10,12,22,.94);color:#f5d56b;font:10px 'Share Tech Mono',monospace;letter-spacing:.04em;box-shadow:0 6px 22px rgba(0,0,0,.32);cursor:pointer;transition:opacity .2s,transform .2s;}
-#exo-invite:hover{transform:translateY(-2px);}
-#exo-invite[hidden]{display:none;}
-.exo-intake{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px;}
-.exo-intake input,.exo-intake select{min-width:0;width:100%;padding:7px 8px;border:1px solid rgba(255,255,255,.1);border-radius:7px;background:#111522;color:#eef7ff;font:10px 'Share Tech Mono',monospace;outline:none;}
-.exo-intake input:focus,.exo-intake select:focus{border-color:rgba(245,200,66,.45);}
-.exo-intake .exo-wide{grid-column:1/-1;}
-.exo-consent{grid-column:1/-1;display:flex;align-items:flex-start;gap:6px;color:#95a4b8;font-size:9px;line-height:1.35;}
-.exo-consent input{width:auto;margin-top:2px;}
-.exo-submit{grid-column:1/-1;border:0;border-radius:8px;padding:9px;background:linear-gradient(135deg,#25d366,#54e58c);color:#07130b;font:700 10px 'Orbitron',monospace;letter-spacing:.08em;cursor:pointer;}
-.exo-submit:disabled{opacity:.45;cursor:not-allowed;}
-.exo-privacy{grid-column:1/-1;color:#718096;font-size:8px;line-height:1.35;}
-@media(max-width:500px){#exo-invite{right:82px;bottom:108px;}}
 #exo-bar{display:flex;gap:6px;padding:10px 16px;border-top:1px solid rgba(212,160,23,.15);}
 #exo-in{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:8px 10px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:12px;outline:none;}
 #exo-in:focus{border-color:rgba(212,160,23,.4);}
 #exo-go{background:linear-gradient(135deg,#d4a017,#f5c842);border:none;border-radius:8px;padding:8px 12px;color:#0a0c16;font-weight:700;font-family:'Orbitron',monospace;font-size:9px;cursor:pointer;letter-spacing:1px;}
 #exo-go:disabled{opacity:.4;cursor:wait;}
-@media(max-width:500px){#exo-panel{right:16px;bottom:148px;}#exo-toggle,#wa-float{right:16px;}.exo-intake{grid-template-columns:1fr;}.exo-intake .exo-wide,.exo-consent,.exo-submit,.exo-privacy{grid-column:1;}}
+@media(max-width:500px){#exo-panel{width:calc(100vw - 56px);right:28px;}}
 
 </style>
 <script>
@@ -4000,384 +3981,29 @@ html.deck-mode .va-chapters{ display:none; }
 
 
 
-<!-- ═══ EXOLEÓN · ECC COGNITIVE ATTENTION FIELD ═══ -->
-<style>
-/* EXOLEÓN · LIVING COGNITIVE ATTENTION FIELD */
-.exo-attention{
-  --exo-cyan:#50e8ff;--exo-gold:#f1bd35;--exo-violet:#8a6cff;
-  position:relative;overflow:hidden;isolation:isolate;border-block:1px solid rgba(255,255,255,.08);
-  background:
-    radial-gradient(ellipse 60% 76% at 16% 48%,rgba(83,48,191,.24),transparent 72%),
-    radial-gradient(ellipse 48% 62% at 88% 44%,rgba(241,189,53,.09),transparent 72%),
-    linear-gradient(145deg,#07070c 0%,#0b0813 50%,#05070b 100%);
-  content-visibility:auto;contain-intrinsic-size:920px;
-}
-.exo-attention::before{
-  content:'';position:absolute;inset:0;z-index:-2;pointer-events:none;opacity:.22;
-  background-image:
-    linear-gradient(rgba(80,232,255,.09) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(138,108,255,.09) 1px,transparent 1px);
-  background-size:52px 52px;
-  mask-image:linear-gradient(90deg,#000,transparent 48%,#000);
-}
-.exo-attention::after{
-  content:'';position:absolute;z-index:-1;width:62%;height:52%;left:-14%;top:24%;
-  border-radius:50%;pointer-events:none;filter:blur(70px);opacity:.42;
-  background:conic-gradient(from 90deg,rgba(80,232,255,.16),rgba(138,108,255,.24),rgba(255,92,73,.11),rgba(80,232,255,.16));
-  animation:exoAurora 12s ease-in-out infinite alternate;animation-play-state:paused;
-}
-.exo-attention.is-online::after{animation-play-state:running}
-.exo-attention-inner{
-  position:relative;z-index:1;max-width:1240px;margin:auto;padding:88px 24px;
-  display:grid;grid-template-columns:minmax(360px,.92fr) minmax(390px,1.08fr);gap:42px;align-items:center;
-}
-.exo-identity{min-width:0}
-.exo-kicker{display:flex;align-items:center;gap:9px;margin-bottom:14px;font:10px var(--f-mono);letter-spacing:.18em;color:var(--exo-gold);text-transform:uppercase}
-.exo-kicker i{width:7px;height:7px;border-radius:50%;background:#2df18c;box-shadow:0 0 12px rgba(45,241,140,.8);animation:exoFieldPulse 2s ease-in-out infinite}
-.exo-title{max-width:13ch;color:#fff;font-size:clamp(36px,5vw,66px);line-height:.96;letter-spacing:-.05em}
-.exo-title em{font-style:normal;background:linear-gradient(90deg,#f1bd35,#ff7b4f 46%,#8a6cff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.exo-intro{max-width:55ch;margin-top:20px;color:#aeb5c7;font-size:15px;line-height:1.7}
-.exo-method{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}
-.exo-method span{padding:7px 10px;border:1px solid rgba(132,101,255,.22);border-radius:999px;background:rgba(132,101,255,.055);color:#c9c2ff;font:9px var(--f-mono);letter-spacing:.08em}
-.exo-brain{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
-.exo-brain div{position:relative;padding:12px;border:1px solid rgba(255,255,255,.07);border-radius:9px;background:rgba(255,255,255,.025);overflow:hidden}
-.exo-brain div::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:1px;background:linear-gradient(transparent,var(--exo-cyan),transparent);opacity:.45}
-.exo-brain b{display:block;color:#e9edf8;font:9px var(--f-mono);letter-spacing:.11em}
-.exo-brain small{display:block;margin-top:3px;color:#747d92;font:10px var(--f-mono)}
-
-/* Painted, breathing identity */
-.exo-visual{
-  --exo-x:0px;--exo-y:0px;--exo-rx:0deg;--exo-ry:0deg;--exo-glare-x:50%;--exo-glare-y:42%;
-  position:relative;isolation:isolate;margin-top:24px;min-height:390px;display:grid;place-items:center;
-  perspective:900px;overflow:visible;touch-action:pan-y;
-}
-.exo-visual::before{
-  content:'';position:absolute;z-index:-4;width:72%;aspect-ratio:1;border:1px solid rgba(97,222,255,.14);
-  border-radius:50%;box-shadow:0 0 70px rgba(88,76,220,.14),inset 0 0 70px rgba(80,232,255,.05);
-  animation:exoFieldOrbit 20s linear infinite;animation-play-state:paused;
-}
-.exo-visual::after{
-  content:'';position:absolute;z-index:-3;left:12%;right:12%;bottom:4%;height:26px;border-radius:50%;
-  background:radial-gradient(ellipse,rgba(80,232,255,.32),rgba(106,75,226,.15) 46%,transparent 72%);
-  filter:blur(13px);transform:scaleX(.9);animation:exoGround 5s ease-in-out infinite;animation-play-state:paused;
-}
-.exo-attention.is-online .exo-visual::before,
-.exo-attention.is-online .exo-visual::after{animation-play-state:running}
-.exo-art-layer{
-  position:relative;z-index:3;width:min(100%,530px);will-change:transform;
-  transform-style:preserve-3d;
-  transform:translate3d(var(--exo-x),var(--exo-y),0) rotateX(var(--exo-rx)) rotateY(var(--exo-ry));
-  transition:transform 420ms cubic-bezier(.23,1,.32,1);
-  animation:exoFieldFloat 7s ease-in-out infinite;animation-play-state:paused;
-}
-.exo-attention.is-online .exo-art-layer{animation-play-state:running}
-.exo-art-layer img{position:relative;z-index:1;display:block;width:100%;height:auto;filter:saturate(1.12) contrast(1.04) drop-shadow(0 26px 44px rgba(0,0,0,.58));user-select:none}
-.exo-glass{
-  position:absolute;z-index:4;inset:6% 8%;pointer-events:none;border-radius:46% 46% 38% 38%;
-  background:
-    radial-gradient(circle at var(--exo-glare-x) var(--exo-glare-y),rgba(255,255,255,.25),transparent 14%),
-    linear-gradient(112deg,transparent 18%,rgba(80,232,255,.08) 38%,transparent 56%,rgba(241,189,53,.08) 78%,transparent);
-  mix-blend-mode:screen;filter:blur(.3px);opacity:.74;transform:translateZ(36px);
-}
-.exo-scan-beam{
-  position:absolute;z-index:5;left:14%;right:14%;top:16%;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(80,232,255,.35),#bff8ff,rgba(80,232,255,.25),transparent);
-  box-shadow:0 0 15px rgba(80,232,255,.75);opacity:0;
-  animation:exoPortraitScan 6.2s ease-in-out infinite;animation-play-state:paused;
-}
-.exo-attention.is-online .exo-scan-beam{animation-play-state:running}
-.exo-paint{position:absolute;z-index:-2;border-radius:50%;pointer-events:none;filter:blur(28px);mix-blend-mode:screen;opacity:.52}
-.exo-paint.warm{width:43%;height:48%;left:15%;top:20%;background:radial-gradient(circle,rgba(255,88,53,.42),rgba(241,189,53,.14) 46%,transparent 72%);animation:exoPaintWarm 6s ease-in-out infinite;animation-play-state:paused}
-.exo-paint.cool{width:48%;height:53%;right:10%;top:13%;background:radial-gradient(circle,rgba(74,184,255,.38),rgba(122,73,232,.19) 52%,transparent 74%);animation:exoPaintCool 7.6s ease-in-out infinite;animation-play-state:paused}
-.exo-attention.is-online .exo-paint{animation-play-state:running}
-.exo-orbit{position:absolute;z-index:-1;border-radius:50%;pointer-events:none}
-.exo-orbit.a{width:82%;aspect-ratio:1;border:1px solid rgba(80,232,255,.16);box-shadow:inset 14px 0 28px rgba(80,232,255,.07);animation:exoOrbitA 14s linear infinite;animation-play-state:paused}
-.exo-orbit.b{width:63%;aspect-ratio:1;border:1px dashed rgba(241,189,53,.18);transform:rotate(24deg);animation:exoOrbitB 22s linear infinite;animation-play-state:paused}
-.exo-attention.is-online .exo-orbit{animation-play-state:running}
-.exo-comet{position:absolute;z-index:6;width:6px;height:6px;border-radius:50%;background:#dffcff;box-shadow:0 0 8px #fff,0 0 20px var(--exo-cyan);pointer-events:none}
-.exo-comet::after{content:'';position:absolute;right:3px;top:2px;width:70px;height:1px;transform-origin:right;background:linear-gradient(90deg,transparent,rgba(80,232,255,.7))}
-.exo-comet.one{left:10%;top:26%;animation:exoCometOne 8s ease-in-out infinite;animation-play-state:paused}
-.exo-comet.two{right:15%;top:37%;animation:exoCometTwo 10s ease-in-out infinite 1.8s;animation-play-state:paused}
-.exo-attention.is-online .exo-comet{animation-play-state:running}
-.exo-embers{position:absolute;inset:8% 7% 14%;z-index:6;pointer-events:none}
-.exo-embers i{--tx:0px;position:absolute;width:3px;height:3px;border-radius:50%;background:var(--exo-gold);box-shadow:0 0 8px currentColor;color:var(--exo-gold);opacity:0;animation:exoEmber 4.8s ease-out infinite;animation-play-state:paused}
-.exo-embers i:nth-child(1){left:12%;top:70%;--tx:-18px;animation-delay:.2s}.exo-embers i:nth-child(2){left:24%;top:82%;--tx:12px;animation-delay:1.1s}
-.exo-embers i:nth-child(3){left:38%;top:75%;--tx:-8px;animation-delay:2.4s}.exo-embers i:nth-child(4){left:56%;top:83%;--tx:17px;animation-delay:.8s}
-.exo-embers i:nth-child(5){left:72%;top:72%;--tx:-14px;animation-delay:3.1s}.exo-embers i:nth-child(6){left:86%;top:78%;--tx:9px;animation-delay:1.7s}
-.exo-embers i:nth-child(7){left:16%;top:55%;--tx:13px;animation-delay:3.8s}.exo-embers i:nth-child(8){left:80%;top:57%;--tx:-10px;animation-delay:2s}
-.exo-attention.is-online .exo-embers i{animation-play-state:running}
-
-/* Holographic ship channel */
-.exo-console{
-  position:relative;isolation:isolate;border:1px solid rgba(80,232,255,.22);border-radius:16px;
-  background:linear-gradient(145deg,rgba(8,15,28,.94),rgba(13,9,25,.92));
-  box-shadow:0 28px 90px rgba(0,0,0,.45),0 0 0 1px rgba(138,108,255,.08),inset 0 0 45px rgba(80,232,255,.025);
-  overflow:hidden;transform:translateZ(0);
-}
-.exo-console::before{
-  content:'';position:absolute;z-index:4;left:-10%;right:-10%;height:92px;top:-120px;pointer-events:none;opacity:.42;
-  background:linear-gradient(180deg,transparent,rgba(80,232,255,.07),rgba(80,232,255,.18),rgba(80,232,255,.04),transparent);
-  filter:blur(3px);animation:exoConsoleSweep 7.5s linear infinite;animation-play-state:paused;
-}
-.exo-console::after{
-  content:'';position:absolute;z-index:5;inset:0;pointer-events:none;border-radius:inherit;
-  background:
-    linear-gradient(90deg,var(--exo-cyan),transparent 18%) top left/34% 1px no-repeat,
-    linear-gradient(180deg,var(--exo-cyan),transparent 18%) top left/1px 34% no-repeat,
-    linear-gradient(270deg,var(--exo-violet),transparent 20%) bottom right/38% 1px no-repeat,
-    linear-gradient(0deg,var(--exo-violet),transparent 20%) bottom right/1px 38% no-repeat;
-  opacity:.68;
-}
-.exo-attention.is-online .exo-console::before{animation-play-state:running}
-.exo-console-top{
-  position:relative;z-index:6;min-height:45px;padding:11px 15px;display:flex;align-items:center;gap:12px;
-  border-bottom:1px solid rgba(80,232,255,.13);background:rgba(4,9,17,.82);
-  color:#6e7d96;font:8px var(--f-mono);letter-spacing:.13em;
-}
-.exo-console-top strong{color:#e8faff;font-size:9px;letter-spacing:.16em}
-.exo-console-top>span:nth-of-type(1){margin-left:auto}
-.exo-console-top .live{display:flex;align-items:center;gap:6px;color:#63f2b0;white-space:nowrap}
-.exo-console-top .live i{width:5px;height:5px;border-radius:50%;background:#39f19a;box-shadow:0 0 10px rgba(57,241,154,.9);animation:exoFieldPulse 1.8s infinite}
-.exo-signal{display:flex!important;align-items:flex-end;gap:2px;height:12px;margin-left:0!important}
-.exo-signal i{display:block;width:2px;background:var(--exo-cyan);box-shadow:0 0 5px rgba(80,232,255,.8);animation:exoSignal 1.1s ease-in-out infinite;animation-play-state:paused}
-.exo-signal i:nth-child(1){height:4px}.exo-signal i:nth-child(2){height:8px;animation-delay:.12s}.exo-signal i:nth-child(3){height:12px;animation-delay:.24s}.exo-signal i:nth-child(4){height:7px;animation-delay:.36s}
-.exo-attention.is-online .exo-signal i{animation-play-state:running}
-.exo-transmission{
-  position:relative;z-index:3;display:flex;align-items:center;gap:9px;padding:8px 16px;
-  border-bottom:1px solid rgba(138,108,255,.13);overflow:hidden;
-  background:linear-gradient(90deg,rgba(80,232,255,.05),rgba(138,108,255,.07),rgba(80,232,255,.02));
-  font:8px var(--f-mono);letter-spacing:.12em;color:#7790ab;
-}
-.exo-transmission::before{content:'';width:22px;height:1px;background:var(--exo-cyan);box-shadow:0 0 9px var(--exo-cyan)}
-.exo-transmission b{color:var(--exo-cyan);font-weight:500;white-space:nowrap}
-.exo-transmission span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity .18s}
-.exo-transmission strong{margin-left:auto;color:#42eba0;font-size:7px;white-space:nowrap}
-.exo-attention #exo-toggle,.exo-attention #exo-invite,.exo-attention .exo-close{display:none!important}
-.exo-attention #exo-panel{position:relative!important;z-index:2;display:flex!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;max-height:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:hidden!important}
-.exo-attention #exo-panel::before{
-  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.12;
-  background:repeating-linear-gradient(180deg,transparent 0,transparent 4px,rgba(80,232,255,.11) 5px);
-}
-.exo-attention #exo-hdr{padding-inline:18px;border-bottom-color:rgba(80,232,255,.11);background:rgba(7,11,22,.42)}
-.exo-attention #exo-msgs{min-height:300px;max-height:390px;padding:18px;scrollbar-color:rgba(80,232,255,.2) transparent}
-.exo-attention .exo-m{
-  position:relative;width:fit-content;max-width:90%;margin-bottom:12px;padding:11px 13px;
-  border:1px solid rgba(80,232,255,.14);border-left-color:rgba(80,232,255,.64);border-radius:2px 10px 10px 10px;
-  background:linear-gradient(120deg,rgba(80,232,255,.065),rgba(138,108,255,.045));
-  color:#d3f5ff;text-shadow:0 0 12px rgba(80,232,255,.12);box-shadow:inset 12px 0 26px rgba(80,232,255,.025);
-}
-.exo-attention .exo-m.bot::after{
-  content:'';position:absolute;width:4px;height:4px;right:8px;top:8px;border-radius:50%;
-  background:var(--exo-cyan);box-shadow:0 0 8px var(--exo-cyan);opacity:.7;
-}
-.exo-attention .exo-m.usr{
-  margin-left:auto;border-color:rgba(241,189,53,.17);border-right-color:rgba(241,189,53,.65);border-left-color:rgba(241,189,53,.17);
-  border-radius:10px 2px 10px 10px;background:linear-gradient(120deg,rgba(241,189,53,.055),rgba(255,90,64,.04));
-  color:#ffd966;text-align:right;text-shadow:0 0 12px rgba(241,189,53,.12);
-}
-.exo-attention .exo-m .exo-who{color:var(--exo-cyan);opacity:.68}
-.exo-attention .exo-m.usr .exo-who{color:var(--exo-gold)}
-.exo-attention .exo-quick{gap:6px;padding:0 18px 12px}
-.exo-attention .exo-quick button,.exo-attention .exo-lead-cta{
-  border-color:rgba(80,232,255,.17);background:rgba(80,232,255,.045);color:#9eeeff;
-  transition:border-color .2s,background .2s,transform .2s,box-shadow .2s;
-}
-.exo-attention .exo-quick button:hover,.exo-attention .exo-lead-cta:hover{
-  border-color:rgba(80,232,255,.42);background:rgba(80,232,255,.1);box-shadow:0 0 18px rgba(80,232,255,.08);transform:translateY(-1px);
-}
-.exo-attention #exo-bar{position:relative;padding:14px 18px;background:rgba(4,8,15,.55);border-top-color:rgba(80,232,255,.12)}
-.exo-attention #exo-in{
-  min-height:45px;border-color:rgba(80,232,255,.2);background:rgba(5,12,22,.88);color:#e9fbff;font-size:13px;
-  box-shadow:inset 0 0 20px rgba(80,232,255,.025);transition:border-color .2s,box-shadow .2s;
-}
-.exo-attention #exo-in:focus{border-color:rgba(80,232,255,.6);box-shadow:0 0 0 3px rgba(80,232,255,.055),inset 0 0 25px rgba(80,232,255,.04)}
-.exo-attention #exo-go{
-  position:relative;overflow:hidden;padding-inline:18px;border-color:rgba(80,232,255,.3);
-  background:linear-gradient(120deg,rgba(80,232,255,.12),rgba(138,108,255,.13));color:#dffbff;
-  text-shadow:0 0 10px rgba(80,232,255,.5);
-}
-.exo-attention #exo-go::before{content:'';position:absolute;inset:0;transform:translateX(-120%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);animation:exoButtonSweep 4s ease-in-out infinite;animation-play-state:paused}
-.exo-attention.is-online #exo-go::before{animation-play-state:running}
-.exo-field-note{padding:0 18px 16px;color:#687187;font:9px var(--f-mono);line-height:1.5}
-
-@keyframes exoFieldPulse{50%{opacity:.35;transform:scale(.76)}}
-@keyframes exoAurora{50%{transform:translate3d(7%,2%,0) scale(1.1);opacity:.58}}
-@keyframes exoFieldOrbit{to{transform:rotate(360deg)}}
-@keyframes exoFieldFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}
-@keyframes exoGround{50%{transform:scaleX(.72);opacity:.58}}
-@keyframes exoPortraitScan{0%,18%{top:15%;opacity:0}25%{opacity:.85}70%{opacity:.45}82%,100%{top:84%;opacity:0}}
-@keyframes exoPaintWarm{50%{transform:translate(8px,-5px) scale(1.11);opacity:.65}}
-@keyframes exoPaintCool{50%{transform:translate(-7px,8px) scale(.92);opacity:.38}}
-@keyframes exoOrbitA{to{transform:rotate(360deg)}}
-@keyframes exoOrbitB{to{transform:rotate(-336deg)}}
-@keyframes exoCometOne{0%,16%{transform:translate(-60px,70px);opacity:0}24%,45%{opacity:1}62%,100%{transform:translate(290px,-130px);opacity:0}}
-@keyframes exoCometTwo{0%,22%{transform:translate(70px,55px) rotate(180deg);opacity:0}30%,48%{opacity:.8}68%,100%{transform:translate(-250px,-95px) rotate(180deg);opacity:0}}
-@keyframes exoEmber{0%{transform:translate(0,15px) scale(.5);opacity:0}20%{opacity:.9}100%{transform:translate(var(--tx),-75px) scale(.15);opacity:0}}
-@keyframes exoConsoleSweep{0%,10%{transform:translateY(0);opacity:0}16%{opacity:.42}72%{opacity:.18}82%,100%{transform:translateY(660px);opacity:0}}
-@keyframes exoSignal{0%,100%{opacity:.3;transform:scaleY(.48)}50%{opacity:1;transform:scaleY(1)}}
-@keyframes exoButtonSweep{0%,68%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
-
-@media(max-width:920px){
-  .exo-attention-inner{grid-template-columns:1fr;gap:24px}.exo-identity{text-align:center}.exo-title,.exo-intro{margin-inline:auto}
-  .exo-kicker,.exo-method{justify-content:center}.exo-visual{min-height:340px}.exo-art-layer{max-width:460px}
-}
-@media(max-width:560px){
-  .exo-attention-inner{padding:62px 14px}.exo-brain{grid-template-columns:1fr}.exo-visual{min-height:290px;margin-top:14px}
-  .exo-art-layer{max-width:390px}.exo-console{border-radius:12px}.exo-attention #exo-msgs{min-height:260px;max-height:340px}
-  .exo-console-top{gap:7px;padding-inline:10px}.exo-console-top>span:nth-of-type(1){display:none}.exo-transmission{padding-inline:11px}
-  .exo-transmission b{display:none}.exo-attention .exo-quick{gap:5px}
-}
-@media(prefers-reduced-motion:reduce){
-  .exo-attention::after,.exo-kicker i,.exo-visual::before,.exo-visual::after,.exo-art-layer,.exo-scan-beam,.exo-paint,.exo-orbit,.exo-comet,.exo-embers i,
-  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before{animation:none!important}
-  .exo-art-layer{transform:none!important;transition:none!important}
-}
-</style>
-<section class="exo-attention" id="exoleon">
-  <div class="exo-attention-inner">
-    <div class="exo-identity">
-      <div class="exo-kicker"><i></i> EXOLEÓN · ECC COGNITIVE FIELD · ONLINE</div>
-      <h2 class="exo-title">Tu proyecto empieza con una <em>conversación.</em></h2>
-      <p class="exo-intro">ExoLeón es la nueva cara de atención de VibraAlto. Absorbe la orquestación de ECC, consulta la capacidad del laboratorio y convierte una necesidad todavía difusa en un plan técnico, un alcance y un siguiente paso comercial.</p>
-      <div class="exo-method" aria-label="Método cognitivo de ExoLeón">
-        <span>01 · Escucha</span><span>02 · Analiza</span><span>03 · Orquesta</span><span>04 · Propone</span><span>05 · Conecta</span>
-      </div>
-      <div class="exo-brain">
-        <div><b>ECC · AGENT OS</b><small>descompone y coordina el trabajo</small></div>
-        <div><b>VBC COMPUTE</b><small>razona y genera la respuesta</small></div>
-        <div><b>NEXUS MEMORY</b><small>conecta capacidades y proyectos</small></div>
-        <div><b>LEÓN · HUMAN CLOSE</b><small>valida alcance, contrato y ejecución</small></div>
-      </div>
-      <div class="exo-visual">
-        <span class="exo-paint warm" aria-hidden="true"></span>
-        <span class="exo-paint cool" aria-hidden="true"></span>
-        <span class="exo-orbit a" aria-hidden="true"></span>
-        <span class="exo-orbit b" aria-hidden="true"></span>
-        <span class="exo-comet one" aria-hidden="true"></span>
-        <span class="exo-comet two" aria-hidden="true"></span>
-        <div class="exo-art-layer">
-          <img src="/assets/exoleon-attention.svg" width="960" height="960" loading="lazy" decoding="async" alt="ExoLeón, inteligencia de atención y arquitectura de proyectos de VibraAlto">
-          <span class="exo-glass" aria-hidden="true"></span>
-          <span class="exo-scan-beam" aria-hidden="true"></span>
-        </div>
-        <span class="exo-embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      </div>
+<!-- ═══ ECC · Agent Operating System ═══ -->
+<section class="ecc-section" id="ecc-os">
+  <div class="ecc-inner">
+    <div class="ecc-badge"><span class="ecc-badge-dot"></span>ECC · AGENT OS</div>
+    <h2 class="ecc-h2">El Sistema Operativo de <em>Agentes</em></h2>
+    <p class="ecc-sub">ECC impulsa cada workflow del Lab — desde revisión de código hasta captación de proyectos. Un ecosistema de agentes especializados que piensa, actúa y escala.</p>
+    <div class="ecc-stats-row">
+      <div class="ecc-stat"><div class="ecc-stat-v">63</div><div class="ecc-stat-l">AGENTES</div></div>
+      <div class="ecc-stat"><div class="ecc-stat-v">249</div><div class="ecc-stat-l">SKILLS</div></div>
+      <div class="ecc-stat"><div class="ecc-stat-v">12</div><div class="ecc-stat-l">LENGUAJES</div></div>
+      <div class="ecc-stat"><div class="ecc-stat-v">∞</div><div class="ecc-stat-l">WORKFLOWS</div></div>
     </div>
-
-    <div class="exo-console" aria-label="Campo de atención ExoLeón">
-      <div class="exo-console-top">
-        <strong>ENLACE DE NAVE</strong>
-        <span>ECC → VBC → NEXUS</span>
-        <span class="exo-signal" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span class="live"><i aria-hidden="true"></i>432 HZ · LOCKED</span>
-      </div>
-      <div class="exo-transmission" aria-live="polite">
-        <b>TRANSMISIÓN</b><span id="exo-link-copy">CANAL DE PROYECTOS LISTO</span><strong>ONLINE</strong>
-      </div>
-      <button id="exo-invite" type="button" hidden>Cotiza tu proyecto con IA</button>
-      <button id="exo-toggle" type="button" hidden aria-expanded="true" aria-controls="exo-panel">Abrir ExoLeón</button>
-      <div id="exo-panel" class="open" role="region" aria-label="Consultor de proyectos EXO-LEON">
-        <div id="exo-hdr">
-          <span class="exo-dot"></span>
-          <span class="exo-name">EXO-LEON</span>
-          <span class="exo-stat" id="exo-status">ECC · VBC Compute</span>
-          <button class="exo-close" id="exo-close" aria-label="Cerrar chat" hidden>×</button>
-        </div>
-        <div id="exo-msgs" aria-live="polite">
-          <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Enlace establecido. Estás a punto de hablar con la nave del futuro. Cuéntame qué quieres construir o qué problema necesitas resolver: voy a entenderlo, organizarlo y proponerte la ruta más directa para convertirlo en un proyecto real.</div>
-        </div>
-        <div class="exo-quick" id="exo-quick">
-          <button data-prompt="Quiero automatizar un proceso de mi empresa">Automatización</button>
-          <button data-prompt="Necesito desarrollar una aplicación o plataforma con IA">Software + IA</button>
-          <button data-prompt="Necesito diseño, prototipado o fabricación 3D">Fabricación 3D</button>
-          <button data-prompt="Quiero integrar sistemas, datos o equipos físicos">Integraciones</button>
-        </div>
-        <div id="exo-lead" hidden></div>
-        <div id="exo-bar">
-          <input id="exo-in" placeholder="Describe tu proyecto o problema..." autocomplete="off" maxlength="2000">
-          <button id="exo-go">ANALIZAR</button>
-        </div>
-      </div>
-      <p class="exo-field-note">ExoLeón prepara el diagnóstico y la ficha del proyecto. La propuesta final, condiciones y contrato son validados por una persona.</p>
+    <div class="ecc-harnesses">
+      <span class="ecc-harness">Claude Code</span>
+      <span class="ecc-harness">Codex</span>
+      <span class="ecc-harness">Cursor</span>
+      <span class="ecc-harness">Gemini</span>
+      <span class="ecc-harness">OpenCode</span>
+      <span class="ecc-harness">Zed</span>
     </div>
+    <a href="https://github.com/leoncanales23/ECC" target="_blank" rel="noopener" class="ecc-link">VER EN GITHUB →</a>
   </div>
 </section>
-
-<script>
-/* ExoLeón living field: visual-only, no network or user-data handling. */
-(function(){
-  const field=document.getElementById('exoleon');
-  if(!field)return;
-  const visual=field.querySelector('.exo-visual');
-  const linkCopy=document.getElementById('exo-link-copy');
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  let frame=0,timer=0,index=0;
-  const transmissions=[
-    'CANAL DE PROYECTOS LISTO',
-    'MEMORIA NEXUS EN LÍNEA',
-    'ECC ORQUESTANDO CAPACIDADES',
-    'VBC COMPUTE · ENLACE ESTABLE'
-  ];
-  function resetVisual(){
-    if(!visual)return;
-    visual.style.setProperty('--exo-x','0px');
-    visual.style.setProperty('--exo-y','0px');
-    visual.style.setProperty('--exo-rx','0deg');
-    visual.style.setProperty('--exo-ry','0deg');
-    visual.style.setProperty('--exo-glare-x','50%');
-    visual.style.setProperty('--exo-glare-y','42%');
-  }
-  function move(event){
-    if(reduce.matches||!visual)return;
-    cancelAnimationFrame(frame);
-    frame=requestAnimationFrame(function(){
-      const box=visual.getBoundingClientRect();
-      const nx=Math.max(-1,Math.min(1,((event.clientX-box.left)/box.width-.5)*2));
-      const ny=Math.max(-1,Math.min(1,((event.clientY-box.top)/box.height-.5)*2));
-      visual.style.setProperty('--exo-x',(nx*7).toFixed(2)+'px');
-      visual.style.setProperty('--exo-y',(ny*5).toFixed(2)+'px');
-      visual.style.setProperty('--exo-rx',(-ny*2.2).toFixed(2)+'deg');
-      visual.style.setProperty('--exo-ry',(nx*3.2).toFixed(2)+'deg');
-      visual.style.setProperty('--exo-glare-x',((nx+1)*50).toFixed(1)+'%');
-      visual.style.setProperty('--exo-glare-y',((ny+1)*50).toFixed(1)+'%');
-    });
-  }
-  function stopTransmission(){
-    if(timer){clearInterval(timer);timer=0;}
-  }
-  function startTransmission(){
-    if(reduce.matches||timer||!linkCopy)return;
-    timer=setInterval(function(){
-      linkCopy.style.opacity='0';
-      setTimeout(function(){
-        index=(index+1)%transmissions.length;
-        linkCopy.textContent=transmissions[index];
-        linkCopy.style.opacity='1';
-      },180);
-    },3400);
-  }
-  if(visual&&window.matchMedia('(hover:hover) and (pointer:fine)').matches){
-    visual.addEventListener('pointermove',move,{passive:true});
-    visual.addEventListener('pointerleave',resetVisual,{passive:true});
-  }
-  if('IntersectionObserver'in window){
-    const observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        field.classList.toggle('is-online',entry.isIntersecting);
-        if(entry.isIntersecting)startTransmission();else stopTransmission();
-      });
-    },{rootMargin:'120px 0px',threshold:.06});
-    observer.observe(field);
-  }else{
-    field.classList.add('is-online');
-    startTransmission();
-  }
-  reduce.addEventListener&&reduce.addEventListener('change',function(){
-    resetVisual();
-    if(reduce.matches)stopTransmission();else if(field.classList.contains('is-online'))startTransmission();
-  });
-})();
-</script>
 
 <!-- ════ NERHIA LIVE WINDOW ════ -->
 
@@ -6705,65 +6331,42 @@ atTick();
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- ExoLeón conversation controller: UI lives in #exoleon -->
+<!-- EXO-LEON Chat Widget -->
+<button id="exo-toggle" title="EXO-LEON · Agente IA">🦁</button>
+<div id="exo-panel">
+  <div id="exo-hdr">
+    <span class="exo-dot"></span>
+    <span class="exo-name">EXO-LEON</span>
+    <span class="exo-stat">VBC Compute · Live</span>
+  </div>
+  <div id="exo-msgs">
+    <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Bienvenido. Soy EXO-LEON, agente de inteligencia de VibraAlto Lab. ¿En qué vertical necesitas solución — 3D, IA, integración de sistemas o análisis de datos?</div>
+  </div>
+  <div id="exo-bar">
+    <input id="exo-in" placeholder="Describe tu requerimiento..." autocomplete="off"/>
+    <button id="exo-go">ENVIAR</button>
+  </div>
+</div>
 <script>
 (function(){
-  'use strict';
-  var VBC='https://vbc-compute-layer.onrender.com', MAX_HISTORY=12, REQUEST_TIMEOUT=25000;
+  var VBC='https://vbc-compute-layer.onrender.com';
   var tgl=document.getElementById('exo-toggle'),pnl=document.getElementById('exo-panel');
   var msgs=document.getElementById('exo-msgs'),inp=document.getElementById('exo-in'),go=document.getElementById('exo-go');
-  var close=document.getElementById('exo-close'),quick=document.getElementById('exo-quick');
-  var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status'),invite=document.getElementById('exo-invite');
-  var hist=[],userTurns=0,qualified=false;
-  function track(event,detail){if(Array.isArray(window.dataLayer))window.dataLayer.push({event:event,exo_detail:detail||''});}
-  function setOpen(open){pnl.classList.toggle('open',open);tgl.setAttribute('aria-expanded',String(open));if(open){invite.hidden=true;inp.focus();track('exo_open','project_intake');}}
-  tgl.addEventListener('click',function(){setOpen(!pnl.classList.contains('open'));});
-  invite.addEventListener('click',function(){setOpen(true);});
-  close.addEventListener('click',function(){setOpen(false);tgl.focus();});
+  var hist=[{role:'system',content:'Eres EXO-LEON, agente de inteligencia de VibraAlto Lab. Comunicación profesional, precisa, sin jerga callejera. Tono: consultor senior de tecnología. Nunca uses "po", "cachai", "eri", "pega" ni lenguaje coloquial chileno. Responde en español neutro-profesional. Estructura tus respuestas con claridad. Identifica la vertical del proyecto (3D, IA, datos, integración), evalúa factibilidad y propón módulos concretos del Lab. Sé conciso: máximo 3-4 oraciones por respuesta.'}];
+  tgl.addEventListener('click',function(){pnl.classList.toggle('open');if(pnl.classList.contains('open'))inp.focus();});
   function addM(t,r){var d=document.createElement('div');d.className='exo-m '+(r==='user'?'usr':'bot');
     var s=document.createElement('div');s.className='exo-who';s.textContent=r==='user'?'TÚ':'EXO-LEON';
     d.appendChild(s);d.appendChild(document.createTextNode(t));msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
-  async function request(path,payload){var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},REQUEST_TIMEOUT);
-    try{var r=await fetch(VBC+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
-      var d=await r.json();if(!r.ok||d.ok===false)throw new Error(d.error||'VBC no disponible');return d;
-    }finally{clearTimeout(timer);}}
-  function whatsapp(summary){return 'https://wa.me/56971747072?text='+encodeURIComponent('Hola VibraAlto, conversé con EXO-LEON. '+summary);}
-  function renderIntake(summary){
-    lead.hidden=false;lead.className='exo-lead';
-    lead.innerHTML='<strong>Proyecto perfilado.</strong> Completa estos datos para enviarlo a León con el diagnóstico de EXO-LEON.'+
-      '<form class="exo-intake" id="exo-intake">'+
-      '<input name="name" autocomplete="name" placeholder="Tu nombre *" required maxlength="80">'+
-      '<input name="company" autocomplete="organization" placeholder="Empresa / proyecto" maxlength="100">'+
-      '<select name="budget" aria-label="Presupuesto aproximado" required><option value="">Presupuesto *</option><option>Por definir</option><option>Hasta $500.000 CLP</option><option>$500.000–$2.000.000 CLP</option><option>$2.000.000–$5.000.000 CLP</option><option>Más de $5.000.000 CLP</option></select>'+
-      '<select name="timeline" aria-label="Plazo esperado" required><option value="">Plazo *</option><option>Lo antes posible</option><option>Durante este mes</option><option>1–3 meses</option><option>Estoy explorando</option></select>'+
-      '<input class="exo-wide" name="contact" autocomplete="tel" placeholder="WhatsApp o correo *" required maxlength="120">'+
-      '<label class="exo-consent"><input name="consent" type="checkbox" required> Autorizo usar estos datos únicamente para responder sobre este proyecto.</label>'+
-      '<button class="exo-submit" type="submit">ENVIAR PROYECTO POR WHATSAPP →</button>'+
-      '<div class="exo-privacy">VibraAlto no guarda esta ficha en el navegador: se envía sólo cuando confirmas en WhatsApp.</div></form>';
-    document.getElementById('exo-intake').addEventListener('submit',function(e){
-      e.preventDefault();var fd=new FormData(e.currentTarget);
-      var brief='Proyecto calificado por EXO-LEON.%0A%0A'+
-        'Nombre: '+fd.get('name')+'%0AEmpresa/proyecto: '+(fd.get('company')||'No indicada')+
-        '%0AContacto: '+fd.get('contact')+'%0APresupuesto: '+fd.get('budget')+
-        '%0APlazo: '+fd.get('timeline')+'%0A%0ADiagnóstico: '+summary;
-      track('exo_lead_submit',fd.get('budget'));window.open(whatsapp(brief.replace(/%0A/g,'\n')),'_blank','noopener');
-    });
-    track('exo_qualified','intake_shown');
-  }
-  async function qualify(){if(qualified||userTurns<3)return;qualified=true;
-    try{var q=await request('/exo/qualify',{messages:hist.slice(-MAX_HISTORY)});var summary=q.summary||'Quiero revisar mi proyecto y coordinar una conversación.';
-      renderIntake(summary);
-    }catch(_){qualified=false;}}
-  async function send(value){var t=(typeof value==='string'?value:inp.value).trim();if(!t||go.disabled)return;inp.value='';quick.hidden=true;addM(t,'user');
-    hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='···';status.textContent='Analizando…';
-    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing'});var reply=d.result||'No pude construir una respuesta todavía.';addM(reply,'bot');
-      hist.push({role:'assistant',content:reply});hist=hist.slice(-MAX_HISTORY);status.textContent='VBC · '+(d.engine||'online');qualify();
-    }catch(e){status.textContent='VBC · reintentando';addM('El motor está tardando en responder. Puedes reintentar o continuar el diagnóstico directamente por WhatsApp.','bot');
-      lead.hidden=false;lead.className='exo-lead';lead.innerHTML='<a class="exo-lead-cta" target="_blank" rel="noopener" href="'+whatsapp('Quiero conversar sobre un proyecto tecnológico.')+'">Hablar con León por WhatsApp →</a>';}
+  async function send(){var t=inp.value.trim();if(!t)return;inp.value='';addM(t,'user');
+    hist.push({role:'user',content:t});go.disabled=true;go.textContent='···';
+    try{var r=await fetch(VBC+'/exo/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:hist})});var d=await r.json();
+      var reply=d.result||'Sin respuesta. Intenta de nuevo.';addM(reply,'bot');
+      hist.push({role:'assistant',content:reply});
+    }catch(e){addM('Compute layer despertando... intenta en 10s o escríbeme al WhatsApp →','bot');}
     go.disabled=false;go.textContent='ENVIAR';}
   go.addEventListener('click',send);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
-  quick.addEventListener('click',function(e){var b=e.target.closest('button[data-prompt]');if(b)send(b.dataset.prompt);});
 })();
 </script>
 </body>
