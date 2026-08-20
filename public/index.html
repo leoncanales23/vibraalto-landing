@@ -240,13 +240,19 @@ body {
 
 /* Hero heading */
 h1.h1 {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: start;
+  column-gap: 0.12em;
+  width: max-content;
+  max-width: 100%;
   font-size: clamp(48px, 7vw, 96px);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 0.95;
   color: var(--fg);
   margin-bottom: 24px;
-  max-width: 12ch;
   opacity: 0; transform: translateY(16px);
   animation: fadeUp 600ms var(--ease-out) 200ms forwards;
 }
@@ -259,22 +265,37 @@ h1.h1 em {
 }
 /* ═══ HERO MANDALA SOL ═══ */
 .h1-mandala{
-  display:inline-block;
+  display: block;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
   width:0.82em; height:0.82em;
-  vertical-align:baseline;
-  margin-right:0.12em;
+  margin: 0;
   fill:#fff;
   filter:drop-shadow(0 0 8px rgba(255,255,255,0.3));
-  position:relative;
-  top:-0.02em;
 }
-.h1-typo{height:0.35em;fill:#fff;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(255,255,255,0.3));vertical-align:baseline;margin-left:0.08em;}
+.h1-typo{
+  display: block;
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  height:0.35em;
+  margin: 0;
+  fill:#fff;
+  flex-shrink:0;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,0.3));
+}
 .h1-sub {
   display: block;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
   font-family: var(--f-mono);
   font-size: clamp(11px, 1.2vw, 14px);
   font-weight: 400;
   letter-spacing: 0.22em;
+  text-align: center;
+  text-indent: 0.11em;
   color: var(--fg-3);
   text-transform: uppercase;
   -webkit-text-fill-color: var(--fg-3);
