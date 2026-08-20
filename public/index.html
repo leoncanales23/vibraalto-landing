@@ -4086,6 +4086,36 @@ html.deck-mode .va-chapters{ display:none; }
   animation:exoPortraitScan 6.2s ease-in-out infinite;animation-play-state:paused;
 }
 .exo-attention.is-online .exo-scan-beam{animation-play-state:running}
+
+/* Micro LED circuits mapped over the ExoLeón artwork */
+.exo-led-map{
+  position:absolute;z-index:3;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;
+  mix-blend-mode:screen;filter:drop-shadow(0 0 4px rgba(80,232,255,.35));transform:translateZ(24px);
+}
+.exo-led-track,.exo-led-trace{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.exo-led-track{stroke:rgba(100,235,255,.2);stroke-width:1;opacity:.42}
+.exo-led-track.gold{stroke:rgba(255,199,71,.2)}
+.exo-led-trace{
+  stroke-width:1.7;stroke-dasharray:1 12 4 20;stroke-dashoffset:0;opacity:.78;
+  animation:exoLedTravel 8.4s linear infinite;animation-play-state:paused;
+}
+.exo-led-trace.cyan{stroke:#7ef4ff;filter:drop-shadow(0 0 3px #50e8ff)}
+.exo-led-trace.violet{stroke:#b896ff;stroke-dasharray:1 18 3 26;animation-duration:11.6s;animation-direction:reverse;opacity:.58}
+.exo-led-trace.gold{stroke:#ffd45c;stroke-dasharray:1 15 5 29;animation-duration:10.2s;filter:drop-shadow(0 0 3px rgba(255,190,55,.9))}
+.exo-led-node{
+  transform-box:fill-box;transform-origin:center;opacity:.16;animation:exoLedNode 4.8s ease-in-out infinite;animation-play-state:paused;
+}
+.exo-led-node.cyan{fill:#d9fcff;stroke:#50e8ff;stroke-width:1;filter:drop-shadow(0 0 4px #50e8ff)}
+.exo-led-node.gold{fill:#fff3bd;stroke:#ffc13d;stroke-width:1;filter:drop-shadow(0 0 4px #ffc13d)}
+.exo-led-node:nth-of-type(2){animation-delay:.65s}.exo-led-node:nth-of-type(3){animation-delay:1.3s}
+.exo-led-node:nth-of-type(4){animation-delay:1.95s}.exo-led-node:nth-of-type(5){animation-delay:2.6s}.exo-led-node:nth-of-type(6){animation-delay:3.25s}
+.exo-led-glint{
+  fill:none;stroke:#e4fdff;stroke-width:1.25;stroke-linecap:round;opacity:.12;
+  filter:drop-shadow(0 0 4px rgba(126,244,255,.9));animation:exoLedGlint 6.8s ease-in-out infinite;animation-play-state:paused;
+}
+.exo-led-glint.gold{stroke:#fff0a6;filter:drop-shadow(0 0 4px rgba(255,212,92,.9));animation-delay:2.2s}
+.exo-led-glint.violet{stroke:#d5c2ff;filter:drop-shadow(0 0 4px rgba(184,150,255,.9));animation-delay:4.1s}
+.exo-attention.is-online .exo-led-trace,.exo-attention.is-online .exo-led-node,.exo-attention.is-online .exo-led-glint{animation-play-state:running}
 .exo-paint{position:absolute;z-index:-2;border-radius:50%;pointer-events:none;filter:blur(28px);mix-blend-mode:screen;opacity:.52}
 .exo-paint.warm{width:43%;height:48%;left:15%;top:20%;background:radial-gradient(circle,rgba(255,88,53,.42),rgba(241,189,53,.14) 46%,transparent 72%);animation:exoPaintWarm 6s ease-in-out infinite;animation-play-state:paused}
 .exo-paint.cool{width:48%;height:53%;right:10%;top:13%;background:radial-gradient(circle,rgba(74,184,255,.38),rgba(122,73,232,.19) 52%,transparent 74%);animation:exoPaintCool 7.6s ease-in-out infinite;animation-play-state:paused}
@@ -4206,6 +4236,9 @@ html.deck-mode .va-chapters{ display:none; }
 @keyframes exoFieldFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}
 @keyframes exoGround{50%{transform:scaleX(.72);opacity:.58}}
 @keyframes exoPortraitScan{0%,18%{top:15%;opacity:0}25%{opacity:.85}70%{opacity:.45}82%,100%{top:84%;opacity:0}}
+@keyframes exoLedTravel{to{stroke-dashoffset:-100}}
+@keyframes exoLedNode{0%,58%,100%{opacity:.12;transform:scale(.58)}64%{opacity:1;transform:scale(1.28)}72%{opacity:.42;transform:scale(.82)}}
+@keyframes exoLedGlint{0%,72%,100%{opacity:.08;transform:scale(.72)}78%{opacity:.92;transform:scale(1.12)}86%{opacity:.18;transform:scale(.82)}}
 @keyframes exoPaintWarm{50%{transform:translate(8px,-5px) scale(1.11);opacity:.65}}
 @keyframes exoPaintCool{50%{transform:translate(-7px,8px) scale(.92);opacity:.38}}
 @keyframes exoOrbitA{to{transform:rotate(360deg)}}
@@ -4229,7 +4262,8 @@ html.deck-mode .va-chapters{ display:none; }
 }
 @media(prefers-reduced-motion:reduce){
   .exo-attention::after,.exo-kicker i,.exo-visual::before,.exo-visual::after,.exo-art-layer,.exo-scan-beam,.exo-paint,.exo-orbit,.exo-comet,.exo-embers i,
-  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before{animation:none!important}
+  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before,.exo-led-trace,.exo-led-node,.exo-led-glint{animation:none!important}
+  .exo-led-trace{stroke-dasharray:1 18;opacity:.28}.exo-led-node{opacity:.32}.exo-led-glint{opacity:.18}
   .exo-art-layer{transform:none!important;transition:none!important}
 }
 </style>
@@ -4257,6 +4291,27 @@ html.deck-mode .va-chapters{ display:none; }
         <span class="exo-comet two" aria-hidden="true"></span>
         <div class="exo-art-layer">
           <img src="/assets/exoleon-attention.svg" width="960" height="960" loading="lazy" decoding="async" alt="ExoLeón, inteligencia de atención y arquitectura de proyectos de VibraAlto">
+          <svg class="exo-led-map" viewBox="0 0 960 960" aria-hidden="true" focusable="false">
+            <ellipse class="exo-led-track" cx="480" cy="510" rx="350" ry="334" transform="rotate(-7 480 510)" pathLength="100"/>
+            <ellipse class="exo-led-trace cyan" cx="480" cy="510" rx="350" ry="334" transform="rotate(-7 480 510)" pathLength="100"/>
+            <path class="exo-led-track" d="M226 602C180 441 265 270 438 215C610 160 781 261 816 428C854 609 713 770 534 807C386 837 270 751 226 602" pathLength="100"/>
+            <path class="exo-led-trace violet" d="M226 602C180 441 265 270 438 215C610 160 781 261 816 428C854 609 713 770 534 807C386 837 270 751 226 602" pathLength="100"/>
+            <path class="exo-led-track gold" d="M278 704C366 794 518 822 655 766C712 743 757 705 786 650" pathLength="100"/>
+            <path class="exo-led-trace gold" d="M278 704C366 794 518 822 655 766C712 743 757 705 786 650" pathLength="100"/>
+            <g>
+              <circle class="exo-led-node cyan" cx="184" cy="478" r="3.2"/>
+              <circle class="exo-led-node cyan" cx="294" cy="245" r="2.8"/>
+              <circle class="exo-led-node gold" cx="565" cy="184" r="3.1"/>
+              <circle class="exo-led-node cyan" cx="801" cy="382" r="2.8"/>
+              <circle class="exo-led-node gold" cx="706" cy="732" r="3.2"/>
+              <circle class="exo-led-node cyan" cx="371" cy="793" r="2.8"/>
+            </g>
+            <g>
+              <path class="exo-led-glint" d="M232 352h18m-9-9v18"/>
+              <path class="exo-led-glint gold" d="M748 548h20m-10-10v20"/>
+              <path class="exo-led-glint violet" d="M619 238h16m-8-8v16"/>
+            </g>
+          </svg>
           <span class="exo-glass" aria-hidden="true"></span>
           <span class="exo-scan-beam" aria-hidden="true"></span>
         </div>
