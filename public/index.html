@@ -4360,13 +4360,15 @@ html.deck-mode .va-chapters{ display:none; }
           <button class="exo-close" id="exo-close" aria-label="Cerrar chat" hidden>×</button>
         </div>
         <div id="exo-msgs" aria-live="polite">
-          <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Enlace establecido. Estás a punto de hablar con la nave del futuro. Cuéntame qué quieres construir o qué problema necesitas resolver: voy a entenderlo, organizarlo y proponerte la ruta más directa para convertirlo en un proyecto real.</div>
+          <div class="exo-m bot"><div class="exo-who">EXO-LEON</div>Enlace establecido. Soy EXO-LEON, tu consultor de proyectos tecnológicos. VibraAlto Lab diseña soluciones en automatización, software con IA, fabricación 3D e integración de sistemas. Cuéntame qué necesitas resolver — te entrego un diagnóstico técnico y una propuesta concreta en minutos.</div>
         </div>
         <div class="exo-quick" id="exo-quick">
           <button data-prompt="Quiero automatizar un proceso de mi empresa">Automatización</button>
           <button data-prompt="Necesito desarrollar una aplicación o plataforma con IA">Software + IA</button>
           <button data-prompt="Necesito diseño, prototipado o fabricación 3D">Fabricación 3D</button>
           <button data-prompt="Quiero integrar sistemas, datos o equipos físicos">Integraciones</button>
+          <button data-prompt="Quiero digitalizar mi empresa o PYME con tecnología">Digitalización PYME</button>
+          <button data-prompt="Necesito análisis de datos, dashboards o reportería inteligente">Datos + Analytics</button>
         </div>
         <div id="exo-lead" hidden></div>
         <div id="exo-bar">
@@ -6791,6 +6793,12 @@ atTick();
   var close=document.getElementById('exo-close'),quick=document.getElementById('exo-quick');
   var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status'),invite=document.getElementById('exo-invite');
   var hist=[],userTurns=0,qualified=false;
+  var serviceContext={
+    lab:'VibraAlto Lab',
+    verticals:['Automatización de procesos','Software + IA','Fabricación 3D','Integración de sistemas','Digitalización PYME','Datos + Analytics'],
+    capabilities:['Agentes IA (ECC)','Aplicaciones web/móvil','Prototipos y manufactura 3D','APIs e integraciones','Dashboards y reportería','Consultoría tecnológica'],
+    differentiators:['63 agentes IA especializados','Orquestación cognitiva ECC','Validación humana en cada proyecto','Desde diagnóstico hasta producción']
+  };
   function track(event,detail){if(Array.isArray(window.dataLayer))window.dataLayer.push({event:event,exo_detail:detail||''});}
   function setOpen(open){pnl.classList.toggle('open',open);tgl.setAttribute('aria-expanded',String(open));if(open){invite.hidden=true;inp.focus();track('exo_open','project_intake');}}
   tgl.addEventListener('click',function(){setOpen(!pnl.classList.contains('open'));});
@@ -6810,6 +6818,7 @@ atTick();
       '<form class="exo-intake" id="exo-intake">'+
       '<input name="name" autocomplete="name" placeholder="Tu nombre *" required maxlength="80">'+
       '<input name="company" autocomplete="organization" placeholder="Empresa / proyecto" maxlength="100">'+
+      '<select name="vertical" aria-label="Área de interés"><option value="">Área de interés</option><option>Automatización</option><option>Software + IA</option><option>Fabricación 3D</option><option>Integraciones</option><option>Digitalización PYME</option><option>Datos + Analytics</option><option>Otro</option></select>'+
       '<select name="budget" aria-label="Presupuesto aproximado" required><option value="">Presupuesto *</option><option>Por definir</option><option>Hasta $500.000 CLP</option><option>$500.000–$2.000.000 CLP</option><option>$2.000.000–$5.000.000 CLP</option><option>Más de $5.000.000 CLP</option></select>'+
       '<select name="timeline" aria-label="Plazo esperado" required><option value="">Plazo *</option><option>Lo antes posible</option><option>Durante este mes</option><option>1–3 meses</option><option>Estoy explorando</option></select>'+
       '<input class="exo-wide" name="contact" autocomplete="tel" placeholder="WhatsApp o correo *" required maxlength="120">'+
@@ -6820,26 +6829,26 @@ atTick();
       e.preventDefault();var fd=new FormData(e.currentTarget);
       var brief='Proyecto calificado por EXO-LEON.%0A%0A'+
         'Nombre: '+fd.get('name')+'%0AEmpresa/proyecto: '+(fd.get('company')||'No indicada')+
-        '%0AContacto: '+fd.get('contact')+'%0APresupuesto: '+fd.get('budget')+
+        '%0AÁrea: '+(fd.get('vertical')||'No indicada')+'%0AContacto: '+fd.get('contact')+'%0APresupuesto: '+fd.get('budget')+
         '%0APlazo: '+fd.get('timeline')+'%0A%0ADiagnóstico: '+summary;
       track('exo_lead_submit',fd.get('budget'));window.open(whatsapp(brief.replace(/%0A/g,'\n')),'_blank','noopener');
     });
     track('exo_qualified','intake_shown');
   }
-  async function qualify(){if(qualified||userTurns<3)return;qualified=true;
+  async function qualify(){if(qualified||userTurns<2)return;qualified=true;
     try{var q=await request('/exo/qualify',{messages:hist.slice(-MAX_HISTORY)});var summary=q.summary||'Quiero revisar mi proyecto y coordinar una conversación.';
       renderIntake(summary);
     }catch(_){qualified=false;}}
   async function send(value){var t=(typeof value==='string'?value:inp.value).trim();if(!t||go.disabled)return;inp.value='';quick.hidden=true;addM(t,'user');
     hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='···';status.textContent='Analizando…';
-    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing'});var reply=d.result||'No pude construir una respuesta todavía.';addM(reply,'bot');
+    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing',context:serviceContext});var reply=d.result||'No pude construir una respuesta todavía.';addM(reply,'bot');
       hist.push({role:'assistant',content:reply});hist=hist.slice(-MAX_HISTORY);status.textContent='VBC · '+(d.engine||'online');qualify();
     }catch(e){status.textContent='VBC · reintentando';addM('El motor está tardando en responder. Puedes reintentar o continuar el diagnóstico directamente por WhatsApp.','bot');
       lead.hidden=false;lead.className='exo-lead';lead.innerHTML='<a class="exo-lead-cta" target="_blank" rel="noopener" href="'+whatsapp('Quiero conversar sobre un proyecto tecnológico.')+'">Hablar con León por WhatsApp →</a>';}
     go.disabled=false;go.textContent='ENVIAR';}
   go.addEventListener('click',send);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
-  quick.addEventListener('click',function(e){var b=e.target.closest('button[data-prompt]');if(b)send(b.dataset.prompt);});
+  quick.addEventListener('click',function(e){var b=e.target.closest('button[data-prompt]');if(b){track('exo_quick_prompt',b.textContent);send(b.dataset.prompt);}});
 })();
 </script>
 </body>
