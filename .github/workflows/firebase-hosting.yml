@@ -23,16 +23,18 @@ jobs:
 
       - name: Verify landing source
         shell: bash
+        run: ./scripts/verify-landing.sh
+
+      - name: Stamp release
+        shell: bash
         run: |
           set -euo pipefail
-          test -f public/index.html
-          test -f firebase.json
-          grep -q '/exo/chat' public/index.html
-          grep -q '/exo/qualify' public/index.html
-          if grep -q "role:'system'" public/index.html; then
-            echo "A system prompt must not be exposed in the browser"
-            exit 1
-          fi
+          sed -i "s/__BUILD_SHA__/$GITHUB_SHA/" public/release.json
+          grep -Fq "\"commit\":\"$GITHUB_SHA\"" public/release.json
+          index_sha=$(sha256sum public/index.html | cut -d ' ' -f 1)
+          favicon_sha=$(sha256sum public/favicon.svg | cut -d ' ' -f 1)
+          printf 'EXPECTED_INDEX_SHA=%s\n' "$index_sha" >> "$GITHUB_ENV"
+          printf 'EXPECTED_FAVICON_SHA=%s\n' "$favicon_sha" >> "$GITHUB_ENV"
 
       - name: Install Firebase CLI
         run: npm install --global firebase-tools
@@ -54,13 +56,32 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for attempt in $(seq 1 12); do
-            page=$(curl -fsSL --max-time 20 https://vibraalto.cl || true)
-            if grep -q 'Quiero automatizar un proceso de mi empresa' <<<"$page"; then
-              echo "EXO-LEON commercial landing is live"
-              exit 0
+          page_file=$(mktemp)
+          favicon_file=$(mktemp)
+          trap 'rm -f "$page_file" "$favicon_file"' EXIT
+
+          for target in https://vibraalto.cl https://vibraalto-landing.web.app; do
+            verified=false
+            for attempt in $(seq 1 12); do
+              cache_bust="release=$GITHUB_SHA&attempt=$attempt"
+              if curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/?$cache_bust" -o "$page_file" \
+                && curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/favicon.svg?$cache_bust" -o "$favicon_file"; then
+                deployed_sha=$(sha256sum "$page_file" | cut -d ' ' -f 1)
+                deployed_favicon_sha=$(sha256sum "$favicon_file" | cut -d ' ' -f 1)
+                release=$(curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/release.json?$cache_bust" || true)
+                if [[ "$deployed_sha" == "$EXPECTED_INDEX_SHA" ]] \
+                  && [[ "$deployed_favicon_sha" == "$EXPECTED_FAVICON_SHA" ]] \
+                  && grep -Fq "\"commit\":\"$GITHUB_SHA\"" <<<"$release"; then
+                  echo "$target exposes the exact $GITHUB_SHA release"
+                  verified=true
+                  break
+                fi
+              fi
+              sleep 10
+            done
+
+            if [[ "$verified" != true ]]; then
+              echo "$target did not expose the exact release in time"
+              exit 1
             fi
-            sleep 10
           done
-          echo "Production did not expose the expected release in time"
-          exit 1
