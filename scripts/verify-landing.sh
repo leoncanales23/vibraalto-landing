@@ -11,11 +11,20 @@ test -f firebase.json
 # ExoLeón commercial closer and secure VBC handoff.
 grep -Fq '/exo/chat' "$landing"
 grep -Fq '/exo/qualify' "$landing"
+grep -Fq "var VBC='https://compute.vibraalto.cl'" "$landing"
+if grep -Fq 'vbc-compute-layer.onrender.com' "$landing"; then
+  echo 'ExoLeón must use the VBC router instead of a single backend'
+  exit 1
+fi
 grep -Fq 'Digitalización PYME' "$landing"
 grep -Fq 'Datos + Analytics' "$landing"
 grep -Fq 'serviceContext' "$landing"
 grep -Fq "userTurns<2" "$landing"
 grep -Fq "track('exo_quick_prompt'" "$landing"
+grep -Fq "track('exo_response_ms'" "$landing"
+grep -Fq "className='exo-thinking'" "$landing"
+grep -Fq "IntersectionObserver" "$landing"
+grep -Fq "pnl.setAttribute('aria-busy','true')" "$landing"
 test "$(grep -c 'button data-prompt=' "$landing")" -eq 6
 
 # The restored attention field and the subtle holographic layer.
@@ -32,6 +41,8 @@ grep -Fq 'text-indent: 0.11em' "$landing"
 grep -Fq 'href="/favicon.svg?v=github-style-1"' "$landing"
 grep -Fq '<circle cx="1125" cy="1125" r="1070" fill="#0d1117"/>' public/favicon.svg
 grep -Fq '<circle cx="1125" cy="1125" r="112" fill="#00d4ff"/>' public/favicon.svg
+
+node scripts/test-exoleon-ui.js
 
 if grep -Fq "role:'system'" "$landing"; then
   echo 'A system prompt must not be exposed in the browser'
