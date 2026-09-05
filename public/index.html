@@ -15,6 +15,7 @@
 <link rel="manifest" href="/manifest.json">
 <title>VIBRAALTO — Eleva tu frecuencia</title>
 <link rel="preconnect" href="https://nerhia-api-852702111467.us-central1.run.app" crossorigin>
+<link rel="preconnect" href="https://compute.vibraalto.cl" crossorigin>
 <link rel="preconnect" href="https://nerhia.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3533,6 +3534,14 @@ html.deck-mode .va-chapters{ display:none; }
 .exo-m.bot{color:#c8eeff;}
 .exo-m.usr{color:#ffb432;text-align:right;}
 .exo-m .exo-who{font-size:9px;color:#7be3ff;opacity:.5;letter-spacing:1px;margin-bottom:2px;}
+.exo-m.pending{min-width:190px;color:#9eeeff;}
+.exo-thinking{display:flex;align-items:center;gap:8px;min-height:18px;}
+.exo-thinking-copy{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.exo-thinking-dots{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;}
+.exo-thinking-dots i{width:4px;height:4px;border-radius:50%;background:#50e8ff;box-shadow:0 0 7px rgba(80,232,255,.65);animation:exoThinkingDot 1.15s ease-in-out infinite;}
+.exo-thinking-dots i:nth-child(2){animation-delay:.16s;}
+.exo-thinking-dots i:nth-child(3){animation-delay:.32s;}
+.exo-thinking-time{margin-left:auto;color:#7be3ff;opacity:.58;font-size:9px;white-space:nowrap;}
 .exo-quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px;}
 .exo-quick button,.exo-lead-cta{background:rgba(245,200,66,.07);border:1px solid rgba(245,200,66,.22);border-radius:999px;color:#f5d56b;padding:7px 10px;font:10px 'Share Tech Mono',monospace;cursor:pointer;}
 .exo-quick button:hover,.exo-lead-cta:hover{background:rgba(245,200,66,.14);}
@@ -4270,6 +4279,7 @@ html.deck-mode .va-chapters{ display:none; }
 @keyframes exoConsoleSweep{0%,10%{transform:translateY(0);opacity:0}16%{opacity:.42}72%{opacity:.18}82%,100%{transform:translateY(660px);opacity:0}}
 @keyframes exoSignal{0%,100%{opacity:.3;transform:scaleY(.48)}50%{opacity:1;transform:scaleY(1)}}
 @keyframes exoButtonSweep{0%,68%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+@keyframes exoThinkingDot{0%,70%,100%{opacity:.22;transform:translateY(0)}35%{opacity:1;transform:translateY(-3px)}}
 
 @media(max-width:920px){
   .exo-attention-inner{grid-template-columns:1fr;gap:24px}.exo-identity{text-align:center}.exo-title,.exo-intro{margin-inline:auto}
@@ -4283,7 +4293,7 @@ html.deck-mode .va-chapters{ display:none; }
 }
 @media(prefers-reduced-motion:reduce){
   .exo-attention::after,.exo-kicker i,.exo-visual::before,.exo-visual::after,.exo-art-layer,.exo-scan-beam,.exo-paint,.exo-orbit,.exo-comet,.exo-embers i,
-  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before,.exo-led-trace,.exo-led-node,.exo-led-glint{animation:none!important}
+  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before,.exo-led-trace,.exo-led-node,.exo-led-glint,.exo-thinking-dots i{animation:none!important}
   .exo-led-trace{stroke-dasharray:1 18;opacity:.28}.exo-led-node{opacity:.32}.exo-led-glint{opacity:.18}
   .exo-art-layer{transform:none!important;transition:none!important}
 }
@@ -6787,12 +6797,13 @@ atTick();
 <script>
 (function(){
   'use strict';
-  var VBC='https://vbc-compute-layer.onrender.com', MAX_HISTORY=12, REQUEST_TIMEOUT=25000;
+  var VBC='https://compute.vibraalto.cl', MAX_HISTORY=12, REQUEST_TIMEOUT=25000;
   var tgl=document.getElementById('exo-toggle'),pnl=document.getElementById('exo-panel');
   var msgs=document.getElementById('exo-msgs'),inp=document.getElementById('exo-in'),go=document.getElementById('exo-go');
   var close=document.getElementById('exo-close'),quick=document.getElementById('exo-quick');
   var lead=document.getElementById('exo-lead'),status=document.getElementById('exo-status'),invite=document.getElementById('exo-invite');
-  var hist=[],userTurns=0,qualified=false;
+  var field=document.getElementById('exoleon'),linkCopy=document.getElementById('exo-link-copy');
+  var hist=[],userTurns=0,qualified=false,warmPromise=null;
   var serviceContext={
     lab:'VibraAlto Lab',
     verticals:['Automatización de procesos','Software + IA','Fabricación 3D','Integración de sistemas','Digitalización PYME','Datos + Analytics'],
@@ -6804,12 +6815,38 @@ atTick();
   tgl.addEventListener('click',function(){setOpen(!pnl.classList.contains('open'));});
   invite.addEventListener('click',function(){setOpen(true);});
   close.addEventListener('click',function(){setOpen(false);tgl.focus();});
+  function appendFormattedText(root,text){
+    String(text||'').split(/(\*\*[^*]+\*\*)/g).forEach(function(part){
+      if(!part)return;
+      if(part.slice(0,2)==='**'&&part.slice(-2)==='**'){var strong=document.createElement('strong');strong.textContent=part.slice(2,-2);root.appendChild(strong);return;}
+      part.split('\n').forEach(function(line,index){if(index)root.appendChild(document.createElement('br'));if(line)root.appendChild(document.createTextNode(line));});
+    });
+  }
   function addM(t,r){var d=document.createElement('div');d.className='exo-m '+(r==='user'?'usr':'bot');
     var s=document.createElement('div');s.className='exo-who';s.textContent=r==='user'?'TÚ':'EXO-LEON';
-    d.appendChild(s);d.appendChild(document.createTextNode(t));msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;}
-  async function request(path,payload){var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},REQUEST_TIMEOUT);
+    d.appendChild(s);appendFormattedText(d,t);msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+  function addPending(){
+    var d=document.createElement('div');d.className='exo-m bot pending';d.setAttribute('role','status');
+    var who=document.createElement('div');who.className='exo-who';who.textContent='EXO-LEON';
+    var row=document.createElement('div');row.className='exo-thinking';
+    var dots=document.createElement('span');dots.className='exo-thinking-dots';dots.setAttribute('aria-hidden','true');
+    for(var i=0;i<3;i++)dots.appendChild(document.createElement('i'));
+    var copy=document.createElement('span');copy.className='exo-thinking-copy';copy.textContent='Consultando VBC';
+    var elapsed=document.createElement('span');elapsed.className='exo-thinking-time';elapsed.setAttribute('aria-hidden','true');elapsed.textContent='0 s';
+    row.appendChild(dots);row.appendChild(copy);row.appendChild(elapsed);d.appendChild(who);d.appendChild(row);msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+    var started=performance.now(),timer=setInterval(function(){var seconds=Math.floor((performance.now()-started)/1000);elapsed.textContent=seconds+' s';
+      copy.textContent=seconds>=8?'La consulta continúa activa':seconds>=3?'ExoLeón sigue trabajando':'Consultando VBC';
+    },1000);
+    return {node:d,stop:function(text){clearInterval(timer);d.className='exo-m bot';d.removeAttribute('role');d.textContent='';var label=document.createElement('div');label.className='exo-who';label.textContent='EXO-LEON';d.appendChild(label);appendFormattedText(d,text);msgs.scrollTop=msgs.scrollHeight;}};
+  }
+  function warmVbc(){
+    if(!warmPromise)warmPromise=fetch(VBC+'/health',{method:'GET',headers:{'Accept':'application/json'},cache:'no-store'}).catch(function(){return null;});
+    return warmPromise;
+  }
+  if(field&&'IntersectionObserver' in window){var warmer=new IntersectionObserver(function(entries){if(entries.some(function(entry){return entry.isIntersecting;})){warmVbc();warmer.disconnect();}},{rootMargin:'700px 0px'});warmer.observe(field);}
+  async function request(path,payload){var controller=new AbortController(),timer=setTimeout(function(){controller.abort();},REQUEST_TIMEOUT),started=performance.now();
     try{var r=await fetch(VBC+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
-      var d=await r.json();if(!r.ok||d.ok===false)throw new Error(d.error||'VBC no disponible');return d;
+      var d=await r.json();d.clientLatencyMs=Math.round(performance.now()-started);if(!r.ok||d.ok===false)throw new Error(d.error||'VBC no disponible');return d;
     }finally{clearTimeout(timer);}}
   function whatsapp(summary){return 'https://wa.me/56971747072?text='+encodeURIComponent('Hola VibraAlto, conversé con EXO-LEON. '+summary);}
   function renderIntake(summary){
@@ -6840,12 +6877,12 @@ atTick();
       renderIntake(summary);
     }catch(_){qualified=false;}}
   async function send(value){var t=(typeof value==='string'?value:inp.value).trim();if(!t||go.disabled)return;inp.value='';quick.hidden=true;addM(t,'user');
-    hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='···';status.textContent='Analizando…';
-    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing',context:serviceContext});var reply=d.result||'No pude construir una respuesta todavía.';addM(reply,'bot');
-      hist.push({role:'assistant',content:reply});hist=hist.slice(-MAX_HISTORY);status.textContent='VBC · '+(d.engine||'online');qualify();
-    }catch(e){status.textContent='VBC · reintentando';addM('El motor está tardando en responder. Puedes reintentar o continuar el diagnóstico directamente por WhatsApp.','bot');
+    hist.push({role:'user',content:t});hist=hist.slice(-MAX_HISTORY);userTurns++;go.disabled=true;go.textContent='PROCESANDO';status.textContent='VBC · respuesta en curso';pnl.setAttribute('aria-busy','true');linkCopy.textContent='SOLICITUD ENVIADA · RESPUESTA EN CURSO';var pending=addPending();
+    try{var d=await request('/exo/chat',{messages:hist,source:'vibraalto.cl',page:'landing',context:serviceContext});var reply=d.result||'No pude construir una respuesta todavía.';pending.stop(reply);
+      hist.push({role:'assistant',content:reply});hist=hist.slice(-MAX_HISTORY);var seconds=(d.clientLatencyMs/1000).toFixed(1);status.textContent='VBC · '+(d.engine||'online')+' · '+seconds+' s';linkCopy.textContent='RESPUESTA RECIBIDA · '+seconds+' S';track('exo_response_ms',d.clientLatencyMs);qualify();
+    }catch(e){status.textContent='VBC · reintentando';linkCopy.textContent='VBC DEMORADO · CANAL HUMANO DISPONIBLE';pending.stop('El motor está tardando en responder. Puedes reintentar o continuar el diagnóstico directamente por WhatsApp.');
       lead.hidden=false;lead.className='exo-lead';lead.innerHTML='<a class="exo-lead-cta" target="_blank" rel="noopener" href="'+whatsapp('Quiero conversar sobre un proyecto tecnológico.')+'">Hablar con León por WhatsApp →</a>';}
-    go.disabled=false;go.textContent='ENVIAR';}
+    pnl.removeAttribute('aria-busy');go.disabled=false;go.textContent='ENVIAR';inp.focus();}
   go.addEventListener('click',send);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
   quick.addEventListener('click',function(e){var b=e.target.closest('button[data-prompt]');if(b){track('exo_quick_prompt',b.textContent);send(b.dataset.prompt);}});
