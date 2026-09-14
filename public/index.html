@@ -4078,6 +4078,7 @@ html.deck-mode .va-chapters{ display:none; }
 /* Painted, breathing identity */
 .exo-visual{
   --exo-x:0px;--exo-y:0px;--exo-rx:0deg;--exo-ry:0deg;--exo-glare-x:50%;--exo-glare-y:42%;
+  --exo-shell-rx:0deg;--exo-shell-ry:0deg;
   position:relative;isolation:isolate;margin-top:24px;min-height:390px;display:grid;place-items:center;
   perspective:900px;overflow:visible;touch-action:pan-y;
 }
@@ -4093,8 +4094,64 @@ html.deck-mode .va-chapters{ display:none; }
 }
 .exo-attention.is-online .exo-visual::before,
 .exo-attention.is-online .exo-visual::after{animation-play-state:running}
+.exo-capsule-rig{
+  position:relative;z-index:3;width:min(100%,530px);aspect-ratio:1;display:grid;place-items:center;
+  transform-style:preserve-3d;cursor:grab;outline:none;isolation:isolate;
+}
+.exo-capsule-rig.is-steering{cursor:grabbing}
+.exo-capsule-rig:focus-visible::after{
+  content:'';position:absolute;z-index:9;inset:4%;border:1px solid rgba(126,244,255,.72);border-radius:50%;
+  box-shadow:0 0 0 4px rgba(80,232,255,.08),inset 0 0 24px rgba(80,232,255,.06);pointer-events:none;
+}
+.exo-capsule-depth{
+  position:absolute;z-index:0;inset:7%;border-radius:50%;pointer-events:none;transform-style:preserve-3d;
+  transform:translateZ(-34px) rotateX(var(--exo-shell-rx)) rotateY(var(--exo-shell-ry));
+  background:
+    radial-gradient(circle at var(--exo-glare-x) var(--exo-glare-y),rgba(225,252,255,.2),transparent 18%),
+    radial-gradient(circle at 50% 46%,transparent 55%,rgba(89,224,255,.13) 73%,rgba(137,97,255,.12) 80%,transparent 82%);
+  border:1px solid rgba(119,232,255,.14);box-shadow:inset -28px -18px 48px rgba(64,35,155,.14),inset 20px 10px 38px rgba(80,232,255,.07);
+  transition:transform 420ms cubic-bezier(.23,1,.32,1);
+}
+.exo-gyro-ring{
+  position:absolute;inset:8%;border-radius:50%;pointer-events:none;transform-style:preserve-3d;
+  border:1px solid rgba(113,237,255,.34);box-shadow:0 0 12px rgba(80,232,255,.11),inset 0 0 12px rgba(80,232,255,.06);
+  animation-play-state:paused!important;will-change:transform;
+}
+.exo-gyro-ring::before,.exo-gyro-ring::after{
+  content:'';position:absolute;width:6px;height:6px;border-radius:50%;top:8%;left:20%;
+  background:#e4fdff;box-shadow:0 0 6px #fff,0 0 15px #50e8ff;opacity:.82;
+}
+.exo-gyro-ring::after{width:4px;height:4px;top:auto;left:auto;right:13%;bottom:23%;background:#ffd45c;box-shadow:0 0 6px #fff,0 0 14px #ffc13d}
+.exo-gyro-ring.equator{z-index:4;border-color:rgba(98,239,255,.34);animation:exoGyroEquator 13s linear infinite}
+.exo-gyro-ring.meridian{z-index:2;inset:10%;border-color:rgba(184,150,255,.27);animation:exoGyroMeridian 17s linear infinite reverse}
+.exo-gyro-ring.diagonal{z-index:4;inset:13%;border-style:dashed;border-color:rgba(255,205,82,.25);animation:exoGyroDiagonal 21s linear infinite}
+.exo-attention.is-online .exo-gyro-ring{animation-play-state:running!important}
+.exo-orbit-beacon{
+  position:absolute;z-index:6;width:8px;height:8px;border:1px solid rgba(223,252,255,.9);border-radius:50%;pointer-events:none;
+  background:#61ecff;box-shadow:0 0 7px #fff,0 0 22px #50e8ff;opacity:.2;
+  animation:exoOrbitBeacon 5.6s ease-in-out infinite;animation-play-state:paused;
+}
+.exo-orbit-beacon.b1{left:6%;top:47%}.exo-orbit-beacon.b2{right:9%;top:28%;background:#ffd45c;box-shadow:0 0 7px #fff,0 0 20px #ffc13d;animation-delay:1.8s}
+.exo-attention.is-online .exo-orbit-beacon{animation-play-state:running}
+.exo-thruster{
+  position:absolute;z-index:1;bottom:11%;width:54px;height:10px;border-radius:50%;pointer-events:none;opacity:.26;
+  background:radial-gradient(ellipse,#fff 0 7%,#68eeff 18%,rgba(80,118,255,.55) 38%,transparent 72%);
+  filter:blur(1px) drop-shadow(0 0 10px rgba(80,232,255,.6));transform-origin:center;
+  animation:exoThruster 2.4s ease-in-out infinite;animation-play-state:paused;
+}
+.exo-thruster.left{left:27%;transform:rotate(18deg)}.exo-thruster.right{right:27%;transform:rotate(-18deg);animation-delay:.32s}
+.exo-attention.is-online .exo-thruster{animation-play-state:running}
+.exo-capsule-rig.is-boosted .exo-thruster{opacity:1;filter:blur(.4px) drop-shadow(0 0 20px #50e8ff);animation-duration:.36s}
+.exo-capsule-rig.is-boosted .exo-capsule-depth{border-color:rgba(126,244,255,.52);box-shadow:inset 0 0 52px rgba(80,232,255,.1),0 0 34px rgba(80,232,255,.13)}
+.exo-orbit-hud{
+  position:absolute;z-index:8;right:8%;bottom:7%;display:grid;grid-template-columns:auto auto;align-items:center;gap:3px 8px;
+  padding:7px 9px;border:1px solid rgba(80,232,255,.2);border-radius:7px;background:rgba(4,10,19,.68);
+  box-shadow:inset 0 0 18px rgba(80,232,255,.035),0 8px 22px rgba(0,0,0,.22);backdrop-filter:blur(5px);
+  color:#7d8ba2;font:7px var(--f-mono);letter-spacing:.12em;pointer-events:none;
+}
+.exo-orbit-hud span{color:#9eeeff}.exo-orbit-hud b{color:#43efaa;font-weight:500}.exo-orbit-hud small{grid-column:1/-1;color:#606d82;font:6px var(--f-mono);letter-spacing:.1em}
 .exo-art-layer{
-  position:relative;z-index:3;width:min(100%,530px);will-change:transform;
+  position:relative;z-index:3;width:100%;will-change:transform;
   transform-style:preserve-3d;
   transform:translate3d(var(--exo-x),var(--exo-y),0) rotateX(var(--exo-rx)) rotateY(var(--exo-ry));
   transition:transform 420ms cubic-bezier(.23,1,.32,1);
@@ -4265,6 +4322,11 @@ html.deck-mode .va-chapters{ display:none; }
 @keyframes exoFieldOrbit{to{transform:rotate(360deg)}}
 @keyframes exoFieldFloat{0%,100%{translate:0 0}50%{translate:0 -10px}}
 @keyframes exoGround{50%{transform:scaleX(.72);opacity:.58}}
+@keyframes exoGyroEquator{from{transform:rotateX(69deg) rotateZ(0)}to{transform:rotateX(69deg) rotateZ(360deg)}}
+@keyframes exoGyroMeridian{from{transform:rotateY(72deg) rotateZ(14deg)}to{transform:rotateY(72deg) rotateZ(374deg)}}
+@keyframes exoGyroDiagonal{from{transform:rotateX(58deg) rotateY(28deg) rotateZ(-18deg)}to{transform:rotateX(58deg) rotateY(28deg) rotateZ(342deg)}}
+@keyframes exoOrbitBeacon{0%,62%,100%{opacity:.18;transform:scale(.65)}70%{opacity:1;transform:scale(1.25)}82%{opacity:.38;transform:scale(.82)}}
+@keyframes exoThruster{50%{opacity:.55;scale:1.16 .72}}
 @keyframes exoPortraitScan{0%,18%{top:15%;opacity:0}25%{opacity:.85}70%{opacity:.45}82%,100%{top:84%;opacity:0}}
 @keyframes exoLedTravel{to{stroke-dashoffset:-100}}
 @keyframes exoLedNode{0%,58%,100%{opacity:.12;transform:scale(.58)}64%{opacity:1;transform:scale(1.28)}72%{opacity:.42;transform:scale(.82)}}
@@ -4283,19 +4345,20 @@ html.deck-mode .va-chapters{ display:none; }
 
 @media(max-width:920px){
   .exo-attention-inner{grid-template-columns:1fr;gap:24px}.exo-identity{text-align:center}.exo-title,.exo-intro{margin-inline:auto}
-  .exo-kicker,.exo-method{justify-content:center}.exo-visual{min-height:340px}.exo-art-layer{max-width:460px}
+  .exo-kicker,.exo-method{justify-content:center}.exo-visual{min-height:340px}.exo-capsule-rig{max-width:460px}
 }
 @media(max-width:560px){
   .exo-attention-inner{padding:62px 14px}.exo-brain{grid-template-columns:1fr}.exo-visual{min-height:290px;margin-top:14px}
-  .exo-art-layer{max-width:390px}.exo-console{border-radius:12px}.exo-attention #exo-msgs{min-height:260px;max-height:340px}
+  .exo-capsule-rig{max-width:390px}.exo-orbit-hud{right:6%;bottom:5%;padding:6px 7px}.exo-console{border-radius:12px}.exo-attention #exo-msgs{min-height:260px;max-height:340px}
   .exo-console-top{gap:7px;padding-inline:10px}.exo-console-top>span:nth-of-type(1){display:none}.exo-transmission{padding-inline:11px}
   .exo-transmission b{display:none}.exo-attention .exo-quick{gap:5px}
 }
 @media(prefers-reduced-motion:reduce){
   .exo-attention::after,.exo-kicker i,.exo-visual::before,.exo-visual::after,.exo-art-layer,.exo-scan-beam,.exo-paint,.exo-orbit,.exo-comet,.exo-embers i,
-  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before,.exo-led-trace,.exo-led-node,.exo-led-glint,.exo-thinking-dots i{animation:none!important}
+  .exo-console::before,.exo-console-top .live i,.exo-signal i,.exo-attention #exo-go::before,.exo-led-trace,.exo-led-node,.exo-led-glint,.exo-thinking-dots i,
+  .exo-gyro-ring,.exo-orbit-beacon,.exo-thruster{animation:none!important}
   .exo-led-trace{stroke-dasharray:1 18;opacity:.28}.exo-led-node{opacity:.32}.exo-led-glint{opacity:.18}
-  .exo-art-layer{transform:none!important;transition:none!important}
+  .exo-art-layer,.exo-capsule-depth{transform:none!important;transition:none!important}.exo-orbit-hud small{display:none}
 }
 </style>
 <section class="exo-attention" id="exoleon">
@@ -4320,9 +4383,18 @@ html.deck-mode .va-chapters{ display:none; }
         <span class="exo-orbit b" aria-hidden="true"></span>
         <span class="exo-comet one" aria-hidden="true"></span>
         <span class="exo-comet two" aria-hidden="true"></span>
-        <div class="exo-art-layer">
-          <img src="/assets/exoleon-attention.svg" width="960" height="960" loading="lazy" decoding="async" alt="ExoLeón, inteligencia de atención y arquitectura de proyectos de VibraAlto">
-          <svg class="exo-led-map" viewBox="0 0 960 960" aria-hidden="true" focusable="false">
+        <div class="exo-capsule-rig" role="button" tabindex="0" aria-label="Cápsula orbital ExoLeón interactiva. Arrastra o usa las flechas para orbitar; presiona Enter para activar el impulso.">
+          <span class="exo-capsule-depth" aria-hidden="true"></span>
+          <span class="exo-gyro-ring equator" aria-hidden="true"></span>
+          <span class="exo-gyro-ring meridian" aria-hidden="true"></span>
+          <span class="exo-gyro-ring diagonal" aria-hidden="true"></span>
+          <span class="exo-orbit-beacon b1" aria-hidden="true"></span>
+          <span class="exo-orbit-beacon b2" aria-hidden="true"></span>
+          <span class="exo-thruster left" aria-hidden="true"></span>
+          <span class="exo-thruster right" aria-hidden="true"></span>
+          <div class="exo-art-layer">
+            <img src="/assets/exoleon-attention.svg" width="960" height="960" loading="lazy" decoding="async" alt="ExoLeón, inteligencia de atención y arquitectura de proyectos de VibraAlto">
+            <svg class="exo-led-map" viewBox="0 0 960 960" aria-hidden="true" focusable="false">
             <ellipse class="exo-led-track" cx="480" cy="510" rx="350" ry="334" transform="rotate(-7 480 510)" pathLength="100"/>
             <ellipse class="exo-led-trace cyan" cx="480" cy="510" rx="350" ry="334" transform="rotate(-7 480 510)" pathLength="100"/>
             <path class="exo-led-track" d="M226 602C180 441 265 270 438 215C610 160 781 261 816 428C854 609 713 770 534 807C386 837 270 751 226 602" pathLength="100"/>
@@ -4342,9 +4414,11 @@ html.deck-mode .va-chapters{ display:none; }
               <path class="exo-led-glint gold" d="M748 548h20m-10-10v20"/>
               <path class="exo-led-glint violet" d="M619 238h16m-8-8v16"/>
             </g>
-          </svg>
-          <span class="exo-glass" aria-hidden="true"></span>
-          <span class="exo-scan-beam" aria-hidden="true"></span>
+            </svg>
+            <span class="exo-glass" aria-hidden="true"></span>
+            <span class="exo-scan-beam" aria-hidden="true"></span>
+          </div>
+          <span class="exo-orbit-hud" aria-hidden="true"><span>ÓRBITA 3D</span><b id="exo-orbit-state">AUTO</b><small>ARRASTRA · ← → · ENTER</small></span>
         </div>
         <span class="exo-embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
       </div>
@@ -4397,9 +4471,11 @@ html.deck-mode .va-chapters{ display:none; }
   const field=document.getElementById('exoleon');
   if(!field)return;
   const visual=field.querySelector('.exo-visual');
+  const capsule=field.querySelector('.exo-capsule-rig');
+  const orbitState=document.getElementById('exo-orbit-state');
   const linkCopy=document.getElementById('exo-link-copy');
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  let frame=0,timer=0,index=0;
+  let frame=0,timer=0,index=0,dragId=null,boostTimer=0,keyX=0,keyY=0;
   const transmissions=[
     'CANAL DE PROYECTOS LISTO',
     'MEMORIA NEXUS EN LÍNEA',
@@ -4414,6 +4490,20 @@ html.deck-mode .va-chapters{ display:none; }
     visual.style.setProperty('--exo-ry','0deg');
     visual.style.setProperty('--exo-glare-x','50%');
     visual.style.setProperty('--exo-glare-y','42%');
+    visual.style.setProperty('--exo-shell-rx','0deg');
+    visual.style.setProperty('--exo-shell-ry','0deg');
+    keyX=0;keyY=0;
+    if(orbitState&&(!capsule||!capsule.classList.contains('is-boosted')))orbitState.textContent=reduce.matches?'ESTÁTICO':'AUTO';
+  }
+  function setOrbit(nx,ny){
+    visual.style.setProperty('--exo-x',(nx*7).toFixed(2)+'px');
+    visual.style.setProperty('--exo-y',(ny*5).toFixed(2)+'px');
+    visual.style.setProperty('--exo-rx',(-ny*3.8).toFixed(2)+'deg');
+    visual.style.setProperty('--exo-ry',(nx*5.8).toFixed(2)+'deg');
+    visual.style.setProperty('--exo-shell-rx',(-ny*7).toFixed(2)+'deg');
+    visual.style.setProperty('--exo-shell-ry',(nx*10).toFixed(2)+'deg');
+    visual.style.setProperty('--exo-glare-x',((nx+1)*50).toFixed(1)+'%');
+    visual.style.setProperty('--exo-glare-y',((ny+1)*50).toFixed(1)+'%');
   }
   function move(event){
     if(reduce.matches||!visual)return;
@@ -4422,13 +4512,42 @@ html.deck-mode .va-chapters{ display:none; }
       const box=visual.getBoundingClientRect();
       const nx=Math.max(-1,Math.min(1,((event.clientX-box.left)/box.width-.5)*2));
       const ny=Math.max(-1,Math.min(1,((event.clientY-box.top)/box.height-.5)*2));
-      visual.style.setProperty('--exo-x',(nx*7).toFixed(2)+'px');
-      visual.style.setProperty('--exo-y',(ny*5).toFixed(2)+'px');
-      visual.style.setProperty('--exo-rx',(-ny*2.2).toFixed(2)+'deg');
-      visual.style.setProperty('--exo-ry',(nx*3.2).toFixed(2)+'deg');
-      visual.style.setProperty('--exo-glare-x',((nx+1)*50).toFixed(1)+'%');
-      visual.style.setProperty('--exo-glare-y',((ny+1)*50).toFixed(1)+'%');
+      setOrbit(nx,ny);
     });
+  }
+  function setState(value){if(orbitState)orbitState.textContent=value;}
+  function boost(){
+    if(reduce.matches||!capsule)return;
+    clearTimeout(boostTimer);
+    capsule.classList.add('is-boosted');setState('IMPULSO');
+    boostTimer=setTimeout(function(){
+      capsule.classList.remove('is-boosted');setState(dragId===null?'AUTO':'MANUAL');
+    },820);
+  }
+  function startOrbit(event){
+    if(reduce.matches||!capsule)return;
+    dragId=event.pointerId;capsule.classList.add('is-steering');setState('MANUAL');boost();
+    capsule.setPointerCapture&&capsule.setPointerCapture(event.pointerId);
+  }
+  function endOrbit(event){
+    if(dragId!==null&&event.pointerId!==undefined&&event.pointerId!==dragId)return;
+    dragId=null;if(capsule)capsule.classList.remove('is-steering');
+    if(!capsule||!capsule.classList.contains('is-boosted'))setState('AUTO');
+  }
+  function stopOrbit(){
+    clearTimeout(boostTimer);boostTimer=0;dragId=null;
+    if(capsule)capsule.classList.remove('is-boosted','is-steering');
+    resetVisual();
+  }
+  function keyOrbit(event){
+    if(reduce.matches)return;
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();boost();return;}
+    const arrows=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];
+    if(!arrows.includes(event.key))return;
+    event.preventDefault();
+    keyX=Math.max(-1,Math.min(1,keyX+(event.key==='ArrowLeft'?-.18:event.key==='ArrowRight'?.18:0)));
+    keyY=Math.max(-1,Math.min(1,keyY+(event.key==='ArrowUp'?-.18:event.key==='ArrowDown'?.18:0)));
+    setOrbit(keyX,keyY);setState('MANUAL');
   }
   function stopTransmission(){
     if(timer){clearInterval(timer);timer=0;}
@@ -4448,11 +4567,19 @@ html.deck-mode .va-chapters{ display:none; }
     visual.addEventListener('pointermove',move,{passive:true});
     visual.addEventListener('pointerleave',resetVisual,{passive:true});
   }
+  if(capsule){
+    capsule.addEventListener('pointerdown',startOrbit,{passive:true});
+    capsule.addEventListener('pointermove',function(event){if(dragId===event.pointerId)move(event);},{passive:true});
+    capsule.addEventListener('pointerup',endOrbit,{passive:true});
+    capsule.addEventListener('pointercancel',endOrbit,{passive:true});
+    capsule.addEventListener('keydown',keyOrbit);
+    capsule.addEventListener('blur',function(){endOrbit({});resetVisual();},{passive:true});
+  }
   if('IntersectionObserver'in window){
     const observer=new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
         field.classList.toggle('is-online',entry.isIntersecting);
-        if(entry.isIntersecting)startTransmission();else stopTransmission();
+        if(entry.isIntersecting)startTransmission();else{stopTransmission();stopOrbit();}
       });
     },{rootMargin:'120px 0px',threshold:.06});
     observer.observe(field);
@@ -4461,7 +4588,7 @@ html.deck-mode .va-chapters{ display:none; }
     startTransmission();
   }
   reduce.addEventListener&&reduce.addEventListener('change',function(){
-    resetVisual();
+    stopOrbit();
     if(reduce.matches)stopTransmission();else if(field.classList.contains('is-online'))startTransmission();
   });
 })();
