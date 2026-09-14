@@ -32,6 +32,13 @@ grep -Fq 'class="exo-led-map"' "$landing"
 test "$(grep -c 'class="exo-led-trace' "$landing")" -eq 3
 test "$(grep -c 'class="exo-led-node' "$landing")" -eq 6
 test "$(grep -c 'class="exo-led-glint' "$landing")" -eq 3
+grep -Fq 'class="exo-capsule-rig"' "$landing"
+test "$(grep -c 'class="exo-gyro-ring' "$landing")" -eq 3
+test "$(grep -c 'class="exo-orbit-beacon' "$landing")" -eq 2
+test "$(grep -c 'class="exo-thruster' "$landing")" -eq 2
+grep -Fq 'id="exo-orbit-state"' "$landing"
+grep -Fq "setState('IMPULSO')" "$landing"
+grep -Fq "event.key==='Enter'" "$landing"
 grep -Fq 'prefers-reduced-motion:reduce' "$landing"
 
 # Hero lockup and small-size mandala favicon.
@@ -43,6 +50,7 @@ grep -Fq '<circle cx="1125" cy="1125" r="1070" fill="#0d1117"/>' public/favicon.
 grep -Fq '<circle cx="1125" cy="1125" r="112" fill="#00d4ff"/>' public/favicon.svg
 
 node scripts/test-exoleon-ui.js
+node scripts/test-exoleon-orbit.js
 
 if grep -Fq "role:'system'" "$landing"; then
   echo 'A system prompt must not be exposed in the browser'
