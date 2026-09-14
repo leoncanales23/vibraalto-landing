@@ -7013,9 +7013,10 @@ atTick();
   /* DMF Academy conversion signal — the destination remains a normal link. */
   document.querySelectorAll('[data-dmf-cta]').forEach(function(link){
     link.addEventListener('click',function(){
-      if(Array.isArray(window.dataLayer)){
-        window.dataLayer.push({event:'dmf_academy_cta',dmf_cta:link.dataset.dmfCta||'',dmf_destination:link.href});
-      }
+      var detail={cta:link.dataset.dmfCta||'',destination:link.href};
+      window.dataLayer=window.dataLayer||[];
+      window.dataLayer.push({event:'dmf_academy_cta',dmf_cta:detail.cta,dmf_destination:detail.destination});
+      window.dispatchEvent(new CustomEvent('dmf_academy_cta',{detail:detail}));
     });
   });
 
