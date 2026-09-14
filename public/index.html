@@ -3123,8 +3123,8 @@ html.deck-mode .va-chapters{ display:none; }
   transform-origin:center center;
   will-change:transform,opacity;
 }
-/* Slide 2 empieza oculto (detrás de la puerta) */
-.hero-slide:nth-child(2){
+/* Todos los paneles salvo la portada empiezan detrás de la puerta */
+.hero-slide:not(:first-child){
   visibility:hidden;
 }
 /* Reflejo cristal — sheen de vidrio durante giro */
@@ -3165,6 +3165,82 @@ html.deck-mode .va-chapters{ display:none; }
              radial-gradient(ellipse at 70% 80%,rgba(0,212,255,.04) 0%,transparent 60%);
   pointer-events:none;
 }
+
+/* ═══ DMF ACADEMY · SLIDE COMERCIAL ═══ */
+.hero-slide-dmf{
+  --dmf-orange:#ff572f;--dmf-amber:#ff9a3c;--dmf-ink:#090705;
+  display:flex;align-items:center;min-height:100vh;
+  background:
+    radial-gradient(circle at 78% 45%,rgba(255,87,47,.16),transparent 34%),
+    radial-gradient(circle at 18% 90%,rgba(255,154,60,.08),transparent 38%),
+    linear-gradient(135deg,#090806 0%,#100a07 52%,#070605 100%);
+  color:#f6f1ec;
+}
+.dmf-academy-slide{position:relative;width:100%;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
+.hero-slide-dmf::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.22;
+  background-image:linear-gradient(rgba(255,125,66,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,125,66,.08) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:linear-gradient(90deg,#000,transparent 68%);mask-image:linear-gradient(90deg,#000,transparent 68%);
+}
+.dmf-slide-inner{
+  position:relative;z-index:2;width:min(1180px,calc(100% - 96px));margin:auto;
+  display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.95fr);
+  gap:clamp(34px,5vw,78px);align-items:center;padding:84px 0 72px;
+}
+.dmf-slide-copy{position:relative;z-index:4;max-width:680px;}
+.dmf-kicker{display:flex;align-items:center;gap:10px;margin-bottom:16px;color:rgba(255,180,132,.78);font:10px 'Share Tech Mono',monospace;letter-spacing:.2em;text-transform:uppercase;}
+.dmf-kicker::before{content:'';width:32px;height:1px;background:var(--dmf-orange);box-shadow:0 0 12px rgba(255,87,47,.75);}
+.dmf-slide-title{margin:0;font:800 clamp(38px,4.8vw,70px)/.93 'Orbitron',sans-serif;letter-spacing:-.055em;text-transform:uppercase;color:#fff;}
+.dmf-slide-title em{display:block;color:var(--dmf-orange);font-style:normal;text-shadow:0 0 30px rgba(255,87,47,.18);}
+.dmf-slide-lede{max-width:650px;margin:24px 0 20px;color:rgba(245,239,233,.7);font:15px/1.72 'Inter',sans-serif;}
+.dmf-slide-lede strong{color:#fff;font-weight:600;}
+.dmf-recipe{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 22px;color:rgba(255,215,190,.76);font:9px 'Share Tech Mono',monospace;letter-spacing:.1em;text-transform:uppercase;}
+.dmf-recipe span{padding:6px 8px;border:1px solid rgba(255,114,62,.2);background:rgba(255,91,47,.055);}
+.dmf-recipe i{color:var(--dmf-orange);font-style:normal;opacity:.72;}
+.dmf-proof{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:24px;}
+.dmf-proof span{display:flex;align-items:baseline;gap:6px;padding:8px 11px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);color:rgba(255,255,255,.58);font:9px 'Share Tech Mono',monospace;text-transform:uppercase;}
+.dmf-proof strong{color:#fff;font:700 15px 'Orbitron',sans-serif;}
+.dmf-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.dmf-primary,.dmf-secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:0 18px;text-decoration:none;text-transform:uppercase;font:700 10px 'Orbitron',sans-serif;letter-spacing:.12em;transition:.25s ease;}
+.dmf-primary{color:#120704;background:linear-gradient(135deg,var(--dmf-orange),var(--dmf-amber));border:1px solid #ff875f;box-shadow:0 12px 34px rgba(255,87,47,.18);}
+.dmf-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(255,87,47,.28);}
+.dmf-secondary{color:#ffd5c7;border:1px solid rgba(255,112,67,.3);background:rgba(255,87,47,.055);}
+.dmf-secondary:hover{border-color:rgba(255,132,83,.7);background:rgba(255,87,47,.11);}
+.dmf-byline{margin-top:17px;color:rgba(255,255,255,.3);font:8px 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;}
+.dmf-slide-visual{position:relative;min-height:560px;isolation:isolate;}
+.dmf-portrait-frame{position:absolute;inset:26px 0 18px 72px;overflow:hidden;border:1px solid rgba(255,121,70,.23);background:#080706;clip-path:polygon(10% 0,100% 0,100% 90%,90% 100%,0 100%,0 10%);box-shadow:0 30px 70px rgba(0,0,0,.45);}
+.dmf-portrait-frame::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(8,6,5,.74),transparent 45%),linear-gradient(0deg,rgba(8,6,5,.82),transparent 42%),repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,117,69,.025) 3px 4px);}
+.dmf-portrait{width:100%;height:100%;object-fit:cover;object-position:66% center;filter:saturate(.82) contrast(1.08) brightness(.8);transform:scale(1.025);}
+.dmf-formula-wheel{
+  position:absolute;z-index:3;left:-26px;bottom:8px;width:clamp(210px,22vw,318px);aspect-ratio:1;border-radius:50%;border:1px solid rgba(255,149,91,.52);
+  background:radial-gradient(circle at center,#0a0806 0 25%,transparent 25.5%),repeating-conic-gradient(from -22.5deg,rgba(255,121,66,.9) 0 1deg,transparent 1deg 45deg),conic-gradient(from -22.5deg,#23100a 0 45deg,#100b08 45deg 90deg,#32140b 90deg 135deg,#100b08 135deg 180deg,#23100a 180deg 225deg,#100b08 225deg 270deg,#32140b 270deg 315deg,#100b08 315deg 360deg);
+  box-shadow:0 0 0 9px rgba(255,91,47,.025),0 0 56px rgba(255,83,36,.22),inset 0 0 45px rgba(0,0,0,.72);animation:dmfFormulaSpin 28s linear infinite;
+}
+.dmf-formula-wheel::before{content:'DMF\A 08';white-space:pre;position:absolute;inset:34%;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;background:#090705;border:1px solid rgba(255,126,74,.55);font:700 clamp(14px,1.8vw,24px)/1 'Orbitron',sans-serif;letter-spacing:.08em;box-shadow:0 0 22px rgba(255,86,43,.22);}
+.dmf-formula-wheel::after{content:'';position:absolute;inset:-14px;border-radius:50%;border:1px dashed rgba(255,138,81,.28);}
+.dmf-stage-orbit{position:absolute;z-index:4;right:-10px;bottom:20px;width:225px;display:grid;grid-template-columns:repeat(2,1fr);gap:5px;}
+.dmf-stage-orbit span{padding:6px 7px;border-left:1px solid rgba(255,100,50,.45);background:rgba(8,7,6,.72);backdrop-filter:blur(6px);color:rgba(255,224,209,.65);font:8px 'Share Tech Mono',monospace;letter-spacing:.08em;text-transform:uppercase;}
+.dmf-signal-tag{position:absolute;z-index:4;right:8px;top:8px;padding:7px 10px;border:1px solid rgba(255,117,67,.25);background:rgba(8,6,5,.72);color:rgba(255,164,115,.66);font:8px 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;}
+.dmf-signal-tag::before{content:'';display:inline-block;width:5px;height:5px;margin-right:7px;border-radius:50%;background:var(--dmf-orange);box-shadow:0 0 10px var(--dmf-orange);}
+@keyframes dmfFormulaSpin{to{transform:rotate(360deg)}}
+@media(max-width:900px){
+  .dmf-slide-inner{width:min(100% - 48px,720px);grid-template-columns:1fr;padding:78px 0 64px;}
+  .dmf-slide-copy{max-width:620px;}.dmf-slide-visual{position:absolute;inset:0;min-height:0;z-index:0;opacity:.3;}
+  .dmf-portrait-frame{inset:8% -12% -5% 42%;clip-path:none;border:0;}.dmf-formula-wheel{left:auto;right:3%;bottom:5%;width:190px;opacity:.72;}
+  .dmf-stage-orbit,.dmf-signal-tag{display:none;}
+}
+@media(max-width:560px){
+  .dmf-slide-inner{width:calc(100% - 38px);padding:68px 0 58px;}.dmf-kicker{font-size:8px;letter-spacing:.13em;margin-bottom:12px;}
+  .dmf-slide-title{font-size:clamp(30px,9vw,42px);line-height:.96;}.dmf-slide-lede{font-size:12px;line-height:1.55;margin:17px 0 14px;max-width:94%;}
+  .dmf-recipe{gap:5px;margin-bottom:14px;}.dmf-recipe span{font-size:7px;padding:5px 6px;}.dmf-proof{gap:5px;margin-bottom:16px;}
+  .dmf-proof span{padding:6px 8px;font-size:7px;}.dmf-proof strong{font-size:12px;}.dmf-primary,.dmf-secondary{min-height:41px;padding:0 13px;font-size:8px;}
+  .dmf-byline{font-size:7px;margin-top:12px;}.dmf-portrait-frame{left:30%;opacity:.7;}.dmf-formula-wheel{width:138px;right:-18px;bottom:8%;}
+}
+@media(max-width:560px) and (max-height:720px){
+  .dmf-slide-inner{padding-top:58px;padding-bottom:48px;}.dmf-recipe,.dmf-byline{display:none;}
+}
+@media(prefers-reduced-motion:reduce){.dmf-formula-wheel{animation:none;}}
 
 /* Carousel dots */
 .carousel-dots{
@@ -3659,7 +3735,46 @@ html.deck-mode .va-chapters{ display:none; }
 </header>
     </div><!-- /slide 1 -->
 
-    <!-- SLIDE 2: PUERTA GIRATORIA -->
+    <!-- SLIDE 2: DMF ACADEMY -->
+    <div class="hero-slide hero-slide-dmf">
+      <section class="dmf-academy-slide" id="dmf-academy" aria-labelledby="dmf-slide-title">
+        <div class="dmf-slide-inner">
+          <div class="dmf-slide-copy">
+            <div class="dmf-kicker">DMF Academy · Dynamic Music Formula</div>
+            <h2 class="dmf-slide-title" id="dmf-slide-title">Crea tu propia música.<em>Sigue la fórmula DMF.</em></h2>
+            <p class="dmf-slide-lede">No necesitas saberlo todo: crear música se parece a seguir una buena receta. Partes de una idea, respetas el orden, pruebas y corriges. <strong>Demian Müller</strong> convierte más de 20 años de estudio y escenario en un método para llevarla hasta un track terminado.</p>
+            <div class="dmf-recipe" aria-label="Recorrido de la fórmula DMF">
+              <span>Idea</span><i>→</i><span>Sonido</span><i>→</i><span>Estructura</span><i>→</i><span>Mezcla</span><i>→</i><span>Release</span>
+            </div>
+            <div class="dmf-proof" aria-label="Características del programa">
+              <span><strong>20+</strong> años</span>
+              <span><strong>08</strong> etapas</span>
+              <span><strong>1:1</strong> mentoría</span>
+              <span><strong>LIVE</strong> Zoom</span>
+            </div>
+            <div class="dmf-actions">
+              <a class="dmf-primary" href="https://dmf.vibraalto.cl/#academy" target="_blank" rel="noopener" data-dmf-cta="programa">Crea tu primer track <span>→</span></a>
+              <a class="dmf-secondary" href="mailto:Demian.muller@gmail.com?subject=Free%20Masterclass%20DMF" data-dmf-cta="masterclass">Masterclass gratis</a>
+            </div>
+            <div class="dmf-byline">Fórmula por Demian Müller · Experiencia digital por VibraAlto</div>
+          </div>
+
+          <div class="dmf-slide-visual" aria-hidden="true">
+            <div class="dmf-portrait-frame">
+              <img class="dmf-portrait" src="https://dmf.vibraalto.cl/assets/images/jpg_0_19kb.jpg" alt="" width="809" height="622" loading="lazy" decoding="async">
+            </div>
+            <div class="dmf-formula-wheel"></div>
+            <div class="dmf-stage-orbit">
+              <span>01 · Idea</span><span>02 · Mix</span><span>03 · Sound</span><span>04 · Bass</span>
+              <span>05 · Flow</span><span>06 · Mindset</span><span>07 · Market</span><span>08 · Release</span>
+            </div>
+            <div class="dmf-signal-tag">Training signal online</div>
+          </div>
+        </div>
+      </section>
+    </div><!-- /slide 2 -->
+
+    <!-- SLIDE 3: PUERTA GIRATORIA -->
     <div class="hero-slide hero-slide-2" id="puerta-giratoria">
       <div class="pg-grid">
     <!-- Mini Card -->
@@ -3794,9 +3909,9 @@ html.deck-mode .va-chapters{ display:none; }
       </div>
     </div>
   </div>
-    </div><!-- /slide 2 -->
+    </div><!-- /slide 3 -->
 
-    <!-- SLIDE 3: NEXUS VA -->
+    <!-- SLIDE 4: NEXUS VA -->
     <div class="hero-slide hero-slide-3">
 <section class="nexus-strip" id="nexus-va">
   <canvas id="nexus-bg-canvas"></canvas>
@@ -3904,9 +4019,9 @@ html.deck-mode .va-chapters{ display:none; }
     </div>
   </div>
 </section>
-    </div><!-- /slide 3 -->
+    </div><!-- /slide 4 -->
 
-    <!-- SLIDE 4: KALDI COFFEE -->
+    <!-- SLIDE 5: KALDI COFFEE -->
     <div class="hero-slide hero-slide-4">
 <section class="kaldi-strip" id="kaldi">
   <canvas id="kaldi-canvas"></canvas>
@@ -4007,7 +4122,7 @@ html.deck-mode .va-chapters{ display:none; }
     </div>
   </div>
 </section>
-    </div><!-- /slide 4 -->
+    </div><!-- /slide 5 -->
 
   </div><!-- /track -->
 
@@ -4019,6 +4134,7 @@ html.deck-mode .va-chapters{ display:none; }
     <span class="carousel-dot" data-slide="1"></span>
     <span class="carousel-dot" data-slide="2"></span>
     <span class="carousel-dot" data-slide="3"></span>
+    <span class="carousel-dot" data-slide="4"></span>
   </div>
 </div><!-- /hero-carousel -->
 
@@ -6892,6 +7008,15 @@ atTick();
   if(nextBtn) nextBtn.addEventListener('click',function(){next();startAuto();});
   dots.forEach(function(d){
     d.addEventListener('click',function(){goTo(+this.dataset.slide,(+this.dataset.slide>current)?'next':'prev');startAuto();});
+  });
+
+  /* DMF Academy conversion signal — the destination remains a normal link. */
+  document.querySelectorAll('[data-dmf-cta]').forEach(function(link){
+    link.addEventListener('click',function(){
+      if(Array.isArray(window.dataLayer)){
+        window.dataLayer.push({event:'dmf_academy_cta',dmf_cta:link.dataset.dmfCta||'',dmf_destination:link.href});
+      }
+    });
   });
 
   /* Touch/swipe */
