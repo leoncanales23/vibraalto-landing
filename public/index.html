@@ -7016,6 +7016,7 @@ atTick();
       var detail={cta:link.dataset.dmfCta||'',destination:link.href};
       window.dataLayer=window.dataLayer||[];
       window.dataLayer.push({event:'dmf_academy_cta',dmf_cta:detail.cta,dmf_destination:detail.destination});
+      document.documentElement.dataset.dmfLastCta=detail.cta;
       window.dispatchEvent(new CustomEvent('dmf_academy_cta',{detail:detail}));
     });
   });
