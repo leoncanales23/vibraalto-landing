@@ -41,6 +41,20 @@ grep -Fq "setState('IMPULSO')" "$landing"
 grep -Fq "event.key==='Enter'" "$landing"
 grep -Fq 'prefers-reduced-motion:reduce' "$landing"
 
+# DMF Academy is the second commercial slide and keeps its own conversion signal.
+grep -Fq 'class="hero-slide hero-slide-dmf"' "$landing"
+grep -Fq 'id="dmf-academy"' "$landing"
+grep -Fq 'https://dmf.vibraalto.cl/#academy' "$landing"
+grep -Fq 'https://dmf.vibraalto.cl/assets/images/jpg_0_19kb.jpg' "$landing"
+grep -Fq "event:'dmf_academy_cta'" "$landing"
+test "$(grep -c 'data-dmf-cta=' "$landing")" -eq 2
+test "$(grep -c '<span class="carousel-dot' "$landing")" -eq 5
+test "$(grep -c 'class="dmf-stage-orbit' "$landing")" -eq 1
+test "$(grep -oE '[0-9]{2} · (Idea|Mix|Sound|Bass|Flow|Mindset|Market|Release)' "$landing" | wc -l)" -eq 8
+dmf_line="$(grep -n '<!-- SLIDE 2: DMF ACADEMY -->' "$landing" | cut -d: -f1)"
+vbc_line="$(grep -n '<!-- SLIDE 3: PUERTA GIRATORIA -->' "$landing" | cut -d: -f1)"
+test "$dmf_line" -lt "$vbc_line"
+
 # Hero lockup and small-size mandala favicon.
 grep -Fq 'grid-template-columns: auto auto' "$landing"
 grep -Fq 'grid-column: 1 / -1' "$landing"
@@ -57,4 +71,4 @@ if grep -Fq "role:'system'" "$landing"; then
   exit 1
 fi
 
-echo 'Landing source preserves Closer A, attention field, LEDs, lockup and favicon.'
+echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy, lockup and favicon.'
