@@ -47,6 +47,8 @@ grep -Fq 'id="dmf-academy"' "$landing"
 grep -Fq 'https://dmf.vibraalto.cl/#academy' "$landing"
 grep -Fq 'https://dmf.vibraalto.cl/assets/images/jpg_0_19kb.jpg' "$landing"
 grep -Fq "event:'dmf_academy_cta'" "$landing"
+grep -Fq 'window.dataLayer=window.dataLayer||[]' "$landing"
+grep -Fq "new CustomEvent('dmf_academy_cta'" "$landing"
 test "$(grep -c 'data-dmf-cta=' "$landing")" -eq 2
 test "$(grep -c '<span class="carousel-dot' "$landing")" -eq 5
 test "$(grep -c 'class="dmf-stage-orbit' "$landing")" -eq 1
