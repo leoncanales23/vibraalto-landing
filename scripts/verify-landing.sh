@@ -48,19 +48,29 @@ grep -Fq 'https://dmf.vibraalto.cl/#academy' "$landing"
 grep -Fq 'https://dmf.vibraalto.cl/assets/images/jpg_0_19kb.jpg' "$landing"
 grep -Fq 'id="dmf-signal"' "$landing"
 grep -Fq 'id="dmf-signal-stage"' "$landing"
-grep -Fq "loader.load('/assets/dmf-signal-chrome.glb'" "$landing"
+grep -Fq 'src="/assets/dmf-receiver.js?v=real-receiver-1"' "$landing"
 grep -Fq 'data-dmf-cta="signal-gateway"' "$landing"
 grep -Fq 'https://dmf.vibraalto.cl/?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_academy&amp;utm_content=receiver_3d#academy' "$landing"
-grep -Fq "new CustomEvent('dmf_signal_3d_state'" "$landing"
-grep -Fq "stage.dataset.renderMode='hologram-v2'" "$landing"
-grep -Fq 'new THREE.MeshBasicMaterial({color:0x39dfff,wireframe:true' "$landing"
-grep -Fq 'new THREE.Points(particleGeometry' "$landing"
-grep -Fq 'frameInterval=1000/(width<680?24:30)' "$landing"
-grep -Fq "powerPreference:'low-power'" "$landing"
-grep -Fq 'Math.min(window.devicePixelRatio||1,1.25)' "$landing"
-test -f public/assets/dmf-signal-chrome.glb
-test "$(stat -c '%s' public/assets/dmf-signal-chrome.glb)" -eq 16416
-test "$(sha256sum public/assets/dmf-signal-chrome.glb | cut -d ' ' -f 1)" = 'f389cc121e01b4240e0ea49a506a83e699dfac7d55ae1a91c3009f72e8d8d146'
+grep -Fq 'class="dmf-relic-state"' "$landing"
+grep -Fq 'class="dmf-relic-readout"' "$landing"
+test -f public/assets/dmf-receiver.js
+node --check public/assets/dmf-receiver.js
+grep -Fq "new CustomEvent('dmf_signal_3d_state'" public/assets/dmf-receiver.js
+grep -Fq "stage.dataset.renderMode='demian-receiver'" public/assets/dmf-receiver.js
+grep -Fq "'/assets/dmf-studio-optimized-59ce574c.glb'" public/assets/dmf-receiver.js
+grep -Fq 'material.onBeforeCompile=function(shader)' public/assets/dmf-receiver.js
+grep -Fq "geometry.setAttribute('aZoneId'" public/assets/dmf-receiver.js
+grep -Fq "quality=width<480?'static':width<768?'balanced':'high'" public/assets/dmf-receiver.js
+grep -Fq "connection.saveData" public/assets/dmf-receiver.js
+grep -Fq "new IntersectionObserver" public/assets/dmf-receiver.js
+grep -Fq "transmitting:{es:'TRANSMISIÓN',en:'TRANSMITTING',zh:'传输中'}" public/assets/dmf-receiver.js
+if grep -Fq '/assets/dmf-signal-chrome.glb' "$landing" public/assets/dmf-receiver.js; then
+  echo 'Legacy DMF proxy model is still referenced by the landing' >&2
+  exit 1
+fi
+test -f public/assets/dmf-studio-optimized-59ce574c.glb
+test "$(stat -c '%s' public/assets/dmf-studio-optimized-59ce574c.glb)" -eq 7998604
+test "$(sha256sum public/assets/dmf-studio-optimized-59ce574c.glb | cut -d ' ' -f 1)" = '59ce574c47cbf0a0e56e3ca736ddeadc9e31cb8849eda49fe8cefb9a83dc183b'
 grep -Fq "event:'dmf_academy_cta'" "$landing"
 grep -Fq 'window.dataLayer=window.dataLayer||[]' "$landing"
 grep -Fq 'document.documentElement.dataset.dmfLastCta=detail.cta' "$landing"
@@ -95,4 +105,4 @@ if grep -Fq "role:'system'" "$landing"; then
   exit 1
 fi
 
-echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + Hologram v2 gateway, Kaldi, lockup and favicon.'
+echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + real Demian Receiver, Kaldi, lockup and favicon.'

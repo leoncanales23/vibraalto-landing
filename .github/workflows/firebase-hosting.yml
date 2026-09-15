@@ -21,6 +21,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Fetch verified DMF Receiver asset
+        shell: bash
+        run: ./scripts/fetch-dmf-receiver.sh
+
       - name: Verify landing source
         shell: bash
         run: ./scripts/verify-landing.sh
@@ -33,10 +37,10 @@ jobs:
           grep -Fq "\"commit\":\"$GITHUB_SHA\"" public/release.json
           index_sha=$(sha256sum public/index.html | cut -d ' ' -f 1)
           favicon_sha=$(sha256sum public/favicon.svg | cut -d ' ' -f 1)
-          dmf_signal_sha=$(sha256sum public/assets/dmf-signal-chrome.glb | cut -d ' ' -f 1)
+          dmf_receiver_sha=$(sha256sum public/assets/dmf-studio-optimized-59ce574c.glb | cut -d ' ' -f 1)
           printf 'EXPECTED_INDEX_SHA=%s\n' "$index_sha" >> "$GITHUB_ENV"
           printf 'EXPECTED_FAVICON_SHA=%s\n' "$favicon_sha" >> "$GITHUB_ENV"
-          printf 'EXPECTED_DMF_SIGNAL_SHA=%s\n' "$dmf_signal_sha" >> "$GITHUB_ENV"
+          printf 'EXPECTED_DMF_RECEIVER_SHA=%s\n' "$dmf_receiver_sha" >> "$GITHUB_ENV"
 
       - name: Install Firebase CLI
         run: npm install --global firebase-tools
@@ -60,8 +64,8 @@ jobs:
           set -euo pipefail
           page_file=$(mktemp)
           favicon_file=$(mktemp)
-          dmf_signal_file=$(mktemp)
-          trap 'rm -f "$page_file" "$favicon_file" "$dmf_signal_file"' EXIT
+          dmf_receiver_file=$(mktemp)
+          trap 'rm -f "$page_file" "$favicon_file" "$dmf_receiver_file"' EXIT
 
           for target in https://vibraalto.cl https://vibraalto-landing.web.app; do
             verified=false
@@ -69,14 +73,14 @@ jobs:
               cache_bust="release=$GITHUB_SHA&attempt=$attempt"
               if curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/?$cache_bust" -o "$page_file" \
                 && curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/favicon.svg?$cache_bust" -o "$favicon_file" \
-                && curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/assets/dmf-signal-chrome.glb?$cache_bust" -o "$dmf_signal_file"; then
+                && curl -fsSL --max-time 40 -H 'Cache-Control: no-cache' "$target/assets/dmf-studio-optimized-59ce574c.glb?$cache_bust" -o "$dmf_receiver_file"; then
                 deployed_sha=$(sha256sum "$page_file" | cut -d ' ' -f 1)
                 deployed_favicon_sha=$(sha256sum "$favicon_file" | cut -d ' ' -f 1)
-                deployed_dmf_signal_sha=$(sha256sum "$dmf_signal_file" | cut -d ' ' -f 1)
+                deployed_dmf_receiver_sha=$(sha256sum "$dmf_receiver_file" | cut -d ' ' -f 1)
                 release=$(curl -fsSL --max-time 20 -H 'Cache-Control: no-cache' "$target/release.json?$cache_bust" || true)
                 if [[ "$deployed_sha" == "$EXPECTED_INDEX_SHA" ]] \
                   && [[ "$deployed_favicon_sha" == "$EXPECTED_FAVICON_SHA" ]] \
-                  && [[ "$deployed_dmf_signal_sha" == "$EXPECTED_DMF_SIGNAL_SHA" ]] \
+                  && [[ "$deployed_dmf_receiver_sha" == "$EXPECTED_DMF_RECEIVER_SHA" ]] \
                   && grep -Fq "\"commit\":\"$GITHUB_SHA\"" <<<"$release"; then
                   echo "$target exposes the exact $GITHUB_SHA release"
                   verified=true
