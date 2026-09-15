@@ -52,6 +52,12 @@ grep -Fq "loader.load('/assets/dmf-signal-chrome.glb'" "$landing"
 grep -Fq 'data-dmf-cta="signal-gateway"' "$landing"
 grep -Fq 'https://dmf.vibraalto.cl/?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_academy&amp;utm_content=receiver_3d#academy' "$landing"
 grep -Fq "new CustomEvent('dmf_signal_3d_state'" "$landing"
+grep -Fq "stage.dataset.renderMode='hologram-v2'" "$landing"
+grep -Fq 'new THREE.MeshBasicMaterial({color:0x39dfff,wireframe:true' "$landing"
+grep -Fq 'new THREE.Points(particleGeometry' "$landing"
+grep -Fq 'frameInterval=1000/(width<680?24:30)' "$landing"
+grep -Fq "powerPreference:'low-power'" "$landing"
+grep -Fq 'Math.min(window.devicePixelRatio||1,1.25)' "$landing"
 test -f public/assets/dmf-signal-chrome.glb
 test "$(stat -c '%s' public/assets/dmf-signal-chrome.glb)" -eq 16416
 test "$(sha256sum public/assets/dmf-signal-chrome.glb | cut -d ' ' -f 1)" = 'f389cc121e01b4240e0ea49a506a83e699dfac7d55ae1a91c3009f72e8d8d146'
@@ -89,4 +95,4 @@ if grep -Fq "role:'system'" "$landing"; then
   exit 1
 fi
 
-echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + 3D gateway, Kaldi, lockup and favicon.'
+echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + Hologram v2 gateway, Kaldi, lockup and favicon.'
