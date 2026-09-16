@@ -49,7 +49,13 @@ grep -Fq 'https://dmf.vibraalto.cl/assets/images/jpg_0_19kb.jpg' "$landing"
 grep -Fq 'id="dmf-signal"' "$landing"
 grep -Fq 'id="dmf-signal-stage"' "$landing"
 grep -Fq 'src="/assets/dmf-receiver.js?v=real-receiver-1"' "$landing"
+grep -Fq 'src="/assets/dmf-manufacturing.js?v=manufacturing-master-1"' "$landing"
 grep -Fq 'data-dmf-cta="signal-gateway"' "$landing"
+grep -Fq 'id="dmf-manufacturing-proof"' "$landing"
+grep -Fq 'data-dmf-print-cta="print-master"' "$landing"
+grep -Fq 'utm_campaign=dmf_manufacturing_master' "$landing"
+test "$(grep -c 'data-dmf-proof="' "$landing")" -eq 4
+test "$(grep -c "dmf_manufacturing_title:'" "$landing")" -eq 3
 grep -Fq 'https://dmf.vibraalto.cl/?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_academy&amp;utm_content=receiver_3d#academy' "$landing"
 grep -Fq 'class="dmf-relic-state"' "$landing"
 grep -Fq 'class="dmf-relic-readout"' "$landing"
@@ -71,6 +77,25 @@ fi
 test -f public/assets/dmf-studio-optimized-59ce574c.glb
 test "$(stat -c '%s' public/assets/dmf-studio-optimized-59ce574c.glb)" -eq 7998604
 test "$(sha256sum public/assets/dmf-studio-optimized-59ce574c.glb | cut -d ' ' -f 1)" = '59ce574c47cbf0a0e56e3ca736ddeadc9e31cb8849eda49fe8cefb9a83dc183b'
+test -f public/assets/dmf-manufacturing.js
+node --check public/assets/dmf-manufacturing.js
+grep -Fq "event:'dmf_print_master_cta'" public/assets/dmf-manufacturing.js
+grep -Fq "new CustomEvent('dmf_manufacturing_proof'" public/assets/dmf-manufacturing.js
+grep -Fq "fetch('/assets/dmf-manufacturing-proof.json',{cache:'no-store'" public/assets/dmf-manufacturing.js
+test -f public/assets/dmf-manufacturing-proof.json
+EXPECTED_3MF_SHA='ca896af51d718b2586a93c29515d59f8f72d3b60d294e1359f19d1db33c1ae82' node - <<'NODE'
+const fs=require('fs');
+const gate=JSON.parse(fs.readFileSync('public/assets/dmf-manufacturing-proof.json','utf8'));
+const valid=gate.pass===true&&gate.watertight===true&&
+  gate.boundary===0&&gate.nonManifold===0&&gate.degenerate===0&&gate.components===1&&
+  gate.sealedCavityCount===0&&gate.sealedAirVoxels===0&&
+  gate.drainCount===2&&gate.drainReachableVolumePct===100&&
+  gate.hollowReductionPct===71.2&&gate.fidelityP95MM===9.608&&
+  gate.fidelityP95MM<=gate.fidelityThresholdP95MM&&
+  gate.removedPct<=gate.removedThresholdPct&&
+  gate.threemfBytes===10413306&&gate.threemfSHA256===process.env.EXPECTED_3MF_SHA;
+if(!valid)throw new Error('Invalid DMF Manufacturing Master proof');
+NODE
 grep -Fq "event:'dmf_academy_cta'" "$landing"
 grep -Fq 'window.dataLayer=window.dataLayer||[]' "$landing"
 grep -Fq 'document.documentElement.dataset.dmfLastCta=detail.cta' "$landing"
@@ -105,4 +130,4 @@ if grep -Fq "role:'system'" "$landing"; then
   exit 1
 fi
 
-echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + real Demian Receiver, Kaldi, lockup and favicon.'
+echo 'Landing source preserves Closer A, attention field, LEDs, DMF Academy + real Demian Receiver + Manufacturing Master, Kaldi, lockup and favicon.'
