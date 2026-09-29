@@ -3276,6 +3276,19 @@ html.deck-mode .va-chapters{ display:none; }
 .dmf-signal-proof{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:27px;}
 .dmf-signal-proof span{display:flex;align-items:baseline;gap:6px;padding:8px 11px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.026);color:rgba(255,255,255,.5);font:8px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;}
 .dmf-signal-proof strong{color:#fff;font:700 15px 'Orbitron',sans-serif;}
+.dmf-manufacturing{position:relative;margin:0 0 22px;padding:15px 16px 14px;border:1px solid rgba(255,112,58,.18);background:linear-gradient(135deg,rgba(255,87,47,.055),rgba(255,255,255,.018));overflow:hidden;}
+.dmf-manufacturing::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 0 44%,rgba(255,139,82,.055) 50%,transparent 56%);transform:translateX(-100%);animation:dmfManufacturingScan 7s ease-in-out infinite;}
+.dmf-manufacturing-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;color:#fff;font:700 9px 'Orbitron',sans-serif;letter-spacing:.12em;text-transform:uppercase;}
+.dmf-manufacturing-status{display:inline-flex;align-items:center;gap:6px;color:rgba(255,190,151,.6);font:7px var(--f-mono);letter-spacing:.1em;white-space:nowrap;}
+.dmf-manufacturing-status::before{content:'';width:5px;height:5px;border-radius:50%;background:#ff7041;box-shadow:0 0 10px rgba(255,112,65,.72);}
+.dmf-manufacturing.is-verified .dmf-manufacturing-status{color:#c8ff4d;}.dmf-manufacturing.is-verified .dmf-manufacturing-status::before{background:#c8ff4d;box-shadow:0 0 11px rgba(200,255,77,.72);}
+.dmf-manufacturing-flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:11px;color:rgba(255,211,185,.54);font:6px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;}
+.dmf-manufacturing-flow b{font-weight:500;}.dmf-manufacturing-flow i{color:var(--dmf-signal-orange);font-style:normal;opacity:.7;}
+.dmf-manufacturing-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;}
+.dmf-manufacturing-metric{min-width:0;padding:8px 7px;border-top:1px solid rgba(255,119,67,.22);background:rgba(0,0,0,.13);}
+.dmf-manufacturing-metric strong{display:block;margin-bottom:4px;color:#fff;font:700 12px 'Orbitron',sans-serif;white-space:nowrap;}
+.dmf-manufacturing-metric span{display:block;color:rgba(255,255,255,.4);font:6px/1.3 var(--f-mono);letter-spacing:.07em;text-transform:uppercase;}
+.dmf-signal-actions{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap;}
 .dmf-signal-cta{
   display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:50px;padding:0 22px;
   border:1px solid #ff8a62;background:linear-gradient(135deg,var(--dmf-signal-orange),var(--dmf-signal-amber));
@@ -3283,6 +3296,8 @@ html.deck-mode .va-chapters{ display:none; }
   box-shadow:0 14px 38px rgba(255,87,47,.2);transition:transform .25s ease,box-shadow .25s ease;
 }
 .dmf-signal-cta:hover{color:#160704;transform:translateY(-2px);box-shadow:0 18px 46px rgba(255,87,47,.32);}
+.dmf-manufacturing-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:50px;padding:0 18px;border:1px solid rgba(255,125,74,.38);background:rgba(255,87,47,.035);color:rgba(255,218,197,.82);text-decoration:none;text-transform:uppercase;font:700 8px 'Orbitron',sans-serif;letter-spacing:.1em;transition:transform .25s ease,border-color .25s ease,color .25s ease;}
+.dmf-manufacturing-cta:hover{color:#fff;border-color:rgba(255,145,94,.8);transform:translateY(-2px);}
 .dmf-signal-byline{margin-top:18px;color:rgba(255,255,255,.27);font:8px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;}
 .dmf-signal-stage{
   position:relative;min-height:clamp(470px,48vw,650px);overflow:hidden;isolation:isolate;
@@ -3323,6 +3338,7 @@ html.deck-mode .va-chapters{ display:none; }
 @keyframes dmfGatewayScan{0%,100%{transform:translateY(0);opacity:.12}50%{transform:translateY(clamp(230px,33vw,390px));opacity:.3}}
 @keyframes dmfSignalLive{50%{opacity:.32;transform:scale(.72)}}
 @keyframes dmfSignalLoad{0%{transform:translateX(-120%)}100%{transform:translateX(400%)}}
+@keyframes dmfManufacturingScan{0%,35%{transform:translateX(-100%)}65%,100%{transform:translateX(100%)}}
 @media(max-width:900px){
   .dmf-signal-inner{width:min(100% - 48px,720px);grid-template-columns:1fr;gap:36px;min-height:auto;padding:78px 0;}
   .dmf-signal-copy{max-width:650px;}.dmf-signal-stage{min-height:480px;}
@@ -3331,10 +3347,11 @@ html.deck-mode .va-chapters{ display:none; }
   .dmf-signal-inner{width:calc(100% - 36px);padding:62px 0;gap:28px;}.dmf-signal-heading{font-size:clamp(34px,10vw,46px);}
   .dmf-signal-lede{font-size:13px;line-height:1.6;margin:19px 0 16px;}.dmf-signal-path{gap:5px;margin-bottom:17px;}.dmf-signal-path span{padding:5px 6px;}
   .dmf-signal-proof{gap:5px;margin-bottom:20px;}.dmf-signal-proof span{padding:6px 8px;font-size:7px;}.dmf-signal-proof strong{font-size:12px;}
-  .dmf-signal-cta{width:100%;min-height:47px;padding-inline:14px;font-size:9px;}.dmf-signal-stage{min-height:390px;clip-path:none;}
+  .dmf-manufacturing{padding:13px 12px;}.dmf-manufacturing-head{align-items:flex-start;flex-direction:column;gap:6px;}.dmf-manufacturing-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.dmf-signal-actions{display:grid;grid-template-columns:1fr;}
+  .dmf-signal-cta,.dmf-manufacturing-cta{width:100%;min-height:47px;padding-inline:14px;font-size:9px;}.dmf-signal-stage{min-height:390px;clip-path:none;}
   .dmf-signal-hud{left:14px;right:14px;top:14px;}.dmf-signal-edition{left:14px;bottom:14px;}.dmf-relic-readout{display:none;}
 }
-@media(prefers-reduced-motion:reduce){.dmf-signal-stage::after,.dmf-signal-live i,.dmf-signal-loader::after{animation:none!important;}}
+@media(prefers-reduced-motion:reduce){.dmf-signal-stage::after,.dmf-signal-live i,.dmf-signal-loader::after,.dmf-manufacturing::after{animation:none!important;}}
 
 /* Carousel dots */
 .carousel-dots{
@@ -4953,9 +4970,26 @@ html.deck-mode .va-chapters{ display:none; }
         <span><strong>08</strong> <span data-i="dmf_signal_modules">módulos</span></span>
         <span><strong>1:1</strong> <span data-i="dmf_signal_mentoring">mentoría</span></span>
       </div>
-      <a class="dmf-signal-cta" href="https://dmf.vibraalto.cl/?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_academy&amp;utm_content=receiver_3d#academy" target="_blank" rel="noopener" data-dmf-cta="signal-gateway">
-        <span data-i="dmf_signal_cta">Entrar a DMF Academy</span><span aria-hidden="true">→</span>
-      </a>
+      <aside class="dmf-manufacturing" id="dmf-manufacturing-proof" aria-labelledby="dmf-manufacturing-title">
+        <div class="dmf-manufacturing-head"><span id="dmf-manufacturing-title" data-i="dmf_manufacturing_title">Manufacturing Master</span><span class="dmf-manufacturing-status" data-dmf-proof-status data-i="dmf_manufacturing_checking" role="status" aria-live="polite">Verificando evidencia</span></div>
+        <div class="dmf-manufacturing-flow" aria-label="Flujo de fabricación validado">
+          <b data-i="dmf_manufacturing_flow1">Reliquia digital</b><i>→</i><b data-i="dmf_manufacturing_flow2">Núcleo hueco</b><i>→</i><b data-i="dmf_manufacturing_flow3">Núcleo drenable</b><i>→</i><b data-i="dmf_manufacturing_flow4">Print Master</b>
+        </div>
+        <div class="dmf-manufacturing-metrics">
+          <div class="dmf-manufacturing-metric"><strong data-dmf-proof="hollowReductionPct">71,2%</strong><span data-i="dmf_manufacturing_reduction">menos material</span></div>
+          <div class="dmf-manufacturing-metric"><strong data-dmf-proof="sealedCavityCount">0</strong><span data-i="dmf_manufacturing_cavities">cavidades selladas</span></div>
+          <div class="dmf-manufacturing-metric"><strong data-dmf-proof="drainReachableVolumePct">100%</strong><span data-i="dmf_manufacturing_drainage">drenaje alcanzable</span></div>
+          <div class="dmf-manufacturing-metric"><strong data-dmf-proof="fidelityP95MM">9,608 mm</strong><span data-i="dmf_manufacturing_fidelity">fidelidad P95</span></div>
+        </div>
+      </aside>
+      <div class="dmf-signal-actions">
+        <a class="dmf-signal-cta" href="https://dmf.vibraalto.cl/?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_academy&amp;utm_content=receiver_3d#academy" target="_blank" rel="noopener" data-dmf-cta="signal-gateway">
+          <span data-i="dmf_signal_cta">Entrar a DMF Academy</span><span aria-hidden="true">→</span>
+        </a>
+        <a class="dmf-manufacturing-cta" href="https://dmf.vibraalto.cl/assets/models/DMF_RELIC_01.3mf?utm_source=vibraalto&amp;utm_medium=dmf_signal_block&amp;utm_campaign=dmf_manufacturing_master&amp;utm_content=print_master_3mf" target="_blank" rel="noopener" data-dmf-print-cta="print-master">
+          <span data-i="dmf_manufacturing_cta">Abrir Print Master 3MF</span><span aria-hidden="true">↗</span>
+        </a>
+      </div>
       <div class="dmf-signal-byline" data-i="dmf_signal_byline">Fórmula por Demian Müller · Experiencia digital por VibraAlto</div>
     </div>
 
@@ -5537,6 +5571,9 @@ const T = {
     dmf_signal_step1:'Idea',dmf_signal_step2:'Ritmo',dmf_signal_step3:'Estructura',dmf_signal_step4:'Mezcla',dmf_signal_step5:'Track',
     dmf_signal_years:'años',dmf_signal_modules:'módulos',dmf_signal_mentoring:'mentoría',
     dmf_signal_cta:'Entrar a DMF Academy',dmf_signal_byline:'Fórmula por Demian Müller · Experiencia digital por VibraAlto',dmf_signal_status:'Señal disponible',
+    dmf_manufacturing_title:'Manufacturing Master',dmf_manufacturing_checking:'Verificando evidencia',dmf_manufacturing_verified:'CI verificado',dmf_manufacturing_unavailable:'Evidencia no disponible',
+    dmf_manufacturing_flow1:'Reliquia digital',dmf_manufacturing_flow2:'Núcleo hueco',dmf_manufacturing_flow3:'Núcleo drenable',dmf_manufacturing_flow4:'Print Master',
+    dmf_manufacturing_reduction:'menos material',dmf_manufacturing_cavities:'cavidades selladas',dmf_manufacturing_drainage:'drenaje alcanzable',dmf_manufacturing_fidelity:'fidelidad P95',dmf_manufacturing_cta:'Abrir Print Master 3MF',
     demos_tag:'Demo gratuita · Prueba sin registro',demos_h2:'Toca la tecnología. Gratis.',
     demos_sub:'Demo en vivo de lo que construimos — fabricación 3D industrial y laboratorio de diseño. Sin cuenta, sin costo, sin límites de tiempo.',
     demo1_title:'⚗️ Laboratorio 3D · Fabricación',demo1_desc:'Diseño · Visor holográfico · Export STL · Cola de impresión',
@@ -5593,6 +5630,9 @@ const T = {
     dmf_signal_step1:'Idea',dmf_signal_step2:'Rhythm',dmf_signal_step3:'Structure',dmf_signal_step4:'Mix',dmf_signal_step5:'Track',
     dmf_signal_years:'years',dmf_signal_modules:'modules',dmf_signal_mentoring:'mentoring',
     dmf_signal_cta:'Enter DMF Academy',dmf_signal_byline:'Formula by Demian Müller · Digital experience by VibraAlto',dmf_signal_status:'Signal available',
+    dmf_manufacturing_title:'Manufacturing Master',dmf_manufacturing_checking:'Verifying evidence',dmf_manufacturing_verified:'CI verified',dmf_manufacturing_unavailable:'Evidence unavailable',
+    dmf_manufacturing_flow1:'Digital relic',dmf_manufacturing_flow2:'Hollow core',dmf_manufacturing_flow3:'Drainable core',dmf_manufacturing_flow4:'Print Master',
+    dmf_manufacturing_reduction:'less material',dmf_manufacturing_cavities:'sealed cavities',dmf_manufacturing_drainage:'drain reachable',dmf_manufacturing_fidelity:'P95 fidelity',dmf_manufacturing_cta:'Open Print Master 3MF',
     demos_tag:'Free demo · No sign-up required',demos_h2:'Touch the technology. Free.',
     demos_sub:'Live demo — industrial 3D fabrication and design lab. No account, no cost, no time limits.',
     demo1_title:'⚗️ 3D Lab · Fabrication',demo1_desc:'Design · Holographic viewer · STL export · Print queue',
@@ -5649,6 +5689,9 @@ const T = {
     dmf_signal_step1:'想法',dmf_signal_step2:'节奏',dmf_signal_step3:'结构',dmf_signal_step4:'混音',dmf_signal_step5:'作品',
     dmf_signal_years:'年经验',dmf_signal_modules:'模块',dmf_signal_mentoring:'指导',
     dmf_signal_cta:'进入 DMF Academy',dmf_signal_byline:'方法：Demian Müller · 数字体验：VibraAlto',dmf_signal_status:'信号可用',
+    dmf_manufacturing_title:'制造母版',dmf_manufacturing_checking:'正在验证证据',dmf_manufacturing_verified:'CI 已验证',dmf_manufacturing_unavailable:'证据不可用',
+    dmf_manufacturing_flow1:'数字遗物',dmf_manufacturing_flow2:'中空内核',dmf_manufacturing_flow3:'可排液内核',dmf_manufacturing_flow4:'打印母版',
+    dmf_manufacturing_reduction:'减少材料',dmf_manufacturing_cavities:'密封空腔',dmf_manufacturing_drainage:'可排液体积',dmf_manufacturing_fidelity:'P95 保真度',dmf_manufacturing_cta:'打开 3MF 打印母版',
     demos_tag:'免费演示 · 无需注册',demos_h2:'触碰技术。免费。',
     demos_sub:'实时演示——工业3D制造和设计实验室。无需账户，无需费用，无时间限制。',
     demo1_title:'⚡ VibraAlto 工厂',demo1_desc:'与ExoLeón聊天 · 打印队列 · 机队控制',
@@ -7191,6 +7234,7 @@ atTick();
 
 <!-- DMF Real Receiver 3D -->
 <script src="/assets/dmf-receiver.js?v=real-receiver-1" defer></script>
+<script src="/assets/dmf-manufacturing.js?v=manufacturing-master-1" defer></script>
 
 
 <!-- WhatsApp Float -->
