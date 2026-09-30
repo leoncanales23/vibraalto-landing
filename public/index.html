@@ -6429,29 +6429,39 @@ setLang('es');
     }
     function useFallback(mode){
       document.documentElement.dataset.nerhiaObservatory=mode||'degraded';
-      setMetric('kaldi-uvx','73');
-      setMetric('ks-signals','2.8K');
-      setMetric('ks-nodes','8');
-      setMetric('ks-conf','99%');
+      setMetric('kaldi-uvx','—');
+      setMetric('ks-signals','—');
+      setMetric('ks-nodes','—');
+      setMetric('ks-conf','—');
     }
     function applySnapshot(snapshot){
       var constellation=snapshot&&snapshot.constellation;
       if(constellation&&constellation.data) constellation=constellation.data;
-      if(!constellation||!Array.isArray(constellation.cities)){
-        useFallback(snapshot&&snapshot.mode);
+      if(constellation&&Array.isArray(constellation.cities)){
+        var stgo=constellation.cities.find(function(city){
+          return city&&city.name&&city.name.toLowerCase().includes('santiago');
+        });
+        if(stgo) setMetric('kaldi-uvx',stgo.uvx||stgo.score||'—');
+        var stats=constellation.globalStats||{};
+        var total=Number(stats.totalCities)||constellation.cities.length;
+        setMetric('ks-signals',total?String(total*340):'—');
+        setMetric('ks-nodes',total||'—');
+        var confidence=Number(stats.avgUVX||stats.confidence);
+        setMetric('ks-conf',confidence?Math.round(confidence)+'%':'—');
+        document.documentElement.dataset.nerhiaObservatory=snapshot.mode||'live';
         return;
       }
-      var stgo=constellation.cities.find(function(city){
-        return city&&city.name&&city.name.toLowerCase().includes('santiago');
-      });
-      if(stgo) setMetric('kaldi-uvx',stgo.uvx||stgo.score||'—');
-      var stats=constellation.globalStats||{};
-      var total=Number(stats.totalCities)||constellation.cities.length;
-      setMetric('ks-signals',total?String(total*340):'—');
-      setMetric('ks-nodes',total||'—');
-      var confidence=Number(stats.avgUVX||stats.confidence);
-      setMetric('ks-conf',confidence?Math.round(confidence)+'%':'—');
-      document.documentElement.dataset.nerhiaObservatory=snapshot.mode||'live';
+
+      var pulse=snapshot&&snapshot.pulse;
+      if(pulse&&pulse.ok){
+        setMetric('kaldi-uvx','—');
+        setMetric('ks-signals',pulse.sonda&&Number.isFinite(Number(pulse.sonda.buffered))?pulse.sonda.buffered:'—');
+        setMetric('ks-nodes',pulse.machines&&Number.isFinite(Number(pulse.machines.online))?pulse.machines.online:'—');
+        setMetric('ks-conf','—');
+        document.documentElement.dataset.nerhiaObservatory=snapshot.mode||'live';
+        return;
+      }
+      useFallback(snapshot&&snapshot.mode);
     }
     function load(){
       if(started) return;
