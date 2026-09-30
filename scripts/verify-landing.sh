@@ -114,6 +114,25 @@ test "$manifesto_line" -lt "$signal_line"
 test "$signal_line" -lt "$demos_line"
 grep -Fq '<section class="kaldi-strip" id="kaldi">' "$landing"
 
+# Lighthouse and NERHIA observatory resilience.
+grep -Fq '<meta name="viewport" content="width=device-width, initial-scale=1.0">' "$landing"
+if grep -Fq 'maximum-scale=1' "$landing"; then
+  echo 'Viewport must allow browser zoom' >&2
+  exit 1
+fi
+grep -Fq 'label for="spd"' "$landing"
+grep -Fq 'label for="tilt"' "$landing"
+grep -Fq 'id="reactor-fallback"' "$landing"
+grep -Fq "probeCanvas.getContext('webgl2')" "$landing"
+grep -Fq "ROUTER+'/router/status'" "$landing"
+grep -Fq "ROUTER+'/observatory/snapshot'" "$landing"
+grep -Fq 'href="https://3d.vibraalto.cl/fabricacion-3d" target="_blank"' "$landing"
+test "$(grep -c '<h3 data-i="p[1-4]_h">' "$landing")" -eq 4
+if grep -Fq 'href="javascript:void(0)"' "$landing"   || grep -Fq 'nerhia-api-852702111467.us-central1.run.app/status' "$landing"   || grep -Fq 'https://vibraalto.cl/api/nerhia/constellation/overview' "$landing"; then
+  echo 'Legacy non-crawlable or direct NERHIA endpoints remain' >&2
+  exit 1
+fi
+
 # Hero lockup and small-size mandala favicon.
 grep -Fq 'grid-template-columns: auto auto' "$landing"
 grep -Fq 'grid-column: 1 / -1' "$landing"
