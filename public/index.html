@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="VibraAlto Lab — taller de sistemas compuestos. 3D, IA, codigo y craft afinados a la misma frecuencia.">
 <meta name="theme-color" content="#09090b">
 <meta property="og:type" content="website">
@@ -14,7 +14,6 @@
 <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg?v=github-style-1">
 <link rel="manifest" href="/manifest.json">
 <title>VIBRAALTO — Eleva tu frecuencia</title>
-<link rel="preconnect" href="https://nerhia-api-852702111467.us-central1.run.app" crossorigin>
 <link rel="preconnect" href="https://compute.vibraalto.cl" crossorigin>
 <link rel="preconnect" href="https://nerhia.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,8 +41,8 @@
   --fg:       #fafafa;   /* zinc-50  */
   --fg-1:     #e4e4e7;   /* zinc-200 */
   --fg-2:     #a1a1aa;   /* zinc-400 */
-  --fg-3:     #71717a;   /* zinc-500 */
-  --fg-4:     #3f3f46;   /* zinc-700 */
+  --fg-3:     #a1a1aa;   /* accessible zinc-400 */
+  --fg-4:     #8b8b96;   /* accessible muted text */
 
   /* Accent — the ONLY color, used sparingly */
   --accent:   #ffffff;
@@ -178,6 +177,35 @@ body {
   z-index: 1;
   will-change: transform, opacity;
   pointer-events: none;
+}
+#reactor-fallback {
+  position: absolute;
+  top: 50%; left: 55%;
+  width: min(62vw, 720px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  z-index: 1; opacity: 0; pointer-events: none;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0,212,255,.24) 0 2%, transparent 3% 17%, rgba(124,47,255,.18) 18% 19%, transparent 20% 31%, rgba(0,212,255,.12) 32% 33%, transparent 34%),
+    conic-gradient(from 20deg, transparent, rgba(0,212,255,.2), transparent 24%, rgba(124,47,255,.18), transparent 54%, rgba(200,255,77,.12), transparent 82%);
+  filter: drop-shadow(0 0 34px rgba(0,212,255,.16));
+  transition: opacity .35s ease;
+}
+#reactor-fallback::before,
+#reactor-fallback::after {
+  content: ''; position: absolute; border-radius: 50%;
+  border: 1px solid rgba(0,212,255,.2);
+}
+#reactor-fallback::before { inset: 13%; transform: rotate(23deg) scaleY(.58); }
+#reactor-fallback::after { inset: 25%; border-color: rgba(124,47,255,.24); transform: rotate(-31deg) scaleX(.62); }
+.hero.webgl-fallback #reactor-fallback { opacity: .72; animation: reactorFallbackSpin 24s linear infinite; }
+.hero.webgl-fallback #symbol-canvas { display: none; }
+@keyframes reactorFallbackSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@media(prefers-reduced-motion: reduce) {
+  .hero.webgl-fallback #reactor-fallback { animation: none; }
 }
 @media(max-width: 900px) {
   #symbol-canvas {
@@ -509,11 +537,11 @@ h1.h1 em {
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--fg-3);
 }
-.pillar h4 {
+.pillar h3 {
   font-size: 17px; font-weight: 600; color: var(--fg);
   letter-spacing: -0.02em; line-height: 1.25;
 }
-.pillar h4 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
+.pillar h3 em { font-style: italic; color: var(--fg-2); font-weight: 400; }
 .pillar p { font-size: 13.5px; color: var(--fg-2); line-height: 1.6; flex: 1; }
 .pillar-glyph {
   border-top: 1px solid var(--border); padding-top: 16px;
@@ -827,11 +855,12 @@ footer {
   letter-spacing: 0.14em; text-transform: uppercase;
 }
 #controls input[type=range] {
-  -webkit-appearance: none; width: 72px; height: 2px;
-  background: var(--bg-3); border-radius: 1px; outline: none; cursor: pointer;
+  -webkit-appearance: none; width: 72px; height: 28px;
+  background: linear-gradient(var(--bg-3),var(--bg-3)) center / 100% 2px no-repeat;
+  border-radius: 1px; outline: none; cursor: pointer;
 }
 #controls input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 10px; height: 10px;
+  -webkit-appearance: none; width: 18px; height: 18px;
   border-radius: 50%; background: var(--fg); cursor: pointer;
 }
 #controls .val {
@@ -842,7 +871,7 @@ footer {
   background: transparent; border: 1px solid var(--border-2);
   color: var(--fg-3); font-family: var(--f-mono); font-size: 9px;
   letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 4px; cursor: pointer;
+  min-height: 36px; padding: 6px 12px; border-radius: 4px; cursor: pointer;
   transition: all 150ms var(--ease-out);
 }
 #controls button:hover { background: var(--bg-2); color: var(--fg-2); }
@@ -1937,7 +1966,7 @@ body { cursor: none; }
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   font-family: 'Geist Mono','JetBrains Mono',monospace;
   font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase;
-  color: rgba(255,255,255,.22); pointer-events: none; white-space: nowrap;
+  color: rgba(255,255,255,.68); pointer-events: none; white-space: nowrap;
 }
 .va-hcell {
   padding: 8px 14px; border-right: 1px solid rgba(255,255,255,.06);
@@ -3780,7 +3809,8 @@ html.deck-mode .va-chapters{ display:none; }
     <div class="hero-slide">
 <header id="top" class="hero" style="min-height:100vh;">
   <!-- Reactor fills the right side -->
-  <canvas id="symbol-canvas" width="920" height="920"></canvas>
+  <div id="reactor-fallback" aria-hidden="true"></div>
+  <canvas id="symbol-canvas" width="920" height="920" aria-label="Reactor visual de VibraAlto"></canvas>
   <div class="hero-veil"></div>
 
   <div class="hero-inner">
@@ -4902,7 +4932,7 @@ html.deck-mode .va-chapters{ display:none; }
     <div class="protocol-grid">
       <article class="pillar reveal">
         <div class="pillar-num">01 · <span data-i="p1_num">Escuchar</span></div>
-        <h4 data-i="p1_h">Antes del primer <em>commit</em>.</h4>
+        <h3 data-i="p1_h">Antes del primer <em>commit</em>.</h3>
         <p data-i="p1_p">Una semana sin tocar código. Mapeamos dónde el sistema desafina hoy — fricciones, latencias, decisiones que ya nadie defiende.</p>
         <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
           <path d="M0 24 Q12 8,24 24 T48 24 T72 24 T96 24 T120 24 T144 24" stroke="#00d4ff" stroke-width="1.5" fill="none"/>
@@ -4910,7 +4940,7 @@ html.deck-mode .va-chapters{ display:none; }
       </article>
       <article class="pillar reveal">
         <div class="pillar-num">02 · <span data-i="p2_num">Aislar</span></div>
-        <h4 data-i="p2_h">Una frecuencia a la <em>vez</em>.</h4>
+        <h3 data-i="p2_h">Una frecuencia a la <em>vez</em>.</h3>
         <p data-i="p2_p">Separamos cada capa — datos, lógica, render, IA, voz. Cada una se prueba en silencio antes de volver a entrar al conjunto.</p>
         <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
           <line x1="28" y1="4" x2="28" y2="44" stroke="#00d4ff" stroke-width="1.5"/>
@@ -4921,7 +4951,7 @@ html.deck-mode .va-chapters{ display:none; }
       </article>
       <article class="pillar reveal">
         <div class="pillar-num">03 · <span data-i="p3_num">Componer</span></div>
-        <h4 data-i="p3_h">El sistema como <em>partitura</em>.</h4>
+        <h3 data-i="p3_h">El sistema como <em>partitura</em>.</h3>
         <p data-i="p3_p">Volvemos a juntar las capas con un cronograma de fases: qué entra primero, qué espera, dónde se sostiene una nota, dónde se corta.</p>
         <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
           <line x1="0" y1="12" x2="220" y2="12" stroke="currentColor" stroke-width="1" opacity=".18"/>
@@ -4934,7 +4964,7 @@ html.deck-mode .va-chapters{ display:none; }
       </article>
       <article class="pillar reveal">
         <div class="pillar-num">04 · <span data-i="p4_num">Resonar</span></div>
-        <h4 data-i="p4_h">El sistema se queda <em>solo</em>.</h4>
+        <h3 data-i="p4_h">El sistema se queda <em>solo</em>.</h3>
         <p data-i="p4_p">Entregamos cuando el sistema ya no nos necesita: documentado, observable, con su propia frecuencia. El lab se aleja, el proyecto sigue sonando.</p>
         <div class="pillar-glyph"><svg viewBox="0 0 220 48" preserveAspectRatio="none">
           <circle cx="110" cy="24" r="4" fill="#c8ff4d"/>
@@ -5026,7 +5056,7 @@ html.deck-mode .va-chapters{ display:none; }
         </div>
         <div class="demo-frame-wrap">
           <iframe id="frame-lab" src="https://3d.vibraalto.cl/fabricacion-3d" title="Laboratorio 3D VibraAlto" allow="fullscreen" loading="lazy"></iframe>
-          <a class="demo-overlay-btn" href="javascript:void(0)" onclick="openFullDemo('lab')" data-i="demo_full">↗ Pantalla completa</a>
+          <a class="demo-overlay-btn" href="https://3d.vibraalto.cl/fabricacion-3d" target="_blank" rel="noopener noreferrer" data-i="demo_full">↗ Pantalla completa</a>
         </div>
       </div>
     </div>
@@ -5537,11 +5567,11 @@ html.deck-mode .va-chapters{ display:none; }
 
 <!-- Controls -->
 <div id="controls">
-  <label>VEL</label>
-  <input type="range" id="spd" min="0" max="10" value="3" step="1">
+  <label for="spd">VEL</label>
+  <input type="range" id="spd" min="0" max="10" value="3" step="1" aria-describedby="spdv">
   <span class="val" id="spdv">3</span>
-  <label>INCL</label>
-  <input type="range" id="tilt" min="0" max="50" value="22" step="1">
+  <label for="tilt">INCL</label>
+  <input type="range" id="tilt" min="0" max="50" value="22" step="1" aria-describedby="tiltv">
   <span class="val" id="tiltv">22°</span>
   <button id="tog">⏸ PAUSA</button>
 </div>
@@ -5752,7 +5782,25 @@ window.addEventListener("load", function ReactorScene(){
   if(!cv3||typeof THREE==='undefined') return;
 
   const W3=window.innerWidth, H3=window.innerHeight;
-  const renderer=new THREE.WebGLRenderer({canvas:cv3,antialias:true,alpha:true});
+  function useReactorFallback(){
+    var hero=cv3.closest('.hero');
+    if(hero) hero.classList.add('webgl-fallback');
+    cv3.setAttribute('aria-hidden','true');
+  }
+  var probeCanvas=document.createElement('canvas');
+  var probeContext=null;
+  try {
+    probeContext=probeCanvas.getContext('webgl2')||probeCanvas.getContext('webgl');
+  } catch(error) {}
+  if(!probeContext){ useReactorFallback(); return; }
+
+  let renderer;
+  try {
+    renderer=new THREE.WebGLRenderer({canvas:cv3,antialias:true,alpha:true});
+  } catch(error) {
+    useReactorFallback();
+    return;
+  }
   renderer.setSize(920,920);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -6369,47 +6417,80 @@ setLang('es');
     })();
   })();
 
-  // ── NERHIA API — fetch live data ──
-  (function fetchNerhiaKaldi(){
-    var NERHIA_API = 'https://nerhia-api-852702111467.us-central1.run.app';
+  // ── NERHIA Observatory — lazy, router-backed and billing-independent ──
+  (function connectNerhiaObservatory(){
+    var ROUTER='https://compute.vibraalto.cl';
+    var CAPABILITY='observatory_snapshot_v1';
+    var started=false;
 
-    // Fetch constellation overview for Santiago UVX
-    fetch(NERHIA_API + '/status')
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(d){
-        if(!d) return;
-        // Update uptime/status if available
-      })
-      .catch(function(){});
-
-    // Try to get Santiago from constellation (public endpoint)
-    fetch('https://vibraalto.cl/api/nerhia/constellation/overview')
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(d){
-        if(!d || !d.cities) return;
-        var stgo = d.cities.find(function(c){
-          return c.name && c.name.toLowerCase().includes('santiago');
+    function setMetric(id,value){
+      var element=document.getElementById(id);
+      if(element) element.textContent=value;
+    }
+    function useFallback(mode){
+      document.documentElement.dataset.nerhiaObservatory=mode||'degraded';
+      setMetric('kaldi-uvx','—');
+      setMetric('ks-signals','—');
+      setMetric('ks-nodes','—');
+      setMetric('ks-conf','—');
+    }
+    function applySnapshot(snapshot){
+      var constellation=snapshot&&snapshot.constellation;
+      if(constellation&&constellation.data) constellation=constellation.data;
+      if(constellation&&Array.isArray(constellation.cities)){
+        var stgo=constellation.cities.find(function(city){
+          return city&&city.name&&city.name.toLowerCase().includes('santiago');
         });
-        if(stgo){
-          document.getElementById('kaldi-uvx').textContent = stgo.uvx || '—';
+        if(stgo) setMetric('kaldi-uvx',stgo.uvx||stgo.score||'—');
+        var stats=constellation.globalStats||{};
+        var total=Number(stats.totalCities)||constellation.cities.length;
+        setMetric('ks-signals',total?String(total*340):'—');
+        setMetric('ks-nodes',total||'—');
+        var confidence=Number(stats.avgUVX||stats.confidence);
+        setMetric('ks-conf',confidence?Math.round(confidence)+'%':'—');
+        document.documentElement.dataset.nerhiaObservatory=snapshot.mode||'live';
+        return;
+      }
+
+      var pulse=snapshot&&snapshot.pulse;
+      if(pulse&&pulse.ok){
+        setMetric('kaldi-uvx','—');
+        setMetric('ks-signals',pulse.sonda&&Number.isFinite(Number(pulse.sonda.buffered))?pulse.sonda.buffered:'—');
+        setMetric('ks-nodes',pulse.machines&&Number.isFinite(Number(pulse.machines.online))?pulse.machines.online:'—');
+        setMetric('ks-conf','—');
+        document.documentElement.dataset.nerhiaObservatory=snapshot.mode||'live';
+        return;
+      }
+      useFallback(snapshot&&snapshot.mode);
+    }
+    function load(){
+      if(started) return;
+      started=true;
+      fetch(ROUTER+'/router/status',{headers:{Accept:'application/json'},cache:'no-store'})
+        .then(function(response){return response.ok?response.json():null;})
+        .then(function(status){
+          var capabilities=status&&Array.isArray(status.capabilities)?status.capabilities:[];
+          if(!capabilities.includes(CAPABILITY)){useFallback('router-legacy');return null;}
+          return fetch(ROUTER+'/observatory/snapshot',{headers:{Accept:'application/json'},cache:'no-store'});
+        })
+        .then(function(response){return response&&response.ok?response.json():null;})
+        .then(function(snapshot){if(snapshot)applySnapshot(snapshot);})
+        .catch(function(){useFallback('offline');});
+    }
+
+    var section=document.getElementById('kaldi');
+    if(section&&'IntersectionObserver' in window){
+      var observer=new IntersectionObserver(function(entries){
+        if(entries.some(function(entry){return entry.isIntersecting;})){
+          observer.disconnect();
+          load();
         }
-        if(d.globalStats){
-          document.getElementById('ks-signals').textContent =
-            d.globalStats.totalCities ? d.globalStats.totalCities * 340 : '—';
-          document.getElementById('ks-nodes').textContent =
-            d.globalStats.totalCities || '—';
-          var conf = d.globalStats.avgUVX;
-          document.getElementById('ks-conf').textContent =
-            conf ? Math.round(conf) + '%' : '—';
-        }
-      })
-      .catch(function(){
-        // Fallback values if API unavailable
-        document.getElementById('kaldi-uvx').textContent = '73';
-        document.getElementById('ks-signals').textContent = '2.8K';
-        document.getElementById('ks-nodes').textContent = '8';
-        document.getElementById('ks-conf').textContent = '99%';
-      });
+      },{rootMargin:'300px 0px'});
+      observer.observe(section);
+    } else {
+      load();
+    }
+
   })();
 
 })();
